@@ -27,11 +27,23 @@ It asks for a password twice (at least 12 characters, typed hidden). Running it 
 | **Overview** | Winner slots (n / 10) and waiting-list count, money collected, how many are in each status (click one to filter), and **Needs attention**: money received but no order (late or repeated payments to refund), failed emails, invitations expiring within 2 hours |
 | **Suppliers** | Everyone, winners first (slot 1 to 10) then the waiting list. Search (name, business, email, mobile), filters (status, winners or waiting list, business type), 25 per page, **Download CSV** that follows the filters. Columns: spot, supplier, contact, registered, status, answers, payment, website stage, emails |
 | **A supplier** | Profile, progress (deadline, answers, payment, `KT10-xxxx` reference, stage 0 to 6, live link), the 8 answers with their questions, uploads, every payment attempt, status history, Hermes stage notes, and each email with **Send again** when the first attempt failed |
+| **Payment History** | Stored payment attempts across suppliers, with current status, amount, dates and request ID. Search, exact status and start-date filters; supplier details links |
 | **Questions** | Both chatbots, on two tabs: **Registration chat** (Bot 1, asked when someone scans the QR code) and **Website chat** (Bot 2, asked after they are invited). Add, edit, delete (restorable) and reorder questions. See below |
 | **Settings** | Email (SMTP), HitPay, Hermes token, AI wording, Campaign. See below |
 | **Activity** | What admins did and when: sign-ins, failed sign-ins, settings saved, exports, resent emails. Never any values |
 
 The invitation link (token) of a supplier is never shown in the admin.
+
+## Payment History
+
+Choose **Payment History** in the admin navigation (`/<admin path>/payments`). This is a read-only list of saved attempts with their **current status**, not an event ledger of every status transition. Errors that occur before an attempt is saved are absent; technical failure details are not exposed here.
+
+- Search matches the supplier's name, business name or email, or the payment request ID. Choose an exact status: Pending, Paid (stored as `completed`), Failed or Link expired. Apply and Clear return to page 1. Refresh and page controls use the filters already applied, even if you have edited the form without applying it. Refresh keeps the current page.
+- **Started from** and **Started through** filter the attempt's start date, including both selected days in Manila time. All displayed dates use Manila time. These are not paid-date filters. Results are newest-started first, with the higher ID first for equal start times.
+- **Pending** means awaiting confirmation. **Late** is the saved late-payment flag; it does not mean that a refund was issued. **Simulated** marks a development simulation. An attempt without that badge may be sandbox or live; this page cannot distinguish those environments.
+- **Awaiting expiry update** means a pending attempt has passed its expiry time at the displayed snapshot, while its stored status is still Pending. It is distinct from the stored **Link expired** status. Opening or refreshing this page does not expire attempts or contact HitPay. There is no automatic polling.
+- Amounts are shown in PHP with two decimal places. A missing paid date appears as a dash. If the supplier is unavailable, the attempt remains visible without a supplier link. A request ID is an identifier, not a checkout link.
+- Open the supplier's details to investigate payment attention. Do not assume that an individual attempt belongs to an order: this list does not establish that relationship. It offers no refund, edit, export or financial-total actions.
 
 ## Questions
 

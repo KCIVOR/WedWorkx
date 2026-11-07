@@ -1,13 +1,30 @@
 # cPanel package
 
-Download `wedworks-cpanel.zip` from this folder using GitHub's Download raw file button. It contains the application, compiled `public/build` assets, and production `vendor` dependencies. No npm or Composer commands are needed on cPanel.
+Download `wedworks-cpanel.zip` using GitHub's **Download raw file** button. This package contains the application, matching compiled `public/build` assets, and 77 production Composer dependencies. No npm or Composer commands are needed on cPanel.
 
-Extract the ZIP outside `public_html`, for example `/home/YOURUSER/wedworks`. Set the domain document root to `/home/YOURUSER/wedworks/public`. Do not expose the whole application folder to the web.
+## Existing installation: update without Terminal
 
-The ZIP includes hidden files such as `public/.htaccess` and empty Laravel storage directories. It excludes credentials, uploaded files, local database data, logs, development packages, and machine-specific config caches.
+1. Back up the current application files and database. Record the current release so it can be restored. Preserve the server `.env` and all existing `storage` contents, including uploads and sessions; never upload a local database or credentials.
+2. In cPanel File Manager, enable **Show Hidden Files**. Upload and extract the ZIP into a temporary directory outside `public_html`. Confirm `public/.htaccess`, `vendor/autoload.php`, and `public/build/manifest.json` exist. Do not expose the archive or application root publicly.
+3. During a maintenance window, release the application files and production `vendor` together. Preserve the server `.env` and existing `storage`; the archive's storage files are empty-directory placeholders only. Retain a backup and old hashed public assets while existing browser sessions reload.
+4. Release the new controller, routes, React source, navigation, manifest, and new asset files together. The manifest must reference `assets/app-DbI6ewpo.js` and `assets/app-4_74B2nk.css`, both present under `public/build`. Remove `public/hot` if present; it points browsers at a development server. Preserve the existing public storage link.
+5. Keep the domain document root at `/home/YOURUSER/wedworks/public` (substitute the actual app path). Confirm writable Laravel storage/cache directories. Never upload Windows-generated config, route, or compiled-view caches. Package discovery files `bootstrap/cache/packages.php` and `services.php` are included.
+6. If the server has stale route/config/view caches, have hosting support clear them or use a controlled **one-time** cPanel Cron Job running the host's verified PHP binary and `artisan optimize:clear` in the actual application directory. Send output to a private log outside the document root, inspect success, then remove the cron job and temporary log. Use the PHP binary selected for this domain. Do not add a public cache-clearing URL. Preserve the existing scheduler cron.
+7. Sign out and confirm Payment History redirects to login; sign in and verify the page, filters, pagination, and supplier link against existing hosted rows. Compare read-only payment counts/statuses before and after. No migration, seed, backfill, test database, or live payment is required for this feature.
 
-For an existing installation, back up first and preserve its `.env` and `storage` contents when updating. Remove `public/hot` if present; it points browsers at a development server.
+The package excludes `.env`, local databases, uploads, logs, sessions, development dependencies, tests, docs, tools, nested deployment archives, and machine-specific Laravel caches. Hidden env examples and `public/.htaccess`, production package discovery, and empty storage directory placeholders are included.
 
-For a NEW installation, the package does not create the database or admin account. You still need a server-specific `.env` with a unique APP_KEY, database tables and initial campaign/admin records, writable storage directories, the public storage link, and the scheduler cron job. These can be prepared separately through cPanel File Manager, phpMyAdmin, and Cron Jobs or with hosting support. Do not copy the development database or credentials into the live site.
+## Release verification — 2026-11-08
 
-See `docs/DEPLOYMENT.md` in the repository for server requirements and layout. Never upload a Windows-generated Laravel config or route cache to Linux.
+- ZIP: **8,055,594 bytes**, **6,327 files** (**7,243 entries**, including directories).
+- SHA-256: `eb6baffb7076d6b577beb324ff2bb4abb789019f2f57f683a4a7c7e46098a6f8`.
+- ZIP permissions verified: Unix metadata (create_system 3), regular files 0644 and directories 0755; directory DOS flags preserved. Content and timestamps unchanged by metadata normalization.
+- ZIP CRC/integrity, forward-slash paths, required new source, manifest/assets, hidden files, placeholders, and exclusions verified locally. The ZIP contains only the new build hashes; existing hosted old hashes may be retained during rollout.
+- Fresh staging install: `composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist` passed (77 packages); package discovery and fresh `php artisan route:list --name=admin.payments --no-ansi` passed.
+- `composer check-platform-reqs --no-dev` passed on Windows PHP **8.3.29**. Root and production locked dependencies require PHP **8.2+**; confirm the selected host PHP and required extensions satisfy the lock before rollout. Linux/cPanel execution, hosted schema/grants, and production smoke remain **UNVERIFIED**.
+
+## New installation
+
+Extract outside `public_html`, for example `/home/YOURUSER/wedworks`, with the document root at `/home/YOURUSER/wedworks/public`. A new installation still needs a server-specific `.env` with a unique APP_KEY, database tables and initial campaign/admin records, writable storage, public storage link, and scheduler cron. Prepare these separately through cPanel File Manager, phpMyAdmin, Cron Jobs, or hosting support. Do not copy development data or credentials.
+
+See repository `docs/DEPLOYMENT.md` for server requirements and layout. Roll back by restoring the preceding matching application/assets/vendor release, retaining server `.env`, storage, and all business records; clear applicable server caches using the same hosting procedure.
