@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuditController as AdminAuditController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\PaymentHistoryController as AdminPaymentHistoryController;
 use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
 use App\Http\Controllers\Admin\RegistrationQuestionController as AdminRegistrationQuestionController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
@@ -64,6 +65,7 @@ Route::prefix(config('admin.path'))->name('admin.')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('/', AdminDashboardController::class)->name('dashboard');
+        Route::get('/payments', [AdminPaymentHistoryController::class, 'index'])->name('payments');
 
         Route::get('/suppliers', [AdminSupplierController::class, 'index'])->name('suppliers');
         Route::get('/suppliers/export', [AdminSupplierController::class, 'export'])->middleware('throttle:20,1')->name('suppliers.export');
