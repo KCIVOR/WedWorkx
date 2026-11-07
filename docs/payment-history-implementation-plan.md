@@ -355,6 +355,7 @@ Implementation changes are prepared; coordinator handles commits/integration. In
 1. `feat: add protected read-only admin payment history` — new test/controller/page, routes, admin navigation. Minimal page ships with route so component checks pass.
 2. `docs: document payment history behavior and rollout` — ADMIN guide, deployment README, execution results in this plan.
 3. `build: refresh production assets and cPanel payment history package` — manifest, generated assets, verified ZIP.
+4. `docs: record verified payment history release` — coordinator integration and remote-push evidence after release verification.
 
 ## Self-review
 
@@ -416,6 +417,10 @@ Fresh empty external stage: `C:/Users/Rovick/AppData/Local/Temp/wedworks-release
 - [ ] Back up and upload/extract package; release matching files/assets/vendor and clear any stale hosted caches through the documented controlled procedure.
 - [ ] Signed-out/signed-in hosted smoke against existing rows and read-only before/after aggregate comparison; no live charge.
 
-### Local integration pending
+### Local integration completed — 2026-11-08
 
-- [ ] Coordinator to record release commit and authorized push after final review. Record hosted rollout outcome under the gates above; local completion does not claim production deployment.
+- [x] Independent source, specification, code-quality and final package reviews approved. Feature commit `d19cd27`, documentation commit `dd8b24b`, and production-package commit `66e395b` fast-forwarded to `main`.
+- [x] Post-integration focused suite passed in the primary checkout: **12 tests / 205 assertions**, exit 0; new controller and routes passed PHP syntax checks. Independent full suite had already passed **294 tests / 2,853 assertions**, exit 0, in 38.95s against the same implementation.
+- [x] Authorized GitHub push succeeded; `git ls-remote origin refs/heads/main` confirmed release `66e395b3318babeb0a4f51fc03f252d585442f65`. This documentation-only follow-up records that verified release; it does not alter the package or application.
+
+Hosted upload and production validation remain pending under the gates above. GitHub publication does not claim production deployment.
