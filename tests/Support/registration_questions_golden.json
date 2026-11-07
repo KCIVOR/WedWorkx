@@ -1,0 +1,9 @@
+{
+    "name": "Hello! Welcome to our 10‑10‑10 Campaign! We're celebrating Kasalang Tagaytay's 10th anniversary with a special website offer for wedding suppliers. I'd love to know more about your business. Let's get started! 🎉\n\nMay I know your name?",
+    "email": "Nice to meet you, {name}! What's your email address? We'll use this to send you updates about the website offer.",
+    "mobile": "What's the best mobile number to reach you?",
+    "business_name": "What's the name of your wedding business?",
+    "business_type": "What type of wedding service do you offer?",
+    "location": "Which city or province is your business based in?",
+    "social_link": "Last one for now — do you have a Facebook page, Instagram account, or existing website you'd like to share? This is optional."
+}

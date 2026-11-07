@@ -1,0 +1,2386 @@
+{
+    "venue": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "Guest Capacity",
+                "type": "number",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": true,
+                "text": "About how many guests can your venue fit comfortably?",
+                "placeholder": "e.g. 150 guests",
+                "options": null
+            },
+            {
+                "key": "extra2",
+                "label": "What's Included",
+                "type": "choice",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": false,
+                "text": "Besides the venue space, what else is included — like catering, tables and chairs, or decorations?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Venue space only",
+                        "label": "Venue space only"
+                    },
+                    {
+                        "value": "Venue + basic setup (tables & chairs)",
+                        "label": "Venue + basic setup (tables & chairs)"
+                    },
+                    {
+                        "value": "Venue + full package (catering, decor, etc.)",
+                        "label": "Venue + full package (catering, decor, etc.)"
+                    },
+                    {
+                        "value": "It depends on the package",
+                        "label": "It depends on the package"
+                    }
+                ]
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "nullable",
+                "integer",
+                "min:1",
+                "max:100000"
+            ],
+            "extra2": [
+                "required",
+                "string",
+                "in:\"Venue space only\",\"Venue + basic setup (tables & chairs)\",\"Venue + full package (catering, decor, etc.)\",\"It depends on the package\""
+            ]
+        }
+    },
+    "coordinator": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "Planning Service",
+                "type": "choice",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": false,
+                "text": "Which of these do you offer?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Full wedding planning, start to finish",
+                        "label": "Full wedding planning, start to finish"
+                    },
+                    {
+                        "value": "Day-of coordination only",
+                        "label": "Day-of coordination only"
+                    },
+                    {
+                        "value": "Both — depending on what the couple needs",
+                        "label": "Both — depending on what the couple needs"
+                    }
+                ]
+            },
+            {
+                "key": "extra2",
+                "label": "Why Couples Choose You",
+                "type": "textarea",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": true,
+                "text": "What's something couples often say they loved about working with you?",
+                "placeholder": "Optional — e.g. attention to detail, staying calm under pressure...",
+                "options": null
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "required",
+                "string",
+                "in:\"Full wedding planning, start to finish\",\"Day-of coordination only\",\"Both — depending on what the couple needs\""
+            ],
+            "extra2": [
+                "nullable",
+                "string",
+                "max:1000"
+            ]
+        }
+    },
+    "photographer": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "Coverage Type",
+                "type": "choice",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": false,
+                "text": "What kind of coverage do you usually offer?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Full-day coverage",
+                        "label": "Full-day coverage"
+                    },
+                    {
+                        "value": "Half-day coverage",
+                        "label": "Half-day coverage"
+                    },
+                    {
+                        "value": "Ceremony only",
+                        "label": "Ceremony only"
+                    },
+                    {
+                        "value": "Pre-wedding + wedding day",
+                        "label": "Pre-wedding + wedding day"
+                    },
+                    {
+                        "value": "Depends on the package",
+                        "label": "Depends on the package"
+                    }
+                ]
+            },
+            {
+                "key": "extra2",
+                "label": "Photo or Video",
+                "type": "choice",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": false,
+                "text": "Do you do photos, videos, or both?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Photos only",
+                        "label": "Photos only"
+                    },
+                    {
+                        "value": "Videos only",
+                        "label": "Videos only"
+                    },
+                    {
+                        "value": "Both photos and videos",
+                        "label": "Both photos and videos"
+                    }
+                ]
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "required",
+                "string",
+                "in:\"Full-day coverage\",\"Half-day coverage\",\"Ceremony only\",\"Pre-wedding + wedding day\",\"Depends on the package\""
+            ],
+            "extra2": [
+                "required",
+                "string",
+                "in:\"Photos only\",\"Videos only\",\"Both photos and videos\""
+            ]
+        }
+    },
+    "caterer": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "Menu Options",
+                "type": "textarea",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": true,
+                "text": "What food packages or menu styles do you offer?",
+                "placeholder": "e.g. Buffet, plated meals, food stations...",
+                "options": null
+            },
+            {
+                "key": "extra2",
+                "label": "Special Requests",
+                "type": "choice",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": false,
+                "text": "Can you prepare special meals, like vegetarian or halal, if couples ask?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Yes, we can accommodate special requests",
+                        "label": "Yes, we can accommodate special requests"
+                    },
+                    {
+                        "value": "We can try — just ask us first",
+                        "label": "We can try — just ask us first"
+                    },
+                    {
+                        "value": "We only offer our standard menu",
+                        "label": "We only offer our standard menu"
+                    }
+                ]
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "nullable",
+                "string",
+                "max:1000"
+            ],
+            "extra2": [
+                "required",
+                "string",
+                "in:\"Yes, we can accommodate special requests\",\"We can try — just ask us first\",\"We only offer our standard menu\""
+            ]
+        }
+    },
+    "florist": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "Style",
+                "type": "textarea",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": true,
+                "text": "What flower or decoration styles do you usually do?",
+                "placeholder": "e.g. Garden-style, minimalist, tropical...",
+                "options": null
+            },
+            {
+                "key": "extra2",
+                "label": "Other Décor",
+                "type": "choice",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": false,
+                "text": "Do you only do flowers, or do you also handle other décor like backdrops or lights?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Flowers only",
+                        "label": "Flowers only"
+                    },
+                    {
+                        "value": "Flowers plus some décor",
+                        "label": "Flowers plus some décor"
+                    },
+                    {
+                        "value": "Full styling and décor",
+                        "label": "Full styling and décor"
+                    }
+                ]
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "nullable",
+                "string",
+                "max:1000"
+            ],
+            "extra2": [
+                "required",
+                "string",
+                "in:\"Flowers only\",\"Flowers plus some décor\",\"Full styling and décor\""
+            ]
+        }
+    },
+    "makeup": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "Service Location",
+                "type": "choice",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": false,
+                "text": "Where do you usually do the makeup — at your own studio, or do you travel to the venue?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "At my own studio",
+                        "label": "At my own studio"
+                    },
+                    {
+                        "value": "I travel to the venue",
+                        "label": "I travel to the venue"
+                    },
+                    {
+                        "value": "Both, depending on the booking",
+                        "label": "Both, depending on the booking"
+                    }
+                ]
+            },
+            {
+                "key": "extra2",
+                "label": "Trial Session",
+                "type": "choice",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": false,
+                "text": "Do you offer a trial session before the wedding day?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Yes, trials are included",
+                        "label": "Yes, trials are included"
+                    },
+                    {
+                        "value": "Trials available for an extra fee",
+                        "label": "Trials available for an extra fee"
+                    },
+                    {
+                        "value": "No trials — just the wedding day",
+                        "label": "No trials — just the wedding day"
+                    }
+                ]
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "required",
+                "string",
+                "in:\"At my own studio\",\"I travel to the venue\",\"Both, depending on the booking\""
+            ],
+            "extra2": [
+                "required",
+                "string",
+                "in:\"Yes, trials are included\",\"Trials available for an extra fee\",\"No trials — just the wedding day\""
+            ]
+        }
+    },
+    "attire": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "Offering",
+                "type": "choice",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": false,
+                "text": "What do you offer?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Gown or suit rentals",
+                        "label": "Gown or suit rentals"
+                    },
+                    {
+                        "value": "Custom-made outfits",
+                        "label": "Custom-made outfits"
+                    },
+                    {
+                        "value": "Ready-made (off-the-rack)",
+                        "label": "Ready-made (off-the-rack)"
+                    },
+                    {
+                        "value": "A mix of these",
+                        "label": "A mix of these"
+                    }
+                ]
+            },
+            {
+                "key": "extra2",
+                "label": "Fittings & Alterations",
+                "type": "choice",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": false,
+                "text": "Do you also offer fitting or alteration services?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Yes, included",
+                        "label": "Yes, included"
+                    },
+                    {
+                        "value": "Available for a fee",
+                        "label": "Available for a fee"
+                    },
+                    {
+                        "value": "No alteration services",
+                        "label": "No alteration services"
+                    }
+                ]
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "required",
+                "string",
+                "in:\"Gown or suit rentals\",\"Custom-made outfits\",\"Ready-made (off-the-rack)\",\"A mix of these\""
+            ],
+            "extra2": [
+                "required",
+                "string",
+                "in:\"Yes, included\",\"Available for a fee\",\"No alteration services\""
+            ]
+        }
+    },
+    "entertainment": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "What's Included",
+                "type": "textarea",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": true,
+                "text": "What do you provide? For example a live band, DJ, host, or sound system.",
+                "placeholder": "e.g. Live band, DJ, host\/emcee, sound & lights...",
+                "options": null
+            },
+            {
+                "key": "extra2",
+                "label": "Duration",
+                "type": "choice",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": false,
+                "text": "How long do your services usually run on the wedding day?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "A few hours",
+                        "label": "A few hours"
+                    },
+                    {
+                        "value": "The whole event, ceremony to reception",
+                        "label": "The whole event, ceremony to reception"
+                    },
+                    {
+                        "value": "Depends on the package",
+                        "label": "Depends on the package"
+                    }
+                ]
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "nullable",
+                "string",
+                "max:1000"
+            ],
+            "extra2": [
+                "required",
+                "string",
+                "in:\"A few hours\",\"The whole event, ceremony to reception\",\"Depends on the package\""
+            ]
+        }
+    },
+    "cake": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "Flavors & Designs",
+                "type": "textarea",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": true,
+                "text": "What flavors or cake designs do you specialize in?",
+                "placeholder": "Optional — e.g. classic vanilla, custom themed designs...",
+                "options": null
+            },
+            {
+                "key": "extra2",
+                "label": "Tasting",
+                "type": "choice",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": false,
+                "text": "Do you offer a free tasting before the wedding?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Yes, free tasting",
+                        "label": "Yes, free tasting"
+                    },
+                    {
+                        "value": "Tasting available for a fee",
+                        "label": "Tasting available for a fee"
+                    },
+                    {
+                        "value": "No tasting offered",
+                        "label": "No tasting offered"
+                    }
+                ]
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "nullable",
+                "string",
+                "max:1000"
+            ],
+            "extra2": [
+                "required",
+                "string",
+                "in:\"Yes, free tasting\",\"Tasting available for a fee\",\"No tasting offered\""
+            ]
+        }
+    },
+    "invitations": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "What You Make",
+                "type": "choice",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": false,
+                "text": "What do you make — invitations, souvenirs, or both?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Invitations only",
+                        "label": "Invitations only"
+                    },
+                    {
+                        "value": "Souvenirs or giveaways only",
+                        "label": "Souvenirs or giveaways only"
+                    },
+                    {
+                        "value": "Both invitations and souvenirs",
+                        "label": "Both invitations and souvenirs"
+                    }
+                ]
+            },
+            {
+                "key": "extra2",
+                "label": "Custom Designs",
+                "type": "choice",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": false,
+                "text": "Can couples ask for a custom design, or do you only offer ready-made designs?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Yes, custom designs available",
+                        "label": "Yes, custom designs available"
+                    },
+                    {
+                        "value": "Mostly ready-made designs",
+                        "label": "Mostly ready-made designs"
+                    },
+                    {
+                        "value": "Both options available",
+                        "label": "Both options available"
+                    }
+                ]
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "required",
+                "string",
+                "in:\"Invitations only\",\"Souvenirs or giveaways only\",\"Both invitations and souvenirs\""
+            ],
+            "extra2": [
+                "required",
+                "string",
+                "in:\"Yes, custom designs available\",\"Mostly ready-made designs\",\"Both options available\""
+            ]
+        }
+    },
+    "transportation": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "Offering",
+                "type": "choice",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": false,
+                "text": "What do you offer?",
+                "placeholder": null,
+                "options": [
+                    {
+                        "value": "Wedding car or transportation only",
+                        "label": "Wedding car or transportation only"
+                    },
+                    {
+                        "value": "Accommodation only",
+                        "label": "Accommodation only"
+                    },
+                    {
+                        "value": "Both transportation and accommodation",
+                        "label": "Both transportation and accommodation"
+                    }
+                ]
+            },
+            {
+                "key": "extra2",
+                "label": "Vehicles & Packages",
+                "type": "textarea",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": true,
+                "text": "What vehicles or rooms\/packages do you have available?",
+                "placeholder": "Optional — e.g. bridal car, van for guests, honeymoon suite...",
+                "options": null
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "required",
+                "string",
+                "in:\"Wedding car or transportation only\",\"Accommodation only\",\"Both transportation and accommodation\""
+            ],
+            "extra2": [
+                "nullable",
+                "string",
+                "max:1000"
+            ]
+        }
+    },
+    "other": {
+        "questions": [
+            {
+                "key": "description",
+                "label": "Business Description",
+                "type": "textarea",
+                "fields": [
+                    "description"
+                ],
+                "optional": false,
+                "text": "Let's start with your business. In a sentence or two, what makes Biz special to couples getting married?",
+                "placeholder": "e.g. We've been in the wedding industry for 8 years..."
+            },
+            {
+                "key": "services",
+                "label": "Services \/ Packages",
+                "type": "services",
+                "fields": [
+                    "services"
+                ],
+                "optional": true,
+                "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it."
+            },
+            {
+                "key": "areas",
+                "label": "Service Areas & Booking",
+                "type": "areas",
+                "fields": [
+                    "service_areas",
+                    "booking"
+                ],
+                "optional": true,
+                "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?"
+            },
+            {
+                "key": "media",
+                "label": "Photos, Logo & Colors",
+                "type": "media",
+                "fields": [
+                    "colors"
+                ],
+                "optional": true,
+                "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+                "placeholder": "Favorite colors, e.g. Blush pink and gold"
+            },
+            {
+                "key": "style",
+                "label": "Website Style",
+                "type": "choice",
+                "fields": [
+                    "style"
+                ],
+                "optional": false,
+                "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+                "options": [
+                    {
+                        "value": "elegant",
+                        "label": "Elegant & Luxurious"
+                    },
+                    {
+                        "value": "modern",
+                        "label": "Modern & Simple"
+                    },
+                    {
+                        "value": "romantic",
+                        "label": "Romantic & Soft"
+                    },
+                    {
+                        "value": "classic",
+                        "label": "Classic & Timeless"
+                    },
+                    {
+                        "value": "colorful",
+                        "label": "Colorful & Creative"
+                    },
+                    {
+                        "value": "surprise",
+                        "label": "Surprise Me!"
+                    }
+                ]
+            },
+            {
+                "key": "additional",
+                "label": "Additional Info",
+                "type": "textarea",
+                "fields": [
+                    "additional"
+                ],
+                "optional": true,
+                "text": "Anything else couples should know? For example reviews, ongoing promos, or how far in advance they should book. This is optional.",
+                "placeholder": "Optional — leave blank to skip"
+            },
+            {
+                "key": "extra1",
+                "label": "Business Details",
+                "type": "textarea",
+                "fields": [
+                    "extra1"
+                ],
+                "optional": true,
+                "text": "Tell us a bit more about what your business offers.",
+                "placeholder": "Optional",
+                "options": null
+            },
+            {
+                "key": "extra2",
+                "label": "Additional Notes",
+                "type": "textarea",
+                "fields": [
+                    "extra2"
+                ],
+                "optional": true,
+                "text": "Is there anything else couples should know before booking you?",
+                "placeholder": "Optional",
+                "options": null
+            }
+        ],
+        "rules": {
+            "description": [
+                "required",
+                "string",
+                "min:5",
+                "max:1000"
+            ],
+            "services": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "services.*.name": [
+                "required",
+                "string",
+                "max:120"
+            ],
+            "services.*.price": [
+                "nullable",
+                "string",
+                "max:40"
+            ],
+            "service_areas": [
+                "nullable",
+                "array",
+                "max:20"
+            ],
+            "service_areas.*": [
+                "required",
+                "string",
+                "max:80"
+            ],
+            "booking": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "colors": [
+                "nullable",
+                "string",
+                "max:120"
+            ],
+            "style": [
+                "required",
+                "string",
+                "in:\"elegant\",\"modern\",\"romantic\",\"classic\",\"colorful\",\"surprise\""
+            ],
+            "additional": [
+                "nullable",
+                "string",
+                "max:2000"
+            ],
+            "extra1": [
+                "nullable",
+                "string",
+                "max:1000"
+            ],
+            "extra2": [
+                "nullable",
+                "string",
+                "max:1000"
+            ]
+        }
+    }
+}

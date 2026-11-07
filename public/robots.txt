@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /invite/
+Disallow: /api/
+Disallow: /webhooks/

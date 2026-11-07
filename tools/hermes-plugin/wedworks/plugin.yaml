@@ -1,0 +1,26 @@
+name: wedworks
+label: WedWorks
+kind: platform
+version: 1.0.0
+description: >
+  Supplier chats from the WedWorks website (the 10-10-10 campaign), answered by this Hermes profile.
+  Keeps one request open to the WedWorks system and replies through its Hermes API. Standard library only.
+author: WedWorks
+requires_env:
+  - name: WEDWORKS_URL
+    description: "The WedWorks website, for example http://127.0.0.1:8081"
+    prompt: "WedWorks website address"
+    password: false
+  - name: WEDWORKS_HERMES_TOKEN
+    description: "The Hermes token from WedWorks Admin > Settings > Hermes agents"
+    prompt: "Hermes token"
+    password: true
+optional_env:
+  - name: WEDWORKS_WAIT
+    description: "Seconds one request is held open waiting for a supplier message (1 to 20, default 20)"
+    prompt: "Wait seconds"
+    password: false
+  - name: WEDWORKS_ALLOW_ALL_USERS
+    description: "true lets every WedWorks chat talk to the agent (the plugin opens no port; chats come only from the WedWorks system)"
+    prompt: "Allow all chats? (true/false)"
+    password: false

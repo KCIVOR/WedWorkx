@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10-10-10 Website Campaign — Kasalang Tagaytay</title>
+<style>
+/* ============ RESET & BASE ============ */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#faf7f1;
+  --surface:#ffffff;
+  --surface-soft:#fbf8f3;
+  --text:#2c2420;
+  --text-soft:#6f6358;
+  --text-faint:#a89c8d;
+  --primary:#8a6d2f;
+  --primary-dark:#6b5321;
+  --primary-light:#f3e8d0;
+  --accent:#c9a24b;
+  --success:#3f7d5c;
+  --success-bg:#e8f3ec;
+  --danger:#a8463d;
+  --danger-bg:#faeae8;
+  --warning:#b8863b;
+  --warning-bg:#fbf1e2;
+  --border:#e8ddc9;
+  --radius-sm:8px;
+  --radius:14px;
+  --radius-lg:22px;
+  --shadow-sm:0 2px 8px rgba(60,45,20,0.06);
+  --shadow:0 8px 28px rgba(60,45,20,0.10);
+  --shadow-lg:0 16px 48px rgba(60,45,20,0.16);
+  --font-head:Georgia,'Times New Roman',serif;
+  --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+}
+html,body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.5;}
+body{min-height:100vh;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:var(--font-head);font-weight:600;letter-spacing:0.2px;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input,select,textarea{font-family:inherit;font-size:15px;}
+a{color:var(--primary);text-decoration:none;}
+::selection{background:var(--primary-light);}
+.hidden{display:none !important;}
+.vis-hidden{visibility:hidden;}
+
+/* ============ LAYOUT SHELL ============ */
+#app{min-height:100vh;display:flex;flex-direction:column;}
+.topbar{
+  position:sticky;top:0;z-index:40;background:rgba(250,247,241,0.92);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;gap:16px;
+}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.brand-mark{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--primary-dark));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-head);font-weight:700;font-size:13px;flex-shrink:0;}
+.brand-text{display:flex;flex-direction:column;line-height:1.2;}
+.brand-text strong{font-family:var(--font-head);font-size:16px;color:var(--text);}
+.brand-text span{font-size:11px;color:var(--text-soft);letter-spacing:0.5px;text-transform:uppercase;}
+.nav-links{display:flex;gap:4px;flex-wrap:wrap;}
+.nav-btn{padding:9px 14px;border-radius:999px;font-size:13.5px;color:var(--text-soft);transition:background .15s,color .15s;white-space:nowrap;}
+.nav-btn:hover{background:var(--primary-light);color:var(--primary-dark);}
+.nav-btn.active{background:var(--primary-dark);color:#fff;}
+.nav-toggle{display:none;}
+@media (max-width:860px){
+  .nav-links{position:fixed;top:64px;left:0;right:0;background:var(--surface);flex-direction:column;padding:10px;box-shadow:var(--shadow);transform:translateY(-10px);opacity:0;pointer-events:none;transition:all .18s;z-index:39;}
+  .nav-links.open{transform:translateY(0);opacity:1;pointer-events:auto;}
+  .nav-toggle{display:flex;width:38px;height:38px;align-items:center;justify-content:center;border-radius:10px;background:var(--primary-light);font-size:18px;}
+}
+
+main{flex:1;width:100%;}
+.view{display:none;animation:fadeIn .35s ease;}
+.view.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.container{max-width:980px;margin:0 auto;padding:36px 24px 80px;}
+.container.wide{max-width:1180px;}
+
+/* ============ GENERIC COMPONENTS ============ */
+.eyebrow{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);font-weight:600;margin-bottom:8px;}
+.page-title{font-size:30px;color:var(--text);margin-bottom:10px;}
+.page-sub{color:var(--text-soft);font-size:15.5px;max-width:640px;margin-bottom:28px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow-sm);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:999px;font-size:14.5px;font-weight:600;transition:transform .12s,box-shadow .12s,background .15s;}
+.btn-primary{background:var(--primary-dark);color:#fff;box-shadow:0 4px 14px rgba(107,83,33,0.28);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(107,83,33,0.34);}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-outline{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary-dark);}
+.btn-outline:hover{background:var(--primary-light);}
+.btn-ghost{color:var(--text-soft);padding:10px 16px;}
+.btn-ghost:hover{color:var(--text);}
+.btn-success{background:var(--success);color:#fff;}
+.btn-danger{background:var(--danger);color:#fff;}
+.btn-sm{padding:8px 14px;font-size:13px;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:0.3px;}
+.pill-gold{background:var(--primary-light);color:var(--primary-dark);}
+.pill-success{background:var(--success-bg);color:var(--success);}
+.pill-warning{background:var(--warning-bg);color:var(--warning);}
+.pill-danger{background:var(--danger-bg);color:var(--danger);}
+.pill-muted{background:#eee8dc;color:var(--text-soft);}
+.divider{height:1px;background:var(--border);margin:22px 0;}
+.badge-demo{position:fixed;bottom:18px;left:18px;z-index:50;background:#2c2420;color:#f3e8d0;font-size:11px;padding:7px 13px;border-radius:999px;letter-spacing:0.4px;box-shadow:var(--shadow);opacity:0.88;}
+.toast-wrap{position:fixed;top:70px;right:18px;z-index:200;display:flex;flex-direction:column;gap:10px;max-width:320px;}
+.toast{background:#2c2420;color:#fdf9f0;padding:13px 16px;border-radius:12px;font-size:13.5px;box-shadow:var(--shadow-lg);animation:toastIn .25s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
+
+/* ============ OVERVIEW / JOURNEY MAP ============ */
+.hero{text-align:center;padding:50px 20px 20px;}
+.hero h1{font-size:40px;margin-bottom:14px;}
+.hero p{color:var(--text-soft);font-size:16.5px;max-width:620px;margin:0 auto 26px;}
+.hero-stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:30px;}
+.stat-chip{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 22px;min-width:120px;box-shadow:var(--shadow-sm);}
+.stat-chip b{display:block;font-family:var(--font-head);font-size:22px;color:var(--primary-dark);}
+.stat-chip span{font-size:12px;color:var(--text-soft);}
+.journey-group{margin-bottom:34px;}
+.journey-group h3{font-size:14px;letter-spacing:0.8px;text-transform:uppercase;color:var(--text-soft);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.journey-group h3 .num{width:24px;height:24px;border-radius:50%;background:var(--primary-dark);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.flow-row{display:flex;align-items:center;gap:6px;overflow-x:auto;padding:6px 2px 14px;}
+.flow-node{flex:0 0 auto;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;min-width:130px;text-align:center;cursor:pointer;transition:all .15s;}
+.flow-node:hover{border-color:var(--accent);box-shadow:var(--shadow-sm);transform:translateY(-2px);}
+.flow-node .ico{font-size:22px;margin-bottom:6px;}
+.flow-node .lbl{font-size:12.5px;font-weight:600;color:var(--text);}
+.flow-arrow{flex:0 0 auto;color:var(--text-faint);font-size:18px;padding:0 2px;}
+.overview-cta{text-align:center;margin-top:10px;}
+
+/* ============ QR SCAN SCREEN ============ */
+.qr-screen{text-align:center;padding:40px 20px;}
+.qr-box{width:220px;height:220px;margin:0 auto 22px;background:#fff;border:2px solid var(--border);border-radius:18px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.qr-box .scan-line{position:absolute;left:8%;width:84%;height:2px;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:scan 1.8s ease-in-out infinite;}
+@keyframes scan{0%{top:8%;}50%{top:88%;}100%{top:8%;}}
+.qr-grid{display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);width:150px;height:150px;gap:3px;}
+.qr-grid div{background:#2c2420;border-radius:1px;}
+.qr-grid div.off{background:transparent;}
+
+/* ============ CHAT UI ============ */
+.chat-shell{max-width:620px;margin:0 auto;}
+.chat-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.chat-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--primary-dark));display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;}
+.chat-head-text strong{display:block;font-size:15px;}
+.chat-head-text span{font-size:12px;color:var(--text-soft);}
+.progress-track{height:6px;background:var(--border);border-radius:999px;overflow:hidden;margin-bottom:18px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--primary-dark));border-radius:999px;transition:width .4s ease;}
+.chat-window{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;min-height:360px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:14px;}
+.chat-log{display:flex;flex-direction:column;gap:12px;max-height:46vh;overflow-y:auto;padding-right:4px;scroll-behavior:smooth;}
+.msg-row{display:flex;gap:10px;align-items:flex-end;animation:msgIn .28s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.msg-row.user{justify-content:flex-end;}
+.msg-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:var(--primary-light);color:var(--primary-dark);}
+.msg-row.user .msg-avatar{background:var(--primary-dark);color:#fff;order:2;}
+.bubble{max-width:78%;padding:11px 15px;border-radius:16px;font-size:14.5px;line-height:1.45;white-space:pre-wrap;}
+.msg-row.bot .bubble{background:var(--surface-soft);border:1px solid var(--border);border-bottom-left-radius:4px;}
+.msg-row.user .bubble{background:var(--primary-dark);color:#fff;border-bottom-right-radius:4px;}
+.typing-dots{display:inline-flex;gap:4px;padding:4px 2px;}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--text-faint);animation:bounce 1.2s infinite ease-in-out;}
+.typing-dots span:nth-child(2){animation-delay:.15s;}
+.typing-dots span:nth-child(3){animation-delay:.3s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:.5;}40%{transform:translateY(-5px);opacity:1;}}
+.input-zone{border-top:1px solid var(--border);padding-top:16px;}
+.field-text,.field-select,.field-textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:#fff;transition:border-color .15s;}
+.field-text:focus,.field-select:focus,.field-textarea:focus{outline:none;border-color:var(--accent);}
+.field-textarea{min-height:90px;resize:vertical;}
+.field-error{color:var(--danger);font-size:12.5px;margin-top:6px;display:none;}
+.field-error.show{display:block;}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.chip{padding:8px 15px;border-radius:999px;border:1.5px solid var(--border);background:#fff;font-size:13.5px;cursor:pointer;transition:all .12s;}
+.chip:hover{border-color:var(--accent);}
+.chip.selected{background:var(--primary-dark);color:#fff;border-color:var(--primary-dark);}
+.chip.addable{display:flex;align-items:center;gap:6px;background:var(--surface-soft);}
+.chip .remove{font-size:12px;opacity:0.7;}
+.option-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px;}
+.option-card{border:1.5px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;cursor:pointer;background:#fff;transition:all .15s;}
+.option-card:hover{border-color:var(--accent);transform:translateY(-1px);}
+.option-card.selected{border-color:var(--primary-dark);background:var(--primary-light);}
+.option-card .ico{font-size:20px;margin-bottom:6px;display:block;}
+.option-card .lbl{font-size:13px;font-weight:600;}
+.chatnav{display:flex;justify-content:space-between;align-items:center;margin-top:16px;}
+.skip-link{font-size:13px;color:var(--text-soft);text-decoration:underline;}
+.service-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.service-row input{flex:1;min-width:120px;}
+.service-row .price{width:110px;flex:0 0 auto;}
+.remove-row{color:var(--danger);font-size:18px;padding:0 6px;}
+.add-row-btn{font-size:13px;color:var(--primary-dark);font-weight:600;margin-top:4px;}
+.upload-zone{border:1.5px dashed var(--border);border-radius:12px;padding:18px;text-align:center;cursor:pointer;background:var(--surface-soft);}
+.upload-zone:hover{border-color:var(--accent);}
+.upload-list{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.upload-thumb{width:64px;height:64px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--primary-dark);overflow:hidden;position:relative;text-align:center;padding:4px;}
+.upload-thumb img{width:100%;height:100%;object-fit:cover;}
+
+/* ============ SUMMARY / REVIEW ============ */
+.review-item{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--border);}
+.review-item:last-child{border-bottom:none;}
+.review-item .k{font-size:12.5px;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.4px;min-width:170px;}
+.review-item .v{flex:1;font-size:14.5px;text-align:right;}
+.edit-link{font-size:12.5px;color:var(--primary);font-weight:600;flex-shrink:0;margin-left:10px;}
+
+/* ============ INVITATION / WAITLIST ============ */
+.result-screen{text-align:center;padding:30px 10px;}
+.result-icon{width:78px;height:78px;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-size:36px;}
+.result-icon.success{background:var(--success-bg);color:var(--success);}
+.result-icon.wait{background:var(--warning-bg);color:var(--warning);}
+.result-icon.expired{background:var(--danger-bg);color:var(--danger);}
+.countdown{display:flex;justify-content:center;gap:10px;margin:20px 0;}
+.countdown .box{background:var(--surface-soft);border:1px solid var(--border);border-radius:10px;padding:10px 16px;min-width:64px;text-align:center;}
+.countdown .box b{display:block;font-size:20px;font-family:var(--font-head);}
+.countdown .box span{font-size:10px;color:var(--text-soft);text-transform:uppercase;}
+.note-box{background:var(--warning-bg);border:1px solid #e6cf9f;border-radius:12px;padding:12px 15px;font-size:13px;color:#7a5a1e;text-align:left;margin-top:16px;}
+
+/* ============ EMAIL PREVIEW ============ */
+.email-client{max-width:560px;margin:0 auto;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;}
+.email-bar{background:#f1ebe0;padding:12px 18px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-soft);}
+.email-bar span.dot{width:9px;height:9px;border-radius:50%;background:#ddd0ba;}
+.email-meta{padding:20px 22px 14px;border-bottom:1px solid var(--border);}
+.email-meta .subj{font-size:17px;font-weight:700;margin-bottom:8px;}
+.email-meta .from{font-size:12.5px;color:var(--text-soft);}
+.email-body{padding:22px;font-size:14.5px;line-height:1.7;}
+.email-body .sig{margin-top:18px;color:var(--text-soft);}
+.email-cta{display:inline-block;background:var(--primary-dark);color:#fff !important;padding:12px 24px;border-radius:999px;font-weight:600;margin:16px 0;font-size:14px;}
+.email-card-mini{background:var(--surface-soft);border:1px solid var(--border);border-radius:10px;padding:14px;margin:12px 0;font-size:13.5px;}
+.email-card-mini .row{display:flex;justify-content:space-between;padding:3px 0;}
+.email-tabs{display:flex;gap:8px;margin-bottom:18px;justify-content:center;}
+
+/* ============ PAYMENT ============ */
+.pay-card{max-width:460px;margin:0 auto;}
+.pay-amount{font-size:40px;font-family:var(--font-head);color:var(--primary-dark);text-align:center;margin:6px 0 2px;}
+.pay-rows .row{display:flex;justify-content:space-between;padding:9px 0;font-size:14px;border-bottom:1px solid var(--border);}
+.pay-rows .row:last-child{border-bottom:none;}
+.modal-overlay{position:fixed;inset:0;background:rgba(30,22,10,0.45);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;}
+.modal-box{background:#fff;border-radius:var(--radius);padding:30px;max-width:380px;width:100%;box-shadow:var(--shadow-lg);text-align:center;animation:modalIn .22s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
+.spinner{width:42px;height:42px;border:3px solid var(--border);border-top-color:var(--primary-dark);border-radius:50%;margin:0 auto 16px;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ============ HERMES PIPELINE ============ */
+.pipeline{display:flex;flex-direction:column;gap:0;max-width:560px;margin:0 auto;}
+.pipe-step{display:flex;gap:16px;padding:16px 0;position:relative;}
+.pipe-step .dot-col{display:flex;flex-direction:column;align-items:center;}
+.pipe-step .dot{width:34px;height:34px;border-radius:50%;background:var(--surface-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-faint);flex-shrink:0;transition:all .25s;}
+.pipe-step .line{width:2px;flex:1;background:var(--border);margin:4px 0;}
+.pipe-step:last-child .line{display:none;}
+.pipe-step.done .dot{background:var(--success);border-color:var(--success);color:#fff;}
+.pipe-step.active .dot{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff;animation:pulseDot 1.2s infinite;}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(107,83,33,.4);}50%{box-shadow:0 0 0 7px rgba(107,83,33,0);}}
+.pipe-step.done .line{background:var(--success);}
+.pipe-body strong{display:block;font-size:14.5px;margin-bottom:3px;}
+.pipe-body span{font-size:13px;color:var(--text-soft);}
+
+/* ============ DASHBOARD ============ */
+.status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px;}
+.status-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;}
+.status-card .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.status-card .top strong{font-size:13.5px;}
+
+/* ============ DEMO PANEL ============ */
+.demo-fab{position:fixed;bottom:18px;right:18px;z-index:120;width:52px;height:52px;border-radius:50%;background:var(--primary-dark);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-lg);}
+.demo-panel{position:fixed;bottom:84px;right:18px;z-index:119;width:290px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-lg);border:1px solid var(--border);padding:16px;display:none;max-height:72vh;overflow-y:auto;}
+.demo-panel.open{display:block;}
+.demo-panel h4{font-size:12.5px;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-soft);margin-bottom:10px;}
+.demo-btn{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:10px;font-size:13px;margin-bottom:6px;background:var(--surface-soft);border:1px solid var(--border);transition:all .12s;}
+.demo-btn:hover{border-color:var(--accent);background:var(--primary-light);}
+.demo-btn small{display:block;color:var(--text-soft);font-size:11px;margin-top:2px;}
+.demo-restart{color:var(--danger);font-weight:600;}
+
+footer.site-footer{text-align:center;padding:24px;color:var(--text-faint);font-size:12px;}
+
+@media (max-width:620px){
+  .container{padding:24px 16px 70px;}
+  .hero h1{font-size:28px;}
+  .bubble{max-width:86%;}
+  .flow-row{padding-bottom:10px;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===================== TOP BAR ===================== -->
+  <div class="topbar">
+    <div class="brand" onclick="showView('overview')">
+      <div class="brand-mark">10</div>
+      <div class="brand-text"><strong>10‑10‑10 Website Campaign</strong><span>Kasalang Tagaytay · 10th Anniversary</span></div>
+    </div>
+    <button class="nav-toggle" id="navToggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <button class="nav-btn" data-view="overview" onclick="showView('overview')">Overview</button>
+      <button class="nav-btn" data-view="chatbot1" onclick="goChatbot1Entry()">Journey 1</button>
+      <button class="nav-btn" data-view="chatbot2" onclick="goChatbot2Entry()">Journey 2</button>
+      <button class="nav-btn" data-view="emails" onclick="showView('emails')">Emails</button>
+      <button class="nav-btn" data-view="dashboard" onclick="showView('dashboard')">My Website</button>
+    </nav>
+  </div>
+
+  <main>
+
+    <!-- ===================== VIEW: OVERVIEW ===================== -->
+    <section class="view" id="view-overview">
+      <div class="container wide">
+        <div class="hero">
+          <div class="eyebrow">Interactive Prototype</div>
+          <h1>The Complete 10‑10‑10 Journey</h1>
+          <p>A limited offer for 10 wedding suppliers to celebrate Kasalang Tagaytay's 10th anniversary — a professional website for ₱10,000, from chatbot registration all the way to delivery.</p>
+          <div class="hero-stats">
+            <div class="stat-chip"><b id="stat-slots">10</b><span>Websites Available</span></div>
+            <div class="stat-chip"><b>₱10,000</b><span>Per Website</span></div>
+            <div class="stat-chip"><b>10th</b><span>Anniversary</span></div>
+            <div class="stat-chip"><b>5 days</b><span>Delivery Goal</span></div>
+          </div>
+          <div class="overview-cta">
+            <button class="btn btn-primary" onclick="goChatbot1Entry()">▶ Start the Journey (Scan QR)</button>
+          </div>
+        </div>
+
+        <div class="journey-group">
+          <h3><span class="num">1</span> Registration Chatbot</h3>
+          <div class="flow-row">
+            <div class="flow-node" onclick="goChatbot1Entry()"><div class="ico">📱</div><div class="lbl">Scan QR Code</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="goChatbot1Entry()"><div class="ico">💬</div><div class="lbl">Chatbot 1<br>Basic Info</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="showView('invite')"><div class="ico">🎟️</div><div class="lbl">Invitation or<br>Waiting List</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="showView('emails')"><div class="ico">✉️</div><div class="lbl">Invitation Email</div></div>
+          </div>
+        </div>
+
+        <div class="journey-group">
+          <h3><span class="num">2</span> Website &amp; Payment Chatbot</h3>
+          <div class="flow-row">
+            <div class="flow-node" onclick="goChatbot2Entry()"><div class="ico">🔗</div><div class="lbl">Private Link</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="goChatbot2Entry()"><div class="ico">💬</div><div class="lbl">Chatbot 2<br>Website Info</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="showView('payment');renderPayment();"><div class="ico">💳</div><div class="lbl">Pay ₱10,000</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="showView('emails')"><div class="ico">✅</div><div class="lbl">Confirmation Email</div></div>
+          </div>
+        </div>
+
+        <div class="journey-group">
+          <h3><span class="num">3</span> Hermes AI Website Creation <span class="pill pill-muted" style="margin-left:6px;">Internal / Dev view — suppliers don't see this</span></h3>
+          <div class="flow-row">
+            <div class="flow-node" onclick="showView('hermes')"><div class="ico">🤖</div><div class="lbl">Hermes Receives Info</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="showView('hermes')"><div class="ico">🎨</div><div class="lbl">Website Remix Agent</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="showView('hermes')"><div class="ico">✍️</div><div class="lbl">Content Builder</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="showView('hermes')"><div class="ico">🛠️</div><div class="lbl">CMS Creator</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="showView('hermes')"><div class="ico">🔍</div><div class="lbl">Quality Review</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node" onclick="showView('hermes')"><div class="ico">🚀</div><div class="lbl">Publish &amp; Deliver</div></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:10px;">
+          <strong style="font-size:14px;">Already in the journey?</strong>
+          <p style="color:var(--text-soft);font-size:13.5px;margin-top:6px;">Open <a href="javascript:showView('dashboard')">My Website</a> to see saved progress, or use the demo controls (bottom-right) to jump straight into any scenario.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== VIEW: CHATBOT 1 (QR + CHAT + SUMMARY) ===================== -->
+    <section class="view" id="view-chatbot1">
+      <div class="container">
+
+        <div id="cb1-qr" class="qr-screen">
+          <div class="eyebrow">Journey 1 · Step 1</div>
+          <h2 class="page-title">Scan to Begin</h2>
+          <p class="page-sub" style="margin:0 auto 24px;">Suppliers at the Kasalang Tagaytay event scan this code to open the registration chatbot.</p>
+          <div class="qr-box">
+            <div class="scan-line"></div>
+            <div class="qr-grid" id="qrGrid"></div>
+          </div>
+          <div class="btn-row" style="justify-content:center;">
+            <button class="btn btn-primary" onclick="startChatbot1()">▶ Start Chatbot</button>
+          </div>
+          <div class="note-box" style="max-width:480px;margin:22px auto 0;text-align:center;">
+            🎉 10 Websites Available &nbsp;·&nbsp; ₱10,000 per website &nbsp;·&nbsp; 10th Anniversary Campaign
+          </div>
+        </div>
+
+        <div id="cb1-chat" class="chat-shell hidden">
+          <div class="chat-head">
+            <div class="chat-avatar">💬</div>
+            <div class="chat-head-text"><strong>Registration Assistant</strong><span>Chatbot 1 · Basic Information</span></div>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="cb1-progress" style="width:0%;"></div></div>
+          <div class="chat-window">
+            <div class="chat-log" id="cb1-log"></div>
+            <div class="input-zone" id="cb1-input"></div>
+          </div>
+        </div>
+
+        <div id="cb1-summary" class="hidden">
+          <div class="eyebrow">Journey 1 · Review</div>
+          <h2 class="page-title">Review Your Information</h2>
+          <p class="page-sub">Please check your details before finishing registration. You can edit anything below.</p>
+          <div class="card" id="cb1-summary-list"></div>
+          <div class="btn-row">
+            <button class="btn btn-outline" onclick="restartChatbot1()">↺ Start Over</button>
+            <button class="btn btn-primary" onclick="finishRegistration()">Finish Registration →</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== VIEW: INVITATION / WAITLIST ===================== -->
+    <section class="view" id="view-invite">
+      <div class="container" id="invite-container"></div>
+    </section>
+
+    <!-- ===================== VIEW: CHATBOT 2 ===================== -->
+    <section class="view" id="view-chatbot2">
+      <div class="container" id="cb2-container"></div>
+    </section>
+
+    <!-- ===================== VIEW: PAYMENT ===================== -->
+    <section class="view" id="view-payment">
+      <div class="container" id="payment-container"></div>
+    </section>
+
+    <!-- ===================== VIEW: EMAILS ===================== -->
+    <section class="view" id="view-emails">
+      <div class="container">
+        <div class="eyebrow">Simulated Inbox</div>
+        <h2 class="page-title">Email Previews</h2>
+        <p class="page-sub">No real emails are sent — these previews show exactly what a supplier would receive at each stage.</p>
+        <div class="email-tabs">
+          <button class="btn btn-outline btn-sm" id="emailTabInvite" onclick="showEmailTab('invite')">① Invitation Email</button>
+          <button class="btn btn-outline btn-sm" id="emailTabConfirm" onclick="showEmailTab('confirm')">② Confirmation Email</button>
+        </div>
+        <div id="email-content"></div>
+      </div>
+    </section>
+
+    <!-- ===================== VIEW: HERMES ===================== -->
+    <section class="view" id="view-hermes">
+      <div class="container" id="hermes-container"></div>
+    </section>
+
+    <!-- ===================== VIEW: DASHBOARD ===================== -->
+    <section class="view" id="view-dashboard">
+      <div class="container" id="dashboard-container"></div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">10‑10‑10 Website Campaign Prototype · Kasalang Tagaytay · All data on this page is simulated and stored only in your browser.</footer>
+</div>
+
+<!-- Demo badge -->
+<div class="badge-demo" id="demoBadge">● Prototype — all actions simulated</div>
+
+<!-- Demo control panel -->
+<button class="demo-fab" id="demoFab" onclick="toggleDemoPanel()" title="Demo Controls">⚙️</button>
+<div class="demo-panel" id="demoPanel">
+  <h4>Demo Scenarios</h4>
+  <button class="demo-btn" onclick="applyScenario('first10')">① First 10<small>Register and receive an invitation</small></button>
+  <button class="demo-btn" onclick="applyScenario('waitlist')">② Waiting List<small>All invitations occupied — join the waiting list</small></button>
+  <button class="demo-btn" onclick="applyScenario('expired')">③ Invitation Expired<small>Spot offered to the next waiting applicant</small></button>
+  <button class="demo-btn" onclick="applyScenario('paysuccess')">④ Payment Successful<small>Jump to Chatbot 2 → pay → Hermes</small></button>
+  <button class="demo-btn" onclick="applyScenario('paypending')">⑤ Payment Pending<small>Left before paying — resume later</small></button>
+  <button class="demo-btn" onclick="applyScenario('delivered')">⑥ Website Delivered<small>Final successful outcome</small></button>
+  <div class="divider" style="margin:10px 0;"></div>
+  <h4>Developer View</h4>
+  <button class="demo-btn" onclick="showView('hermes');toggleDemoPanel();">🤖 Journey 3 — Hermes Pipeline<small>Internal only — not shown to suppliers</small></button>
+  <div class="divider" style="margin:10px 0;"></div>
+  <button class="demo-btn demo-restart" onclick="restartDemo()">↺ Restart Demo (clear all data)</button>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- ============================================================ -->
+<!-- JAVASCRIPT                                                    -->
+<!-- ============================================================ -->
+<script>
+/* ======================================================================
+   STATE
+====================================================================== */
+const STORAGE_KEY = 'tenTenTenState_v1';
+const TOTAL_SLOTS = 10;
+const PRICE = 10000;
+
+const BUSINESS_TYPES = [
+  {v:'venue', l:'Wedding Venue'},
+  {v:'coordinator', l:'Wedding Coordinator / Planner'},
+  {v:'photographer', l:'Photographer / Videographer'},
+  {v:'caterer', l:'Catering Supplier'},
+  {v:'florist', l:'Florist / Wedding Stylist'},
+  {v:'makeup', l:'Makeup Artist'},
+  {v:'attire', l:'Bridal Gown / Suit Supplier'},
+  {v:'entertainment', l:'Wedding Entertainment Supplier'},
+  {v:'cake', l:'Wedding Cake Supplier'},
+  {v:'invitations', l:'Invitations / Souvenirs Supplier'},
+  {v:'transportation', l:'Transportation / Accommodation Supplier'},
+  {v:'other', l:'Other Wedding-Related Business'}
+];
+
+const EXTRA_QUESTIONS = {
+  venue:{text:"How many guests can your venue accommodate?",type:'number',placeholder:'e.g. 150 guests'},
+  coordinator:{text:"Do you offer full planning, partial planning, or wedding-day coordination?",type:'select',options:['Full planning','Partial planning','Wedding-day coordination only','All of the above']},
+  photographer:{text:"What kind of wedding coverage do you offer?",type:'select',options:['Full day coverage','Half day coverage','Ceremony only','Pre-wedding + wedding','Custom package']},
+  caterer:{text:"What menu options or catering packages do you provide?",type:'textarea',placeholder:'e.g. Buffet, plated service, dessert bar...'},
+  florist:{text:"What floral styles or arrangement types do you specialize in?",type:'textarea',placeholder:'e.g. Garden-style, minimalist, tropical...'},
+  makeup:{text:"Do you offer bridal trials or services at the wedding venue?",type:'select',options:['Bridal trial only','On-site service only','Both trial and on-site','Studio only']},
+  attire:{text:"Do you offer rentals, custom outfits, or ready-made designs?",type:'select',options:['Rentals','Custom outfits','Ready-made designs','A mix of these']},
+  entertainment:{text:"What performances or equipment are included?",type:'textarea',placeholder:'e.g. Live band, sound system, host/emcee...'},
+  cake:{text:"Do you offer tasting sessions, and what flavors or designs do you specialize in?",type:'textarea'},
+  invitations:{text:"What type of invitations or souvenirs do you create — printed, digital, or custom items?",type:'textarea'},
+  transportation:{text:"What vehicles or accommodation packages do you offer?",type:'textarea'},
+  other:{text:"Is there anything specific about your service type we should know when building your website?",type:'textarea'}
+};
+
+const STYLE_OPTIONS = [
+  {v:'elegant',l:'Elegant & Luxurious',ico:'✨'},
+  {v:'modern',l:'Modern & Simple',ico:'◻️'},
+  {v:'romantic',l:'Romantic & Soft',ico:'🌸'},
+  {v:'classic',l:'Classic & Timeless',ico:'🕊️'},
+  {v:'colorful',l:'Colorful & Creative',ico:'🎨'},
+  {v:'surprise',l:'Surprise Me!',ico:'🎁'}
+];
+
+function defaultState(){
+  return {
+    slotsInvited: 0,
+    slotsPaid: 0,
+    waitlistCount: 0,
+    scenarioLabel: null,
+    current: {
+      registered:false,
+      basic:{}, // name,email,mobile,business,type,location,social
+      status:'none', // none | invited | waiting | expired | paid | delivered
+      position:null,
+      invitationDeadline:null,
+      waitlistPosition:null,
+      website:{}, // description, services[], locations, booking, style, photos[], colors, additional, extra
+      paymentStatus:'none', // none | pending | success | failed
+      orderRef:null,
+      hermesStage:0, // 0-6
+      emailChecked:false // becomes true once the supplier opens their email — results are never revealed in-app before this
+    }
+  };
+}
+
+let state = loadState();
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return Object.assign(defaultState(), JSON.parse(raw));
+  }catch(e){}
+  return defaultState();
+}
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+
+/* ======================================================================
+   NAV / VIEW SWITCHING
+====================================================================== */
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const target = document.getElementById('view-'+id);
+  if(target) target.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.view===id));
+  document.getElementById('navLinks').classList.remove('open');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='invite') renderInviteView();
+  if(id==='payment') renderPayment();
+  if(id==='emails'){ if(!state.current.emailChecked && state.current.registered){ state.current.emailChecked=true; saveState(); } renderEmails(); }
+  if(id==='hermes') renderHermes();
+  if(id==='dashboard') renderDashboard();
+  document.getElementById('stat-slots').textContent = Math.max(0, TOTAL_SLOTS - state.slotsPaid);
+}
+
+function toast(msg){
+  const wrap = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className='toast'; el.textContent=msg;
+  wrap.appendChild(el);
+  setTimeout(()=>{ el.style.transition='opacity .3s'; el.style.opacity='0'; setTimeout(()=>el.remove(),300); }, 3600);
+}
+
+function toggleDemoPanel(){ document.getElementById('demoPanel').classList.toggle('open'); }
+
+/* Build QR grid visual */
+(function buildQR(){
+  const grid = document.getElementById('qrGrid');
+  if(!grid) return;
+  const pattern = [
+    1,1,1,0,1,1,1, 1,0,1,0,1,0,1, 1,1,1,0,1,1,1, 0,0,0,1,0,0,0,
+    1,1,0,1,0,1,1, 1,0,1,1,1,0,1, 1,1,1,0,1,1,1
+  ];
+  for(let i=0;i<49;i++){
+    const d = document.createElement('div');
+    if(!pattern[i]) d.className='off';
+    grid.appendChild(d);
+  }
+})();
+
+/* ======================================================================
+   GENERIC CHAT ENGINE
+====================================================================== */
+function ChatEngine(opts){
+  // opts: { logEl, inputEl, progressEl, steps, data, onComplete }
+  this.logEl = opts.logEl;
+  this.inputEl = opts.inputEl;
+  this.progressEl = opts.progressEl;
+  this.steps = opts.steps;
+  this.data = opts.data || {};
+  this.onComplete = opts.onComplete;
+  this.idx = 0;
+}
+ChatEngine.prototype.start = function(fromIdx){
+  this.logEl.innerHTML='';
+  this.idx = fromIdx || 0;
+  this.renderUpTo(this.idx);
+};
+ChatEngine.prototype.renderUpTo = function(i){
+  // replay bot+user bubbles for already-answered steps (for edit/back nav), then show step i live
+  this.logEl.innerHTML='';
+  for(let s=0;s<i;s++){
+    const step = this.steps[s];
+    this.pushBubble('bot', typeof step.bot==='function'? step.bot(this.data): step.bot, false);
+    if(step.summaryValue){
+      this.pushBubble('user', step.summaryValue(this.data), false);
+    }
+  }
+  this.showStep(i);
+};
+ChatEngine.prototype.pushBubble = function(who, text, animate){
+  const row = document.createElement('div');
+  row.className = 'msg-row '+who;
+  row.innerHTML = '<div class="msg-avatar">'+(who==='bot'?'💬':'🙂')+'</div><div class="bubble"></div>';
+  row.querySelector('.bubble').textContent = text;
+  this.logEl.appendChild(row);
+  if(animate!==false){ this.logEl.scrollTop = this.logEl.scrollHeight; }
+};
+ChatEngine.prototype.showTyping = function(cb){
+  const row = document.createElement('div');
+  row.className='msg-row bot';
+  row.innerHTML = '<div class="msg-avatar">💬</div><div class="bubble"><span class="typing-dots"><span></span><span></span><span></span></span></div>';
+  this.logEl.appendChild(row);
+  this.logEl.scrollTop = this.logEl.scrollHeight;
+  setTimeout(()=>{ row.remove(); cb(); }, 480);
+};
+ChatEngine.prototype.showStep = function(i){
+  this.idx = i;
+  if(this.progressEl) this.progressEl.style.width = Math.round((i/this.steps.length)*100)+'%';
+  this.inputEl.innerHTML='';
+  if(i>=this.steps.length){ if(this.onComplete) this.onComplete(this.data); return; }
+  const step = this.steps[i];
+  const self = this;
+  this.showTyping(function(){
+    const text = typeof step.bot==='function'? step.bot(self.data): step.bot;
+    self.pushBubble('bot', text);
+    self.renderInput(step);
+  });
+};
+ChatEngine.prototype.renderInput = function(step){
+  const self = this;
+  const wrap = document.createElement('div');
+  let errorEl;
+  function mkError(){
+    errorEl = document.createElement('div');
+    errorEl.className='field-error';
+    wrap.appendChild(errorEl);
+  }
+  function showErr(msg){ errorEl.textContent = msg; errorEl.classList.add('show'); }
+  function clearErr(){ if(errorEl){errorEl.textContent='';errorEl.classList.remove('show');} }
+
+  function commit(value, displayText){
+    clearErr();
+    if(step.save) step.save(self.data, value);
+    self.pushBubble('user', displayText!==undefined?displayText:String(value));
+    self.inputEl.innerHTML='';
+    saveState();
+    self.showStep(self.idx+1);
+  }
+
+  const navRow = document.createElement('div');
+  navRow.className = 'chatnav';
+  const backBtn = document.createElement('button');
+  backBtn.className='btn btn-ghost btn-sm';
+  backBtn.textContent='← Back';
+  backBtn.style.visibility = this.idx>0 ? 'visible':'hidden';
+  backBtn.onclick = function(){ self.renderUpTo(Math.max(0,self.idx-1)); };
+
+  const skipBtn = document.createElement('a');
+  skipBtn.className='skip-link';
+  skipBtn.textContent='Skip this question';
+  skipBtn.href='javascript:void(0)';
+  skipBtn.onclick = function(){ commit('', '(skipped)'); };
+
+  if(step.type==='text' || step.type==='email' || step.type==='tel' || step.type==='number'){
+    const input = document.createElement('input');
+    input.className='field-text'; input.type = step.type==='number'?'number':(step.type==='tel'?'tel':(step.type==='email'?'email':'text'));
+    input.placeholder = step.placeholder||'';
+    if(step.initial) input.value = step.initial(self.data) || '';
+    mkError();
+    wrap.appendChild(input);
+    const btn = document.createElement('button');
+    btn.className='btn btn-primary btn-sm'; btn.style.marginTop='10px'; btn.textContent='Send ➤';
+    btn.onclick = function(){
+      const v = input.value.trim();
+      const err = step.validate ? step.validate(v) : null;
+      if(err){ showErr(err); return; }
+      commit(v);
+    };
+    input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); btn.click(); } });
+    wrap.appendChild(btn);
+    setTimeout(()=>input.focus(), 50);
+  }
+  else if(step.type==='textarea'){
+    const input = document.createElement('textarea');
+    input.className='field-textarea'; input.placeholder = step.placeholder||'';
+    mkError();
+    wrap.appendChild(input);
+    const btn = document.createElement('button');
+    btn.className='btn btn-primary btn-sm'; btn.style.marginTop='10px'; btn.textContent='Send ➤';
+    btn.onclick = function(){
+      const v = input.value.trim();
+      const err = step.validate ? step.validate(v) : null;
+      if(err){ showErr(err); return; }
+      commit(v, v || '(skipped)');
+    };
+    wrap.appendChild(btn);
+  }
+  else if(step.type==='select'){
+    const sel = document.createElement('select');
+    sel.className='field-select';
+    const ph = document.createElement('option'); ph.value=''; ph.textContent='Choose one...'; sel.appendChild(ph);
+    step.options.forEach(o=>{
+      const op = document.createElement('option');
+      op.value = typeof o==='string'?o:o.v;
+      op.textContent = typeof o==='string'?o:o.l;
+      sel.appendChild(op);
+    });
+    mkError();
+    wrap.appendChild(sel);
+    const btn = document.createElement('button');
+    btn.className='btn btn-primary btn-sm'; btn.style.marginTop='10px'; btn.textContent='Continue ➤';
+    btn.onclick = function(){
+      if(!sel.value){ showErr('Please choose an option.'); return; }
+      const labelObj = step.options.find(o=> (typeof o==='string'?o:o.v)===sel.value);
+      commit(sel.value, typeof labelObj==='string'?labelObj:labelObj.l);
+    };
+    wrap.appendChild(btn);
+  }
+  else if(step.type==='chips-single'){
+    const row = document.createElement('div'); row.className='option-grid';
+    let picked=null;
+    step.options.forEach(o=>{
+      const c = document.createElement('div'); c.className='option-card';
+      c.innerHTML = '<span class="ico">'+(o.ico||'•')+'</span><span class="lbl">'+o.l+'</span>';
+      c.onclick = ()=>{ row.querySelectorAll('.option-card').forEach(x=>x.classList.remove('selected')); c.classList.add('selected'); picked=o; btn.disabled=false; };
+      row.appendChild(c);
+    });
+    wrap.appendChild(row);
+    const btn = document.createElement('button');
+    btn.className='btn btn-primary btn-sm'; btn.style.marginTop='12px'; btn.textContent='Continue ➤'; btn.disabled=true;
+    btn.onclick = function(){ commit(picked.v, picked.l); };
+    wrap.appendChild(btn);
+  }
+  else if(step.type==='services'){
+    const listWrap = document.createElement('div');
+    let rows = [];
+    function addRow(name,price){
+      const r = document.createElement('div'); r.className='service-row';
+      const n = document.createElement('input'); n.className='field-text'; n.placeholder='Service or package name'; n.value=name||'';
+      const p = document.createElement('input'); p.className='field-text price'; p.placeholder='Price (optional)'; p.value=price||'';
+      const rm = document.createElement('button'); rm.className='remove-row'; rm.textContent='✕';
+      rm.onclick=()=>{ r.remove(); rows = rows.filter(x=>x!==r); };
+      r.appendChild(n); r.appendChild(p); r.appendChild(rm);
+      r._getName=()=>n.value.trim(); r._getPrice=()=>p.value.trim();
+      listWrap.appendChild(r); rows.push(r);
+    }
+    addRow();
+    wrap.appendChild(listWrap);
+    const addBtn = document.createElement('button');
+    addBtn.className='add-row-btn'; addBtn.textContent='+ Add another service/package';
+    addBtn.onclick = ()=> addRow();
+    wrap.appendChild(addBtn);
+    mkError();
+    const btn = document.createElement('button');
+    btn.className='btn btn-primary btn-sm'; btn.style.marginTop='12px'; btn.textContent='Continue ➤';
+    btn.onclick = function(){
+      const items = rows.map(r=>({name:r._getName(),price:r._getPrice()})).filter(i=>i.name);
+      if(items.length===0){ showErr('Please add at least one service, or skip this question.'); return; }
+      commit(items, items.map(i=>i.name+(i.price?' ('+i.price+')':'')).join(', '));
+    };
+    wrap.appendChild(btn);
+    wrap.appendChild(skipBtn);
+  }
+  else if(step.type==='locations'){
+    const current = (self.data.basic && self.data.basic.location) ? [self.data.basic.location] : [];
+    let chips = [...current];
+    const chipRow = document.createElement('div'); chipRow.className='chip-row';
+    function renderChips(){
+      chipRow.innerHTML='';
+      chips.forEach((c,i)=>{
+        const el = document.createElement('div'); el.className='chip addable';
+        el.innerHTML = c+' <span class="remove">✕</span>';
+        el.querySelector('.remove').onclick=()=>{ chips.splice(i,1); renderChips(); };
+        chipRow.appendChild(el);
+      });
+    }
+    renderChips();
+    wrap.appendChild(chipRow);
+    const addWrap = document.createElement('div'); addWrap.style.display='flex'; addWrap.style.gap='8px'; addWrap.style.marginTop='8px';
+    const addInput = document.createElement('input'); addInput.className='field-text'; addInput.placeholder='Add another area served';
+    const addBtn = document.createElement('button'); addBtn.className='btn btn-outline btn-sm'; addBtn.textContent='+ Add';
+    addBtn.onclick = ()=>{ if(addInput.value.trim()){ chips.push(addInput.value.trim()); addInput.value=''; renderChips(); } };
+    addWrap.appendChild(addInput); addWrap.appendChild(addBtn);
+    wrap.appendChild(addWrap);
+
+    const bookLabel = document.createElement('div'); bookLabel.style.marginTop='14px'; bookLabel.style.fontSize='13px'; bookLabel.style.color='var(--text-soft)';
+    bookLabel.textContent = 'How should couples contact or book you?';
+    wrap.appendChild(bookLabel);
+    const bookInput = document.createElement('input'); bookInput.className='field-text'; bookInput.style.marginTop='6px';
+    bookInput.placeholder='e.g. Facebook Messenger, phone call, inquiry form...';
+    wrap.appendChild(bookInput);
+
+    const btn = document.createElement('button');
+    btn.className='btn btn-primary btn-sm'; btn.style.marginTop='12px'; btn.textContent='Continue ➤';
+    btn.onclick = function(){
+      const val = {areas:chips, booking:bookInput.value.trim()};
+      commit(val, 'Areas: '+chips.join(', ')+(bookInput.value.trim()?' · Booking: '+bookInput.value.trim():''));
+    };
+    wrap.appendChild(btn);
+  }
+  else if(step.type==='photos'){
+    const zone = document.createElement('div'); zone.className='upload-zone';
+    zone.innerHTML = '<div>📷 Click to upload logo or photos</div><div style="font-size:11.5px;color:var(--text-faint);margin-top:4px;">(demo only — files are not stored)</div>';
+    const fileInput = document.createElement('input'); fileInput.type='file'; fileInput.accept='image/*'; fileInput.multiple=true; fileInput.style.display='none';
+    const list = document.createElement('div'); list.className='upload-list';
+    let files = [];
+    zone.onclick = ()=> fileInput.click();
+    fileInput.onchange = ()=>{
+      Array.from(fileInput.files).forEach(f=>{
+        files.push(f.name);
+        const th = document.createElement('div'); th.className='upload-thumb';
+        const reader = new FileReader();
+        reader.onload = e=>{ th.innerHTML = '<img src="'+e.target.result+'">'; };
+        if(f.type.startsWith('image/')) reader.readAsDataURL(f); else th.textContent=f.name;
+        list.appendChild(th);
+      });
+    };
+    wrap.appendChild(zone); wrap.appendChild(fileInput); wrap.appendChild(list);
+
+    const colorLabel = document.createElement('div'); colorLabel.style.marginTop='14px'; colorLabel.style.fontSize='13px'; colorLabel.style.color='var(--text-soft)';
+    colorLabel.textContent='Any favorite colors for your website? (optional)';
+    wrap.appendChild(colorLabel);
+    const colorInput = document.createElement('input'); colorInput.className='field-text'; colorInput.style.marginTop='6px'; colorInput.placeholder='e.g. Blush pink and gold';
+    wrap.appendChild(colorInput);
+
+    const btn = document.createElement('button');
+    btn.className='btn btn-primary btn-sm'; btn.style.marginTop='12px'; btn.textContent='Continue ➤';
+    btn.onclick=function(){
+      commit({files:files, colors:colorInput.value.trim()}, (files.length? files.length+' file(s) uploaded':'No files uploaded')+(colorInput.value.trim()?' · Colors: '+colorInput.value.trim():''));
+    };
+    wrap.appendChild(btn);
+    wrap.appendChild(skipBtn);
+  }
+  wrap.appendChild(navRow);
+  navRow.appendChild(backBtn);
+  this.inputEl.appendChild(wrap);
+};
+
+/* ======================================================================
+   JOURNEY 1 — CHATBOT 1
+====================================================================== */
+let cb1Engine = null;
+
+function goChatbot1Entry(){
+  showView('chatbot1');
+  document.getElementById('cb1-qr').classList.remove('hidden');
+  document.getElementById('cb1-chat').classList.add('hidden');
+  document.getElementById('cb1-summary').classList.add('hidden');
+}
+
+const CB1_STEPS = [
+  { bot:"Hello! Welcome to our 10‑10‑10 Website Campaign! We're celebrating Kasalang Tagaytay's 10th anniversary with a special website offer for wedding suppliers. I'd love to know more about your business. Let's get started! 🎉\n\nMay I know your name?",
+    type:'text', placeholder:'Your full name',
+    validate:v=> v.length<2 ? 'Please enter your name.' : null,
+    save:(d,v)=>{ d.basic.name=v; }, summaryValue:d=>d.basic.name },
+  { bot:d=>"Nice to meet you, "+d.basic.name+"! What's your email address? We'll use this to send you updates about the website offer.",
+    type:'email', placeholder:'you@example.com',
+    validate:v=> !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? 'That email looks incomplete — please double check.' : null,
+    save:(d,v)=>{ d.basic.email=v; }, summaryValue:d=>d.basic.email },
+  { bot:"What's the best mobile number to reach you?",
+    type:'tel', placeholder:'09xx xxx xxxx',
+    validate:v=> v.replace(/\D/g,'').length<7 ? 'Please enter a valid mobile number.' : null,
+    save:(d,v)=>{ d.basic.mobile=v; }, summaryValue:d=>d.basic.mobile },
+  { bot:"What's the name of your wedding business?",
+    type:'text', placeholder:'Business name',
+    validate:v=> v.length<2 ? 'Please enter your business name.' : null,
+    save:(d,v)=>{ d.basic.business=v; }, summaryValue:d=>d.basic.business },
+  { bot:"What type of wedding service do you offer?",
+    type:'select', options:BUSINESS_TYPES,
+    save:(d,v)=>{ d.basic.type=v; }, summaryValue:d=>(BUSINESS_TYPES.find(b=>b.v===d.basic.type)||{}).l },
+  { bot:"Which city or province is your business based in?",
+    type:'text', placeholder:'e.g. Tagaytay City',
+    validate:v=> v.length<2 ? 'Please enter your city or province.' : null,
+    save:(d,v)=>{ d.basic.location=v; }, summaryValue:d=>d.basic.location },
+  { bot:"Last one for now — do you have a Facebook page, Instagram account, or existing website you'd like to share? This is optional.",
+    type:'text', placeholder:'Facebook / Instagram / website link',
+    save:(d,v)=>{ d.basic.social=v; }, summaryValue:d=>d.basic.social || '(skipped)' }
+];
+
+function startChatbot1(){
+  document.getElementById('cb1-qr').classList.add('hidden');
+  document.getElementById('cb1-summary').classList.add('hidden');
+  document.getElementById('cb1-chat').classList.remove('hidden');
+  const data = { basic: Object.assign({}, state.current.basic) };
+  cb1Engine = new ChatEngine({
+    logEl: document.getElementById('cb1-log'),
+    inputEl: document.getElementById('cb1-input'),
+    progressEl: document.getElementById('cb1-progress'),
+    steps: CB1_STEPS,
+    data: data,
+    onComplete: showCb1Summary
+  });
+  cb1Engine.start(0);
+}
+function restartChatbot1(){ startChatbot1(); }
+
+function showCb1Summary(data){
+  document.getElementById('cb1-chat').classList.add('hidden');
+  document.getElementById('cb1-summary').classList.remove('hidden');
+  const rows = [
+    ['Name', data.basic.name],
+    ['Email', data.basic.email],
+    ['Mobile', data.basic.mobile],
+    ['Business Name', data.basic.business],
+    ['Business Type', (BUSINESS_TYPES.find(b=>b.v===data.basic.type)||{}).l],
+    ['Location', data.basic.location],
+    ['Social Media', data.basic.social || '—']
+  ];
+  const list = document.getElementById('cb1-summary-list');
+  list.innerHTML = rows.map((r,i)=>
+    '<div class="review-item"><div class="k">'+r[0]+'</div><div class="v">'+(r[1]||'—')+'</div><a class="edit-link" href="javascript:void(0)" onclick="editCb1Step('+i+')">Edit</a></div>'
+  ).join('');
+  window._cb1PendingData = data;
+}
+function editCb1Step(i){
+  document.getElementById('cb1-summary').classList.add('hidden');
+  document.getElementById('cb1-chat').classList.remove('hidden');
+  cb1Engine.data = window._cb1PendingData;
+  cb1Engine.renderUpTo(i);
+}
+
+function finishRegistration(){
+  const data = window._cb1PendingData;
+  state.current.basic = data.basic;
+  state.current.registered = true;
+
+  if(state.slotsInvited < TOTAL_SLOTS){
+    state.slotsInvited += 1;
+    state.current.status = 'invited';
+    state.current.position = state.slotsInvited;
+    state.current.invitationDeadline = Date.now() + 24*60*60*1000;
+  } else {
+    state.waitlistCount += 1;
+    state.current.status = 'waiting';
+    state.current.waitlistPosition = state.waitlistCount;
+  }
+  saveState();
+  showView('invite');
+  toast('✅ Registration complete! Please check your email for updates.');
+}
+
+/* ======================================================================
+   INVITATION / WAITLIST VIEW
+====================================================================== */
+function fmtCountdown(ms){
+  if(ms<=0) return {h:0,m:0,s:0};
+  const h = Math.floor(ms/3600000);
+  const m = Math.floor((ms%3600000)/60000);
+  const s = Math.floor((ms%60000)/1000);
+  return {h,m,s};
+}
+let countdownTimer=null;
+function startEmailCountdown(){
+  clearInterval(countdownTimer);
+  function tick(){
+    const c = state.current;
+    const rem = c.invitationDeadline - Date.now();
+    if(rem<=0){ checkInvitationExpiry(); clearInterval(countdownTimer); renderEmails(); return; }
+    const t = fmtCountdown(rem);
+    const box = document.getElementById('countdownBoxes');
+    if(box) box.innerHTML =
+      '<div class="box"><b>'+String(t.h).padStart(2,'0')+'</b><span>Hours</span></div>'+
+      '<div class="box"><b>'+String(t.m).padStart(2,'0')+'</b><span>Min</span></div>'+
+      '<div class="box"><b>'+String(t.s).padStart(2,'0')+'</b><span>Sec</span></div>';
+  }
+  tick();
+  countdownTimer = setInterval(tick, 1000);
+}
+function renderInviteView(){
+  clearInterval(countdownTimer);
+  const el = document.getElementById('invite-container');
+  const c = state.current;
+
+  if(!c.registered){
+    el.innerHTML = emptyStateHTML('🎟️','No registration yet','Start Chatbot 1 to register your business and see your invitation status here.','goChatbot1Entry()','Start Chatbot 1');
+    return;
+  }
+
+  checkInvitationExpiry();
+
+  if(c.status==='invited' || c.status==='waiting'){
+    el.innerHTML =
+      '<div class="result-screen">'+
+        '<div class="result-icon" style="background:var(--primary-light);color:var(--primary-dark);">✉️</div>'+
+        '<div class="eyebrow">Journey 1 · Registration Complete</div>'+
+        '<h2 class="page-title">Thank you, '+c.basic.name+'!</h2>'+
+        '<p class="page-sub" style="margin:0 auto 6px;">We\'ve received your registration for <strong>'+c.basic.business+'</strong>. We\'ll send an update to <strong>'+c.basic.email+'</strong> to let you know your next step — please check your inbox.</p>'+
+        '<div class="note-box">This offer is limited to our first 10 suppliers. We\'ll only reach you by email, so keep an eye on your inbox over the next 24 hours.</div>'+
+        '<div class="btn-row" style="justify-content:center;">'+
+          '<button class="btn btn-primary" onclick="showView(\'emails\')">✉️ Check My Email</button>'+
+          '<button class="btn btn-outline" onclick="showView(\'dashboard\')">Go to My Website →</button>'+
+        '</div>'+
+      '</div>';
+  }
+  else if(c.status==='expired'){
+    el.innerHTML =
+      '<div class="result-screen">'+
+        '<div class="result-icon expired">⌛</div>'+
+        '<div class="eyebrow">Journey 1 · Result</div>'+
+        '<h2 class="page-title">Your invitation has expired</h2>'+
+        '<p class="page-sub" style="margin:0 auto 6px;">Hi '+c.basic.name+', your 24‑hour invitation period passed before payment was completed, so this opportunity has been offered to the next supplier on our waiting list.</p>'+
+        '<div class="pill pill-danger">Invitation Expired</div>'+
+        '<div class="note-box">This is a simulated outcome for the prototype — in production, the next eligible waitlisted supplier would receive a fresh invitation and full 24‑hour window.</div>'+
+        '<div class="btn-row" style="justify-content:center;">'+
+          '<button class="btn btn-outline" onclick="showView(\'dashboard\')">Go to My Website →</button>'+
+        '</div>'+
+      '</div>';
+  }
+  else if(c.status==='paid' || c.status==='delivered'){
+    el.innerHTML = emptyStateHTML('✅','Invitation already used','Your invitation was redeemed — your website order is confirmed. Check My Website for full status.','showView(\'dashboard\')','Go to My Website');
+  }
+}
+function emptyStateHTML(icon,title,sub,action,actionLabel){
+  return '<div class="result-screen"><div class="result-icon" style="background:var(--primary-light);color:var(--primary-dark);">'+icon+'</div>'+
+    '<h2 class="page-title">'+title+'</h2><p class="page-sub" style="margin:0 auto 6px;">'+sub+'</p>'+
+    '<div class="btn-row" style="justify-content:center;"><button class="btn btn-primary" onclick="'+action+'">'+actionLabel+'</button></div></div>';
+}
+function checkInvitationExpiry(){
+  const c = state.current;
+  if(c.status==='invited' && c.invitationDeadline && Date.now() > c.invitationDeadline && c.paymentStatus!=='success'){
+    c.status='expired';
+    saveState();
+  }
+}
+function demoExpireNow(){
+  state.current.invitationDeadline = Date.now()-1000;
+  checkInvitationExpiry();
+  saveState();
+  renderInviteView();
+  renderEmails();
+  renderDashboard();
+  toast('Demo: invitation expired and spot offered to next waiting applicant.');
+}
+
+/* ======================================================================
+   JOURNEY 2 — CHATBOT 2
+====================================================================== */
+let cb2Engine = null;
+
+function goChatbot2Entry(){
+  showView('chatbot2');
+  const c = state.current;
+  const el = document.getElementById('cb2-container');
+  if(!c.registered || (c.status!=='invited' && c.status!=='paid' && c.status!=='delivered')){
+    el.innerHTML = emptyStateHTML('🔒','Private link required',
+      c.status==='expired' ? 'This invitation link is no longer active for this order.' :
+      'This chatbot is only reachable from the private link in your invitation email. Please check your inbox.',
+      "showView('emails')", 'Check My Email');
+    return;
+  }
+  if(c.status==='invited' && !c.emailChecked){
+    el.innerHTML = emptyStateHTML('🔒','Open your invitation email first',
+      'Please check your email and click the link inside to continue — this chatbot only unlocks from there.',
+      "showView('emails')", 'Check My Email');
+    return;
+  }
+  if(c.status==='paid' || c.status==='delivered'){
+    renderCb2Locked();
+    return;
+  }
+  renderCb2Chat();
+}
+
+function renderCb2Locked(){
+  const c = state.current;
+  document.getElementById('cb2-container').innerHTML =
+    '<div class="eyebrow">Journey 2 · Already Submitted</div>'+
+    '<h2 class="page-title">Website information already submitted</h2>'+
+    '<p class="page-sub">Your order is confirmed and your information is now with our team to prepare your website.</p>'+
+    '<div class="card" id="cb2-locked-summary"></div>'+
+    '<div class="btn-row"><button class="btn btn-primary" onclick="showView(\'dashboard\')">Go to My Website →</button></div>';
+  document.getElementById('cb2-locked-summary').innerHTML = buildWebsiteSummaryHTML(c.website, false);
+}
+
+const CB2_STEPS = [
+  { bot:d=>"Tell me a little about your business. What makes "+(d.basic.business||'your business')+" special?",
+    type:'textarea', placeholder:'A short description of your business...',
+    validate:v=> v.length<5 ? 'A short description helps us build your website — please add a little more detail.' : null,
+    save:(d,v)=>{ d.website.description=v; }, summaryValue:d=>d.website.description },
+  { bot:"What wedding services or packages would you like to feature on your website? Add as many as you like.",
+    type:'services',
+    save:(d,v)=>{ d.website.services=v; }, summaryValue:d=>(d.website.services||[]).map(s=>s.name).join(', ')||'(skipped)' },
+  { bot:"Which areas do you serve, and how would you like couples to contact or book your services?",
+    type:'locations',
+    save:(d,v)=>{ d.website.serviceAreas=v.areas; d.website.booking=v.booking; },
+    summaryValue:d=> (d.website.serviceAreas||[]).join(', ')+(d.website.booking?' · '+d.website.booking:'') },
+  { bot:"Do you have a logo, wedding photos, or favorite colors you'd like us to use?",
+    type:'photos',
+    save:(d,v)=>{ d.website.photos=v.files; d.website.colors=v.colors; },
+    summaryValue:d=> (d.website.photos&&d.website.photos.length? d.website.photos.length+' file(s)':'No files')+(d.website.colors?' · '+d.website.colors:'') },
+  { bot:"What kind of look would you like for your website? These are preferences — our design team creates the final look for you.",
+    type:'chips-single', options:STYLE_OPTIONS,
+    save:(d,v)=>{ d.website.style=v; }, summaryValue:d=>(STYLE_OPTIONS.find(s=>s.v===d.website.style)||{}).l },
+  { bot:"Is there anything else you'd like couples to know about your business? Reviews, special offers, booking reminders — anything helpful. This is optional.",
+    type:'textarea', placeholder:'Optional additional info...',
+    save:(d,v)=>{ d.website.additional=v; }, summaryValue:d=>d.website.additional||'(skipped)' },
+  { bot:d=> (EXTRA_QUESTIONS[d.basic.type]||EXTRA_QUESTIONS.other).text,
+    type:d=> (EXTRA_QUESTIONS[d.basic.type]||EXTRA_QUESTIONS.other).type,
+    options:d=> (EXTRA_QUESTIONS[d.basic.type]||EXTRA_QUESTIONS.other).options,
+    placeholder:d=> (EXTRA_QUESTIONS[d.basic.type]||EXTRA_QUESTIONS.other).placeholder,
+    save:(d,v)=>{ d.website.extra=v; }, summaryValue:d=>d.website.extra||'(skipped)' }
+];
+
+function renderCb2Chat(){
+  const c = state.current;
+  const el = document.getElementById('cb2-container');
+  el.innerHTML =
+    '<div class="chat-shell">'+
+      '<div class="chat-head"><div class="chat-avatar">💬</div><div class="chat-head-text"><strong>Website Assistant</strong><span>Chatbot 2 · Website Information</span></div></div>'+
+      '<div class="progress-track"><div class="progress-fill" id="cb2-progress" style="width:0%;"></div></div>'+
+      '<div class="chat-window"><div class="chat-log" id="cb2-log"></div><div class="input-zone" id="cb2-input"></div></div>'+
+    '</div>';
+
+  const data = { basic: c.basic, website: Object.assign({}, c.website) };
+  const steps = [
+    { bot:d=>"Welcome back, "+d.basic.name+"! We're excited to help create a website for "+d.basic.business+". I'll ask a few questions about your services and the kind of website you'd like.", type:null },
+  ].concat(resolveCb2Steps());
+
+  // First step is just a greeting message with a "Let's go" continue — merge with first real step instead:
+  cb2Engine = new ChatEngine({
+    logEl: document.getElementById('cb2-log'),
+    inputEl: document.getElementById('cb2-input'),
+    progressEl: document.getElementById('cb2-progress'),
+    steps: resolveCb2Steps(),
+    data: data,
+    onComplete: showCb2Summary
+  });
+  cb2Engine.start(0);
+  // prepend greeting bubble
+  const greetRow = document.createElement('div');
+  greetRow.className='msg-row bot';
+  greetRow.innerHTML = '<div class="msg-avatar">💬</div><div class="bubble">Welcome back, '+c.basic.name+'! We\'re excited to help create a website for '+c.basic.business+'. I\'ll ask a few questions about your services and the kind of website you\'d like — your answers will help us prepare a website that represents your business.</div>';
+  document.getElementById('cb2-log').prepend(greetRow);
+}
+function resolveCb2Steps(){
+  // resolve dynamic type/options/placeholder functions for the extra-question step into a plain step object
+  return CB2_STEPS.map(s=>{
+    if(typeof s.type!=='function') return s;
+    return Object.assign({}, s, {
+      type: s.type(state.current), // placeholder resolution happens with actual data at render time via closures below
+    });
+  });
+}
+// Because the last CB2 step's type/options/placeholder depend on data, resolve again right before engine use with real data object
+function resolveCb2StepsWithData(data){
+  return CB2_STEPS.map(s=>{
+    if(typeof s.type!=='function') return s;
+    const q = EXTRA_QUESTIONS[data.basic.type] || EXTRA_QUESTIONS.other;
+    return Object.assign({}, s, { type:q.type, options:q.options, placeholder:q.placeholder });
+  });
+}
+
+function showCb2Summary(data){
+  state.current.website = data.website;
+  saveState();
+  const el = document.getElementById('cb2-container');
+  el.innerHTML =
+    '<div class="eyebrow">Journey 2 · Review</div>'+
+    '<h2 class="page-title">Review Your Website Information</h2>'+
+    '<p class="page-sub">Here\'s everything we\'ll use to prepare your website. You can edit anything before continuing.</p>'+
+    '<div class="card" id="cb2-summary-list"></div>'+
+    '<div class="btn-row">'+
+      '<button class="btn btn-outline" onclick="renderCb2Chat()">↺ Edit Answers</button>'+
+      '<button class="btn btn-primary" onclick="showView(\'payment\')">Continue to Payment →</button>'+
+    '</div>';
+  document.getElementById('cb2-summary-list').innerHTML = buildWebsiteSummaryHTML(data.website, true);
+}
+function buildWebsiteSummaryHTML(w, editable){
+  w = w||{};
+  const rows = [
+    ['Business Description', w.description],
+    ['Services / Packages', (w.services||[]).map(s=>s.name+(s.price?' — '+s.price:'')).join(', ')],
+    ['Service Areas', (w.serviceAreas||[]).join(', ')],
+    ['Booking Preference', w.booking],
+    ['Photos / Logo', (w.photos||[]).length ? (w.photos||[]).length+' file(s) uploaded' : 'None'],
+    ['Favorite Colors', w.colors],
+    ['Website Style', (STYLE_OPTIONS.find(s=>s.v===w.style)||{}).l],
+    ['Additional Info', w.additional],
+    ['Business-Specific Detail', w.extra]
+  ];
+  return rows.map(r=>'<div class="review-item"><div class="k">'+r[0]+'</div><div class="v">'+(r[1]||'—')+'</div></div>').join('');
+}
+
+/* fix renderCb2Chat to use data-aware step resolution */
+function renderCb2Chat(){
+  const c = state.current;
+  const el = document.getElementById('cb2-container');
+  el.innerHTML =
+    '<div class="chat-shell">'+
+      '<div class="chat-head"><div class="chat-avatar">💬</div><div class="chat-head-text"><strong>Website Assistant</strong><span>Chatbot 2 · Website Information</span></div></div>'+
+      '<div class="progress-track"><div class="progress-fill" id="cb2-progress" style="width:0%;"></div></div>'+
+      '<div class="chat-window"><div class="chat-log" id="cb2-log"></div><div class="input-zone" id="cb2-input"></div></div>'+
+    '</div>';
+  const data = { basic: c.basic, website: Object.assign({}, c.website) };
+  const steps = resolveCb2StepsWithData(data);
+  cb2Engine = new ChatEngine({
+    logEl: document.getElementById('cb2-log'),
+    inputEl: document.getElementById('cb2-input'),
+    progressEl: document.getElementById('cb2-progress'),
+    steps: steps,
+    data: data,
+    onComplete: showCb2Summary
+  });
+  cb2Engine.start(0);
+  const greetRow = document.createElement('div');
+  greetRow.className='msg-row bot';
+  greetRow.innerHTML = '<div class="msg-avatar">💬</div><div class="bubble">Welcome back, '+c.basic.name+'! We\'re excited to help create a website for '+c.basic.business+'. I\'ll ask a few questions about your services and the kind of website you\'d like — your answers will help us prepare a website that represents your business.</div>';
+  document.getElementById('cb2-log').prepend(greetRow);
+}
+
+/* ======================================================================
+   PAYMENT
+====================================================================== */
+function renderPayment(){
+  const c = state.current;
+  const el = document.getElementById('payment-container');
+  if(!c.registered || !c.website || !c.website.description){
+    el.innerHTML = emptyStateHTML('💳','Nothing to pay yet','Complete Chatbot 2 first so we know what website to prepare for you.','goChatbot2Entry()','Go to Website Chatbot');
+    return;
+  }
+  if(c.status==='expired'){
+    el.innerHTML = emptyStateHTML('⌛','Invitation expired','Your invitation period ended before payment was completed, so this order can no longer be paid.','showView(\'dashboard\')','Go to My Website');
+    return;
+  }
+  if(c.paymentStatus==='success'){
+    el.innerHTML = emptyStateHTML('✅','Payment already confirmed','Your ₱10,000 payment is confirmed and your website is now being prepared.','showView(\'dashboard\')','Go to My Website');
+    return;
+  }
+  const remaining = c.invitationDeadline ? Math.max(0,c.invitationDeadline-Date.now()) : null;
+  el.innerHTML =
+    '<div class="eyebrow">Journey 2 · Payment</div>'+
+    '<h2 class="page-title" style="text-align:center;">Confirm Your Website Order</h2>'+
+    '<div class="card pay-card">'+
+      '<div style="text-align:center;color:var(--text-soft);font-size:13px;">10‑10‑10 Website Campaign</div>'+
+      '<div class="pay-amount">₱'+PRICE.toLocaleString()+'</div>'+
+      '<div style="text-align:center;color:var(--text-soft);font-size:13px;margin-bottom:14px;">One-time website package</div>'+
+      '<div class="divider"></div>'+
+      '<div class="pay-rows">'+
+        '<div class="row"><span>Business</span><strong>'+c.basic.business+'</strong></div>'+
+        '<div class="row"><span>Website Package</span><strong>Standard — ₱'+PRICE.toLocaleString()+'</strong></div>'+
+        '<div class="row"><span>Payment Status</span><strong>'+(c.paymentStatus==='pending'?'Pending':'Not yet paid')+'</strong></div>'+
+        (remaining!==null ? '<div class="row"><span>Invitation Expires In</span><strong>'+Math.floor(remaining/3600000)+'h '+Math.floor((remaining%3600000)/60000)+'m</strong></div>' : '')+
+      '</div>'+
+      '<div class="btn-row" style="justify-content:center;">'+
+        '<button class="btn btn-primary" style="width:100%;" onclick="openPaymentModal()">Pay ₱'+PRICE.toLocaleString()+' →</button>'+
+      '</div>'+
+    '</div>';
+}
+function openPaymentModal(){
+  const overlay = document.createElement('div');
+  overlay.className='modal-overlay'; overlay.id='payModal';
+  overlay.innerHTML =
+    '<div class="modal-box">'+
+      '<div class="eyebrow">Simulated Payment</div>'+
+      '<h3 style="margin-bottom:8px;">Pay ₱'+PRICE.toLocaleString()+'</h3>'+
+      '<p style="color:var(--text-soft);font-size:13.5px;margin-bottom:18px;">This is a demo payment screen. No real payment is processed. Choose an outcome below to continue the prototype.</p>'+
+      '<button class="btn btn-success" style="width:100%;margin-bottom:8px;" onclick="simulatePayment(\'success\')">✅ Simulate Successful Payment</button>'+
+      '<button class="btn btn-danger" style="width:100%;margin-bottom:8px;" onclick="simulatePayment(\'failed\')">❌ Simulate Unsuccessful Payment</button>'+
+      '<button class="btn btn-outline" style="width:100%;" onclick="simulatePayment(\'later\')">⏸ Save and Pay Later</button>'+
+    '</div>';
+  document.body.appendChild(overlay);
+}
+function closePaymentModal(){ const m=document.getElementById('payModal'); if(m) m.remove(); }
+function simulatePayment(outcome){
+  closePaymentModal();
+  if(outcome==='later'){
+    state.current.paymentStatus='pending';
+    saveState();
+    toast('Progress saved. You can resume payment anytime from My Website.');
+    showView('dashboard');
+    return;
+  }
+  // show a brief processing spinner for realism
+  const overlay = document.createElement('div');
+  overlay.className='modal-overlay'; overlay.id='payProcessing';
+  overlay.innerHTML = '<div class="modal-box"><div class="spinner"></div><div>Processing payment...</div></div>';
+  document.body.appendChild(overlay);
+  setTimeout(()=>{
+    overlay.remove();
+    if(outcome==='failed'){
+      state.current.paymentStatus='failed';
+      saveState();
+      const m = document.createElement('div');
+      m.className='modal-overlay';
+      m.innerHTML = '<div class="modal-box"><div class="result-icon expired" style="margin:0 auto 14px;">✕</div><h3>Payment Unsuccessful</h3><p style="color:var(--text-soft);font-size:13.5px;margin:10px 0 18px;">Your payment could not be completed. Your invitation remains valid — you can try again before it expires.</p><button class="btn btn-primary" style="width:100%;" onclick="this.closest(\'.modal-overlay\').remove();renderPayment();">Try Again</button></div>';
+      document.body.appendChild(m);
+    } else {
+      state.current.paymentStatus='success';
+      state.current.status='paid';
+      state.slotsPaid += 1;
+      state.current.orderRef = 'KT10-'+Math.floor(1000+Math.random()*9000);
+      state.current.hermesStage = 1;
+      saveState();
+      toast('🎉 Payment confirmed! Your website is now being prepared.');
+      showView('payment');
+      renderPaymentConfirmed();
+    }
+  }, 1100);
+}
+function renderPaymentConfirmed(){
+  const c = state.current;
+  const el = document.getElementById('payment-container');
+  el.innerHTML =
+    '<div class="result-screen">'+
+      '<div class="result-icon success">✅</div>'+
+      '<h2 class="page-title">Payment Confirmed!</h2>'+
+      '<p class="page-sub" style="margin:0 auto 10px;">Thank you, '+c.basic.name+'! We\'ve received your ₱10,000 payment and your website information for <strong>'+c.basic.business+'</strong>.</p>'+
+      '<div class="email-card-mini" style="max-width:360px;margin:0 auto;">'+
+        '<div class="row"><span>Order Reference</span><strong>'+c.orderRef+'</strong></div>'+
+        '<div class="row"><span>Amount Paid</span><strong>₱'+PRICE.toLocaleString()+'</strong></div>'+
+        '<div class="row"><span>Status</span><strong style="color:var(--success);">Confirmed</strong></div>'+
+      '</div>'+
+      '<div class="btn-row" style="justify-content:center;">'+
+        '<button class="btn btn-primary" onclick="showView(\'emails\')">✉️ View Confirmation Email</button>'+
+        '<button class="btn btn-outline" onclick="showView(\'dashboard\')">Go to My Website →</button>'+
+      '</div>'+
+    '</div>';
+}
+
+/* ======================================================================
+   EMAILS
+====================================================================== */
+let currentEmailTab = 'invite';
+function showEmailTab(tab){ currentEmailTab = tab; renderEmails(); }
+function renderEmails(){
+  clearInterval(countdownTimer);
+  document.getElementById('emailTabInvite').classList.toggle('btn-primary', currentEmailTab==='invite');
+  document.getElementById('emailTabInvite').classList.toggle('btn-outline', currentEmailTab!=='invite');
+  document.getElementById('emailTabConfirm').classList.toggle('btn-primary', currentEmailTab==='confirm');
+  document.getElementById('emailTabConfirm').classList.toggle('btn-outline', currentEmailTab!=='confirm');
+  const c = state.current;
+  const el = document.getElementById('email-content');
+
+  if(currentEmailTab==='invite'){
+    if(c.status!=='invited' && c.status!=='paid' && c.status!=='delivered' && c.status!=='expired'){
+      el.innerHTML = emptyStateHTML('✉️','No invitation email yet','This email appears once you\'re selected as one of the first 10 suppliers.','goChatbot1Entry()','Start Chatbot 1');
+      return;
+    }
+    el.innerHTML =
+      '<div class="email-client">'+
+        '<div class="email-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px;">Inbox · Kasalang Tagaytay</span></div>'+
+        '<div class="email-meta"><div class="subj">Your 10‑10‑10 Website Invitation!</div><div class="from">From: Kasalang Tagaytay &lt;campaign@kasalangtagaytay.ph&gt; &nbsp;·&nbsp; To: '+(c.basic.email||'you@example.com')+'</div></div>'+
+        '<div class="email-body">'+
+          'Hello '+(c.basic.name||'there')+',<br><br>Congratulations!<br><br>You\'ve been selected to continue with our 10‑10‑10 Website Campaign.<br><br>The next step is to tell us more about your business so we can prepare your personalized website.<br>'+
+          '<br><a class="email-cta" href="javascript:goChatbot2Entry()">Continue to Website Chatbot</a><br>'+
+          '<div class="email-card-mini"><div class="row"><span>Website Package</span><strong>₱'+PRICE.toLocaleString()+'</strong></div></div>'+
+          'Please complete your order before your invitation expires.<br><br>Thank you!<div class="sig">— The Kasalang Tagaytay Team</div>'+
+        '</div>'+
+      '</div>';
+    if(c.status==='invited'){
+      el.innerHTML += '<div class="countdown" id="countdownBoxes" style="margin:18px auto 0;"></div>'+
+        '<p style="text-align:center;color:var(--text-soft);font-size:12px;margin-top:6px;">Time remaining to complete your order — a proposed 24‑hour window, not a finalized campaign policy.</p>'+
+        '<div class="btn-row" style="justify-content:center;"><button class="btn btn-ghost btn-sm" onclick="demoExpireNow()">⏩ Dev: Simulate time passing (expire invitation)</button></div>';
+      startEmailCountdown();
+    }
+  } else {
+    if(c.paymentStatus!=='success'){
+      el.innerHTML = emptyStateHTML('✉️','No confirmation email yet','This email appears once your payment is confirmed.','showView(\'payment\')','Go to Payment');
+      return;
+    }
+    el.innerHTML =
+      '<div class="email-client">'+
+        '<div class="email-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px;">Inbox · Kasalang Tagaytay</span></div>'+
+        '<div class="email-meta"><div class="subj">Your Website Order Is Confirmed — 10‑10‑10 Campaign</div><div class="from">From: Kasalang Tagaytay &lt;campaign@kasalangtagaytay.ph&gt; &nbsp;·&nbsp; To: '+(c.basic.email||'you@example.com')+'</div></div>'+
+        '<div class="email-body">'+
+          'Hello '+c.basic.name+',<br><br>Thank you for completing your 10‑10‑10 website order!<br><br>We\'ve received your payment and the information you shared about <strong>'+c.basic.business+'</strong>. Our team will now prepare your personalized website.<br><br>'+
+          '<div class="email-card-mini">'+
+            '<div class="row"><span>Business Name</span><strong>'+c.basic.business+'</strong></div>'+
+            '<div class="row"><span>Business Type</span><strong>'+(BUSINESS_TYPES.find(b=>b.v===c.basic.type)||{}).l+'</strong></div>'+
+            '<div class="row"><span>Order Reference</span><strong>'+(c.orderRef||'—')+'</strong></div>'+
+            '<div class="row"><span>Total Payment</span><strong>₱'+PRICE.toLocaleString()+'</strong></div>'+
+            '<div class="row"><span>Payment Status</span><strong style="color:var(--success);">Confirmed</strong></div>'+
+          '</div>'+
+          'Your submitted website information:<br>'+
+          '<div class="email-card-mini">'+buildWebsiteSummaryHTML(c.website,false)+'</div>'+
+          'Our target is to deliver your website within five days after the event, subject to complete requirements and our agreed package terms.<br><br>Thank you for joining our campaign!<div class="sig">— The Kasalang Tagaytay Team</div>'+
+        '</div>'+
+      '</div>';
+  }
+}
+
+/* ======================================================================
+   HERMES
+====================================================================== */
+const HERMES_STEPS = [
+  {t:'Hermes Receives Information', d:'Completed and paid order received from the campaign.'},
+  {t:'Website Remix Agent', d:'Combines design ideas from our website library into a personalized layout.'},
+  {t:'Content Builder', d:'Writes the website\'s content using your confirmed business information.'},
+  {t:'CMS Creator Agent', d:'Builds the website pages and prepares them for future updates.'},
+  {t:'Quality Check and Review', d:'Checks business details, links, mobile view, images, and overall quality.'},
+  {t:'Publish and Deliver', d:'The approved website is published and shared with you.'}
+];
+function renderHermes(){
+  const c = state.current;
+  const el = document.getElementById('hermes-container');
+  if(c.status!=='paid' && c.status!=='delivered'){
+    el.innerHTML = emptyStateHTML('🤖','Nothing in Hermes yet','Hermes only receives completed, paid orders. Finish Chatbot 2 and payment to see this workflow run.','goChatbot2Entry()','Go to Website Chatbot');
+    return;
+  }
+  el.innerHTML =
+    '<div class="eyebrow">Journey 3 · Hermes AI</div>'+
+    '<h2 class="page-title" style="text-align:center;">Building Your Website</h2>'+
+    '<p class="page-sub" style="text-align:center;margin:0 auto 20px;">Our existing Hermes AI system is now preparing the website for <strong>'+c.basic.business+'</strong>.</p>'+
+    '<div class="card"><div class="pipeline" id="pipelineEl"></div></div>'+
+    '<div class="btn-row" style="justify-content:center;" id="hermesActionRow"></div>';
+  drawPipeline();
+}
+function drawPipeline(){
+  const c = state.current;
+  const pipeEl = document.getElementById('pipelineEl');
+  pipeEl.innerHTML = HERMES_STEPS.map((s,i)=>{
+    const stepNum = i+1;
+    let cls = '';
+    if(c.status==='delivered' || c.hermesStage>stepNum) cls='done';
+    else if(c.hermesStage===stepNum) cls='active';
+    const icon = cls==='done' ? '✓' : (i+1);
+    return '<div class="pipe-step '+cls+'"><div class="dot-col"><div class="dot">'+icon+'</div><div class="line"></div></div><div class="pipe-body"><strong>'+s.t+'</strong><span>'+s.d+'</span></div></div>';
+  }).join('');
+  const actionRow = document.getElementById('hermesActionRow');
+  if(c.status==='delivered'){
+    actionRow.innerHTML =
+      '<div class="note-box" style="text-align:center;max-width:460px;">🚀 Website published and delivered! Target delivery: within five days after the event, subject to complete information and agreed package terms.</div>'+
+      '<br><button class="btn btn-primary" onclick="showView(\'dashboard\')">View in My Website →</button>';
+  } else {
+    actionRow.innerHTML = '<button class="btn btn-primary" onclick="advanceHermes()">▶ Simulate Next Step</button><button class="btn btn-outline" onclick="advanceHermesAll()">⏩ Simulate Full Process</button>';
+  }
+}
+function advanceHermes(){
+  const c = state.current;
+  if(c.hermesStage < HERMES_STEPS.length){
+    c.hermesStage += 1;
+  } else {
+    c.status='delivered';
+  }
+  if(c.hermesStage>=HERMES_STEPS.length && c.status!=='delivered'){
+    // one more click finalizes
+  }
+  if(c.hermesStage>HERMES_STEPS.length-0 && c.status==='paid'){ /* no-op guard */ }
+  saveState();
+  if(c.hermesStage>=HERMES_STEPS.length){ c.status='delivered'; saveState(); }
+  drawPipeline();
+  if(c.status==='delivered') toast('🚀 Website published and delivered!');
+}
+function advanceHermesAll(){
+  let i=0;
+  const iv = setInterval(()=>{
+    advanceHermes();
+    i++;
+    if(state.current.status==='delivered' || i>HERMES_STEPS.length){ clearInterval(iv); }
+  }, 450);
+}
+
+/* ======================================================================
+   DASHBOARD
+====================================================================== */
+function renderDashboard(){
+  const c = state.current;
+  const el = document.getElementById('dashboard-container');
+  if(!c.registered){
+    el.innerHTML = emptyStateHTML('🗂️','No saved progress yet','Start your journey by scanning the QR code and completing registration.','goChatbot1Entry()','Start Chatbot 1');
+    return;
+  }
+  checkInvitationExpiry();
+  // We never reveal invited-vs-waitlisted in the app before the supplier has checked their email.
+  let dashStatusKey = c.status;
+  if((c.status==='invited' || c.status==='waiting') && !c.emailChecked){ dashStatusKey = 'pending'; }
+  const invStatusMap = {pending:['Pending — check email','pill-muted'], invited:['Invited',"pill-gold"], waiting:['Waiting List',"pill-warning"], expired:['Expired',"pill-danger"], paid:['Redeemed',"pill-success"], delivered:['Redeemed',"pill-success"], none:['—','pill-muted']};
+  const payMap = {none:['Not Started','pill-muted'], pending:['Pending','pill-warning'], success:['Confirmed','pill-success'], failed:['Failed — Retry Needed','pill-danger']};
+  const infoComplete = c.website && c.website.description ? ['Complete','pill-success'] : ['Not Started','pill-muted'];
+  const prodMap = { 0:['Not Started','pill-muted'] };
+  let prodLabel = 'Not Started', prodCls='pill-muted';
+  if(c.status==='paid' || c.status==='delivered'){
+    if(c.status==='delivered'){ prodLabel='Delivered'; prodCls='pill-success'; }
+    else { prodLabel='In Progress ('+c.hermesStage+'/'+HERMES_STEPS.length+')'; prodCls='pill-warning'; }
+  }
+  const delivMap = c.status==='delivered' ? ['Delivered','pill-success'] : ['Not Yet','pill-muted'];
+
+  el.innerHTML =
+    '<div class="eyebrow">My Website</div>'+
+    '<h2 class="page-title">Hi '+c.basic.name+' 👋</h2>'+
+    '<p class="page-sub">Here\'s everything saved for <strong>'+c.basic.business+'</strong>. Progress is stored in your browser, so you can come back anytime without a password.</p>'+
+    '<div class="status-grid">'+
+      statusCard('Registration', 'Complete', 'pill-success')+
+      statusCard('Invitation', invStatusMap[dashStatusKey][0], invStatusMap[dashStatusKey][1])+
+      statusCard('Payment', payMap[c.paymentStatus][0], payMap[c.paymentStatus][1])+
+      statusCard('Website Information', infoComplete[0], infoComplete[1])+
+      statusCard('Website Production', prodLabel, prodCls)+
+      statusCard('Delivery', delivMap[0], delivMap[1])+
+    '</div>'+
+    '<div class="divider"></div>'+
+    renderDashboardActions();
+}
+function statusCard(label,val,cls){
+  return '<div class="status-card"><div class="top"><strong>'+label+'</strong></div><div class="pill '+cls+'">'+val+'</div></div>';
+}
+function renderDashboardActions(){
+  const c = state.current;
+  let actions = '';
+  if((c.status==='invited' || c.status==='waiting') && !c.emailChecked){
+    actions += '<button class="btn btn-primary" onclick="showView(\'emails\')">✉️ Check My Email</button>';
+  }
+  if(c.status==='invited' && c.emailChecked){
+    actions += '<button class="btn btn-primary" onclick="goChatbot2Entry()">Continue to Website Chatbot →</button>';
+  }
+  if(c.status==='invited' && c.emailChecked && c.website && c.website.description && c.paymentStatus!=='success'){
+    actions += '<button class="btn btn-outline" onclick="showView(\'payment\')">Resume Payment →</button>';
+  }
+  if(c.paymentStatus==='success' && c.status!=='delivered'){
+    actions += '<span style="color:var(--text-soft);font-size:13.5px;">Your website is being prepared — check back here for updates.</span>';
+  }
+  if(c.status==='delivered'){
+    actions += '<span style="color:var(--text-soft);font-size:13.5px;">🎉 Your website has been delivered! Check your email for the link.</span>';
+  }
+  if(c.status==='waiting' && c.emailChecked){
+    actions += '<span style="color:var(--text-soft);font-size:13.5px;">We\'ll notify you by email if a spot opens up.</span>';
+  }
+  if(c.status==='expired'){
+    actions += '<span style="color:var(--text-soft);font-size:13.5px;">This order can no longer be paid — your invitation period has ended.</span>';
+  }
+  return '<div class="btn-row">'+actions+'</div>';
+}
+
+/* ======================================================================
+   DEMO SCENARIOS
+====================================================================== */
+const SAMPLE_BASIC = {
+  name:'Maria Santos', email:'maria.santos@example.com', mobile:'0917 123 4567',
+  business:'Santos Floral Designs', type:'florist', location:'Tagaytay City',
+  social:'facebook.com/santosfloraldesigns'
+};
+const SAMPLE_WEBSITE = {
+  description:'We create romantic, garden-style floral arrangements for weddings across Cavite and Laguna.',
+  services:[{name:'Bridal Bouquet Package',price:'₱8,000'},{name:'Full Venue Styling',price:'₱45,000'}],
+  serviceAreas:['Tagaytay City','Cavite','Laguna'], booking:'Facebook Messenger or phone call',
+  photos:['bouquet1.jpg','venue-styling.jpg'], colors:'Blush pink and sage green',
+  style:'romantic', additional:'10% off for weekday weddings.', extra:'We specialize in garden-style and tropical arrangements.'
+};
+
+function toastScenario(label){ state.scenarioLabel=label; saveState(); toast('Demo scenario loaded: '+label); }
+
+function applyScenario(key){
+  state = defaultState();
+  const c = state.current;
+  switch(key){
+    case 'first10':
+      state.slotsInvited = 4;
+      toastScenario('First 10 — register now to receive an invitation');
+      saveState();
+      goChatbot1Entry();
+      break;
+    case 'waitlist':
+      state.slotsInvited = TOTAL_SLOTS;
+      toastScenario('Waiting List — all invitations are occupied');
+      saveState();
+      goChatbot1Entry();
+      break;
+    case 'expired':
+      state.slotsInvited = 9;
+      c.registered = true; c.basic = Object.assign({},SAMPLE_BASIC);
+      c.status = 'invited'; c.position = 9; c.emailChecked = true;
+      c.invitationDeadline = Date.now() - 1000*60*10;
+      toastScenario('Invitation Expired — reassigned to next waiting applicant');
+      saveState();
+      showView('invite');
+      break;
+    case 'paysuccess':
+      state.slotsInvited = 5;
+      c.registered = true; c.basic = Object.assign({},SAMPLE_BASIC);
+      c.status = 'invited'; c.position = 5; c.emailChecked = true;
+      c.invitationDeadline = Date.now() + 1000*60*60*24;
+      toastScenario('Payment Successful path — complete Chatbot 2, then pay');
+      saveState();
+      goChatbot2Entry();
+      break;
+    case 'paypending':
+      state.slotsInvited = 6;
+      c.registered = true; c.basic = Object.assign({},SAMPLE_BASIC);
+      c.status = 'invited'; c.position = 6; c.emailChecked = true;
+      c.invitationDeadline = Date.now() + 1000*60*60*24;
+      c.website = Object.assign({}, SAMPLE_WEBSITE);
+      c.paymentStatus = 'pending';
+      toastScenario('Payment Pending — resume payment from My Website');
+      saveState();
+      showView('dashboard');
+      break;
+    case 'delivered':
+      state.slotsInvited = 10; state.slotsPaid = 10;
+      c.registered = true; c.basic = Object.assign({},SAMPLE_BASIC);
+      c.status = 'delivered'; c.position = 10; c.emailChecked = true;
+      c.invitationDeadline = Date.now() - 1000*60*60*24;
+      c.website = Object.assign({}, SAMPLE_WEBSITE);
+      c.paymentStatus = 'success'; c.orderRef = 'KT10-7842'; c.hermesStage = 6;
+      toastScenario('Website Delivered — final outcome');
+      saveState();
+      showView('hermes');
+      break;
+  }
+  document.getElementById('demoPanel').classList.remove('open');
+}
+function restartDemo(){
+  localStorage.removeItem(STORAGE_KEY);
+  state = defaultState();
+  document.getElementById('demoPanel').classList.remove('open');
+  toast('Demo restarted — all data cleared.');
+  showView('overview');
+}
+
+/* ======================================================================
+   INIT
+====================================================================== */
+(function init(){
+  showView('overview');
+  // keep slot counter live
+  setInterval(()=>{ document.getElementById('stat-slots').textContent = Math.max(0, TOTAL_SLOTS - state.slotsPaid); }, 2000);
+})();
+</script>
+</body>
+</html>

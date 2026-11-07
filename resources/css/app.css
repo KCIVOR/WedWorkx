@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tokens copied from docs/WedWorks_Chatbot_Design_System.html (:root). Do not add values that are not there. */
+:root {
+  /* Primitives */
+  --blue-600: #2f5bea;
+  --blue-700: #2349c9;
+  --blue-500: #5b7cfa;
+  --blue-200: #d6e0fc;
+  --blue-100: #e8eefe;
+  --blue-50: #f3f6ff;
+  --navy-900: #0f172a;
+  --slate-700: #334155;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+  --white: #ffffff;
+  --green-700: #15803d; --green-50: #ecfdf3; --green-200: #bbf0cf;
+  --amber-700: #b45309; --amber-50: #fff7e6; --amber-200: #fde1a8;
+  --red-600: #c62828; --red-50: #fef2f2; --red-200: #fbcaca;
+
+  /* Semantic */
+  --wb-accent: var(--blue-600);
+  --wb-accent-hover: var(--blue-700);
+  --wb-accent-soft: rgba(47, 91, 234, .12);
+  --wb-accent-shadow: rgba(47, 91, 234, .28);
+  --wb-canvas: var(--slate-50);
+  --wb-surface: var(--white);
+  --wb-text: var(--slate-700);
+  --wb-heading: var(--navy-900);
+  --wb-muted: var(--slate-500);
+  --wb-line: var(--slate-200);
+  --wb-ai-bg: var(--blue-100);
+  --wb-ai-line: var(--blue-200);
+  --wb-ai-text: var(--navy-900);
+  --wb-user-bg: var(--blue-600);
+  --wb-user-text: #fff;
+  --wb-placeholder: #6b7a90;
+
+  /* Type */
+  --font-display: 'DM Sans', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* Radius */
+  --r-sm: 10px; --r-field: 12px; --r-md: 16px; --r-card: 20px; --r-shell: 24px; --r-bubble: 18px; --r-tail: 4px; --r-pill: 999px;
+
+  /* Spacing (4px base) */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px; --s-16: 64px;
+
+  /* Elevation */
+  --sh-sm: 0 2px 8px rgba(15, 23, 42, .05);
+  --sh-md: 0 10px 30px rgba(15, 23, 42, .08);
+  --sh-lg: 0 30px 60px rgba(15, 23, 42, .12);
+  --sh-blue: 0 8px 18px var(--wb-accent-shadow);
+
+  /* Motion */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --dur-fast: 120ms; --dur-base: 240ms; --dur-slow: 480ms;
+
+  /* Literal values the design system uses inside its wb-* component CSS (not in :root).
+     Named here once so components never hard-code them. */
+  --slate-300: #cbd5e1;                 /* outline button and field border */
+  --wb-online: #4ade80;                 /* header status dot */
+  --wb-online-ring: rgba(74, 222, 128, .25);
+  --sh-user: 0 8px 20px rgba(47, 91, 234, .25); /* user bubble shadow */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; color-scheme: light; }
+body {
+  margin: 0;
+  background: var(--slate-50);
+  color: var(--wb-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 {
+  margin: 0;
+  color: var(--navy-900);
+  font-family: var(--font-display);
+  letter-spacing: -.02em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+code, pre { font-family: var(--font-mono); }
+button { font-family: inherit; }
+:focus-visible { outline: 2px solid var(--blue-600); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-wb-in { animation: none; }
+  .animate-wb-pulse, .animate-wb-blink { animation: none; opacity: .6; }
+  * { transition-duration: .01ms !important; }
+}
+
+/* Chat log: mask and slim scrollbar, copied from the design system's .wb-log */
+.wb-log {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 calc(100% - 10px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 calc(100% - 10px), transparent 100%);
+}
+.wb-log::-webkit-scrollbar { width: 10px; }
+.wb-log::-webkit-scrollbar-track { background: transparent; margin-block: 14px; }
+.wb-log::-webkit-scrollbar-thumb { background: var(--wb-accent); background-clip: padding-box; border: 3.5px solid transparent; border-radius: 999px; min-height: 40px; }
+.wb-log:not(:hover)::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--wb-accent) 24%, transparent); background-clip: padding-box; }
+.wb-log::-webkit-scrollbar-button { display: none; height: 0; }
+@supports not selector(::-webkit-scrollbar) { .wb-log { scrollbar-width: thin; scrollbar-color: var(--wb-accent) transparent; } }

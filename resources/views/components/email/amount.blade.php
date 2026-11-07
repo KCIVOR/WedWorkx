@@ -1,0 +1,3 @@
+{{-- Amount block from the Payment reminder and Payment receipt templates. --}}
+@props(['value', 'label' => 'Amount due'])
+<tr><td align="center" style="padding:6px 0;text-align:center"><div style="font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#64748b">{{ $label }}</div><div class="amount" style="font-family:'DM Sans',Arial,Helvetica,sans-serif;font-size:40px;line-height:48px;font-weight:700;letter-spacing:-1px;color:#0f172a"><span style="color:#2f5bea;font-size:26px;vertical-align:top">&#8369;</span>{{ $value }}</div></td></tr>

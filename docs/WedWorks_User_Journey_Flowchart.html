@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supplier Journey Flowchart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* WedWorks "Bold" tokens (from WedWorks_Chatbot_Design_System.html) */
+:root{
+  --blue-600:#2f5bea; --blue-700:#2349c9; --blue-500:#5b7cfa;
+  --blue-200:#d6e0fc; --blue-100:#e8eefe; --blue-50:#f3f6ff;
+  --navy-900:#0f172a; --slate-700:#334155; --slate-500:#64748b; --slate-400:#94a3b8;
+  --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc;
+  --green-700:#15803d; --green-50:#ecfdf3; --green-200:#bbf0cf;
+  --amber-700:#b45309; --amber-50:#fff7e6; --amber-200:#fde1a8;
+  --red-600:#c62828;   --red-50:#fef2f2;   --red-200:#fbcaca;
+  --font-display:'DM Sans','Inter',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sh-sm:0 2px 8px rgba(15,23,42,.05);
+  --sh-md:0 10px 30px rgba(15,23,42,.08);
+  --sh-blue:0 8px 18px rgba(47,91,234,.28);
+  --line:var(--blue-200);
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:var(--slate-50);color:var(--slate-700);font-family:var(--font-body);line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;color:var(--navy-900);font-family:var(--font-display);letter-spacing:-.02em;line-height:1.15}
+p{margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:32px 16px 64px}
+
+/* Header */
+.hero{padding:28px;border:1px solid var(--slate-200);border-radius:24px;background:radial-gradient(60% 90% at 100% 0%,var(--blue-100),transparent 70%),#fff;box-shadow:var(--sh-md)}
+.eyebrow{display:inline-flex;gap:8px;padding:6px 12px;border-radius:999px;background:var(--blue-100);color:var(--blue-600);font-size:12px;font-weight:600;letter-spacing:.04em;margin-bottom:14px}
+.hero h1{font-size:clamp(26px,4.5vw,38px)}
+.hero h1 em{font-style:normal;color:var(--blue-600)}
+.hero p{margin-top:10px;max-width:640px;color:var(--slate-500)}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:20px;font-size:13px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.lg{display:inline-block;width:18px;height:14px;border-radius:5px;border:1.5px solid var(--blue-600);background:#fff}
+.lg.dec{width:16px;height:16px;border-radius:2px;transform:rotate(45deg) scale(.8);background:var(--blue-600);border:0}
+.lg.stop{background:var(--slate-100);border-color:var(--slate-400);border-style:dashed}
+.lg.ok{background:var(--green-50);border-color:var(--green-700)}
+.lg.int{background:var(--navy-900);border-color:var(--navy-900)}
+
+/* Tags */
+.tag{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:600;line-height:1.5;border:1px solid transparent}
+.tag.missing{background:var(--red-50);color:var(--red-600);border-color:var(--red-200)}
+.tag.proposed{background:var(--amber-50);color:var(--amber-700);border-color:var(--amber-200)}
+.tag.differs{background:var(--blue-50);color:var(--blue-700);border-color:var(--blue-200)}
+.tag.ai{background:var(--blue-600);color:#fff}
+
+/* Phase */
+.phase{margin-top:40px}
+.phase-head{display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
+.phase-head .num{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-600)}
+.phase-head h2{font-size:21px}
+
+/* Flow: each row = main column (spine) + side column (branch) */
+.flow{position:relative}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:56px;position:relative}
+.row > .main{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:34px}
+/* spine connector between nodes */
+.row > .main::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-1px);background:var(--line)}
+.row > .main::before{content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-5px);border:5px solid transparent;border-top:7px solid var(--blue-500);border-bottom:0;z-index:1}
+.row.last > .main::after,.row.last > .main::before{display:none}
+.row.last > .main{padding-bottom:0}
+.yes{position:absolute;left:calc(50% + 10px);bottom:8px;z-index:2;font-size:11px;font-weight:700;color:var(--green-700);letter-spacing:.06em;text-transform:uppercase}
+
+/* Step node */
+.node{width:100%;max-width:440px;background:#fff;border:1.5px solid var(--blue-200);border-radius:20px;padding:16px 18px;box-shadow:var(--sh-sm);position:relative;z-index:1}
+.node .top{display:flex;align-items:center;gap:12px}
+.step{flex:none;width:32px;height:32px;border-radius:10px;background:var(--blue-600);color:#fff;display:grid;place-items:center;font:700 14px var(--font-display);box-shadow:var(--sh-blue)}
+.node h3{font-size:16.5px}
+.node .who{font-size:12px;color:var(--slate-500);margin-top:1px}
+.node ul{margin:10px 0 0;padding-left:18px;font-size:13.5px}
+.node li{margin:3px 0}
+.node .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.node.ok{background:var(--green-50);border-color:var(--green-200)}
+.node.ok .step{background:var(--green-700);box-shadow:none}
+.node.int{background:var(--navy-900);border-color:var(--navy-900);color:#cbd5e1}
+.node.int h3{color:#fff}
+.node.int .who{color:#94a3b8}
+.node.int .step{background:#fff;color:var(--navy-900);box-shadow:none}
+
+/* Decision diamond */
+.decision{position:relative;z-index:1;width:250px;height:132px;display:grid;place-items:center;text-align:center}
+.decision::before{content:"";position:absolute;inset:0;background:var(--blue-600);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);filter:drop-shadow(0 6px 10px rgba(47,91,234,.3))}
+.decision p{position:relative;color:#fff;font:600 14px/1.3 var(--font-display);max-width:150px}
+.decision small{display:block;font:500 11px var(--font-body);opacity:.85;margin-top:3px}
+
+/* Side branch */
+.side{position:relative;display:flex;flex-direction:column;justify-content:center;gap:12px;padding-bottom:34px}
+.side .branch{position:relative}
+.side .branch::before{content:"";position:absolute;right:100%;top:50%;width:calc(50% - 69px);height:2px;background:var(--line)}
+.side .branch.no-arm::before{display:none}
+.side.multi{padding-left:22px}
+.side.multi::before{content:"";position:absolute;right:100%;top:calc(50% - 17px);width:calc(50% - 69px);height:2px;background:var(--line)}
+.side.multi::after{content:"";position:absolute;left:0;top:64px;bottom:calc(34px + 70px);width:2px;background:var(--line)}
+.side.multi .branch::before{width:22px}
+.blabel{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--red-600);margin-bottom:6px}
+.blabel.neutral{color:var(--slate-500)}
+.loop{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:4px 10px;border-radius:999px;background:var(--blue-100);color:var(--blue-700);font-size:12px;font-weight:600}
+.end{background:var(--slate-100);border:1.5px dashed var(--slate-400);border-radius:16px;padding:14px 16px;font-size:13.5px}
+.end h3{font-size:15px;display:flex;align-items:center;gap:8px}
+.end p{margin-top:4px}
+.end .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.sub{background:#fff;border:1.5px solid var(--blue-200);border-radius:16px;padding:14px 16px;font-size:13.5px;box-shadow:var(--sh-sm)}
+.sub h3{font-size:15px}
+.sub p{margin-top:4px}
+
+/* Hermes stages */
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.stages div{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:8px 10px;font-size:12.5px;color:#e2e8f0}
+.stages b{display:block;font:700 11px var(--font-display);color:var(--blue-200);letter-spacing:.08em}
+.track{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:12px;font-size:12.5px}
+.pill{padding:3px 10px;border-radius:999px;font-weight:600;font-size:12px}
+.pill.prog{background:var(--amber-50);color:var(--amber-700)}
+.pill.done{background:var(--green-50);color:var(--green-700)}
+
+/* Notes */
+.notes{margin-top:48px;background:#fff;border:1px solid var(--slate-200);border-radius:24px;padding:24px;box-shadow:var(--sh-sm)}
+.notes h2{font-size:20px;margin-bottom:6px}
+.notes > p{color:var(--slate-500);font-size:14px}
+.notes ol{margin:14px 0 0;padding-left:20px;font-size:14px}
+.notes li{margin:8px 0}
+.foot{margin-top:24px;font-size:12.5px;color:var(--slate-500);text-align:center}
+
+/* Phone: one column, branches sit under the decision, indented */
+@media (max-width:760px){
+  .wrap{padding-top:20px}
+  .hero{padding:22px 18px}
+  .row{grid-template-columns:minmax(0,1fr)}
+  .row > .main{padding-bottom:0}
+  .row > .main::after,.row > .main::before,.yes{display:none}
+  .side{padding:14px 0 0 18px;margin-left:12px;border-left:2px dashed var(--line);gap:10px}
+  .side .branch::before,.side.multi::before,.side.multi::after{display:none}
+  .side.multi{padding-left:18px}
+  .side:empty{display:none}
+  /* spine connector moves to the bottom of each row */
+  .row{padding-bottom:40px}
+  .row::after{content:"";position:absolute;left:50%;bottom:4px;width:2px;height:32px;transform:translateX(-1px);background:var(--line)}
+  .row.has-yes::before{content:attr(data-yes);position:absolute;left:calc(50% + 10px);bottom:12px;font-size:11px;font-weight:700;color:var(--green-700);letter-spacing:.06em;text-transform:uppercase}
+  .row.last{padding-bottom:0}
+  .row.last::after,.row.last::before{display:none}
+  .decision{width:230px;height:122px}
+  .stages{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">10-10-10 Campaign · Supplier journey</div>
+    <h1>From <em>QR scan</em> to <em>Hermes handoff</em></h1>
+    <p>What a wedding supplier goes through, step by step, and where the flow branches. Red and amber tags mark things that are missing or not yet decided.</p>
+    <div class="legend">
+      <span><i class="lg"></i>Step the supplier sees</span>
+      <span><i class="lg dec"></i>Decision</span>
+      <span><i class="lg stop"></i>End of the road</span>
+      <span><i class="lg ok"></i>Success</span>
+      <span><i class="lg int"></i>Internal (supplier doesn't see)</span>
+      <span><span class="tag missing">Missing</span></span>
+      <span><span class="tag proposed">Proposed</span></span>
+      <span><span class="tag differs">Prototype differs</span></span>
+    </div>
+  </header>
+
+  <!-- ================= PHASE 1 ================= -->
+  <section class="phase">
+    <div class="phase-head"><span class="num">Phase 1</span><h2>Register at the booth</h2></div>
+    <div class="flow">
+
+      <div class="row">
+        <div class="main">
+          <div class="node">
+            <div class="top"><span class="step">1</span><div><h3>Scan the QR code</h3><div class="who">At the Kasalang Tagaytay booth</div></div></div>
+            <ul><li>Opens the registration chat on the supplier's phone.</li></ul>
+          </div>
+        </div>
+        <div class="side"></div>
+      </div>
+
+      <div class="row">
+        <div class="main">
+          <div class="node">
+            <div class="top"><span class="step">2</span><div><h3>Chatbot 1: registration</h3><div class="who">7 questions</div></div></div>
+            <ul>
+              <li>Name, email, mobile, business name, business type (12 options), city/province, social link (optional).</li>
+              <li>Checks email format and mobile length.</li>
+            </ul>
+            <div class="tags"><span class="tag ai">AI-worded</span><span class="tag differs">Prototype is scripted, not AI</span></div>
+          </div>
+        </div>
+        <div class="side"></div>
+      </div>
+
+      <div class="row">
+        <div class="main">
+          <div class="node">
+            <div class="top"><span class="step">3</span><div><h3>Review card</h3><div class="who">All 7 answers, each with Edit</div></div></div>
+          </div>
+        </div>
+        <div class="side"></div>
+      </div>
+
+      <div class="row has-yes" data-yes="Yes · Submit">
+        <div class="main">
+          <div class="decision"><p>All correct?</p></div>
+          <span class="yes">Yes · Submit</span>
+        </div>
+        <div class="side">
+          <div class="branch">
+            <span class="blabel">No</span>
+            <div class="sub"><h3>Edit that one answer</h3><p>Jumps back to the question. Other answers are kept.</p>
+              <span class="loop">↩ back to Review card</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row has-yes" data-yes="Yes · Invited">
+        <div class="main">
+          <div class="decision"><p>One of the first 10?<small>Step 4 · slot check</small></p></div>
+          <span class="yes">Yes · Invited</span>
+        </div>
+        <div class="side">
+          <div class="branch">
+            <span class="blabel">No · slot 11+</span>
+            <div class="end"><h3>⏳ Waitlisted</h3>
+              <p>Gets a waitlist number. The app only says "Thank you, check your email" (same card as invited suppliers).</p>
+              <p>No auto-promotion: if an invite expires, nobody on the waitlist is invited.</p>
+              <div class="tags"><span class="tag missing">Waitlist email missing</span><span class="tag proposed">Waitlist wording undecided</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= PHASE 2 ================= -->
+  <section class="phase">
+    <div class="phase-head"><span class="num">Phase 2</span><h2>Invitation</h2></div>
+    <div class="flow">
+
+      <div class="row">
+        <div class="main">
+          <div class="node">
+            <div class="top"><span class="step">5</span><div><h3>Invitation email</h3><div class="who">Private link · 24-hour window starts</div></div></div>
+            <ul>
+              <li>Congratulations, ₱10,000 website package.</li>
+              <li>Button "Continue to Website Chatbot" with a countdown.</li>
+            </ul>
+            <div class="tags"><span class="tag proposed">24h window proposed</span></div>
+          </div>
+        </div>
+        <div class="side"></div>
+      </div>
+
+      <div class="row has-yes" data-yes="Yes">
+        <div class="main">
+          <div class="decision"><p>Link opened, invite still valid?</p></div>
+          <span class="yes">Yes</span>
+        </div>
+        <div class="side">
+          <div class="branch">
+            <span class="blabel">No · 24h passed</span>
+            <div class="end"><h3>⌛ Invitation expired</h3>
+              <p>Chatbot 2 and payment are blocked. This can happen at any point before payment.</p>
+              <div class="tags"><span class="tag differs">Prototype text still says the spot goes to the next supplier</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= PHASE 3 ================= -->
+  <section class="phase">
+    <div class="phase-head"><span class="num">Phase 3</span><h2>Website details</h2></div>
+    <div class="flow">
+
+      <div class="row">
+        <div class="main">
+          <div class="node">
+            <div class="top"><span class="step">6</span><div><h3>Chatbot 2: website details</h3><div class="who">8 questions = 6 common + 2 by business type</div></div></div>
+            <ul>
+              <li>Common: what makes you special, services and prices, areas served and booking, logo/photos/colors, website style, anything else.</li>
+              <li>By type, e.g. venue: guest capacity, what's included. Photographer: coverage, photo/video.</li>
+            </ul>
+            <div class="tags"><span class="tag ai">AI-worded</span><span class="tag differs">Photos saved as filenames only</span></div>
+          </div>
+        </div>
+        <div class="side"></div>
+      </div>
+
+      <div class="row">
+        <div class="main">
+          <div class="node">
+            <div class="top"><span class="step">7</span><div><h3>Review card</h3><div class="who">Summary of all 8 answers</div></div></div>
+          </div>
+        </div>
+        <div class="side"></div>
+      </div>
+
+      <div class="row has-yes" data-yes="Yes · Confirm">
+        <div class="main">
+          <div class="decision"><p>All correct?</p></div>
+          <span class="yes">Yes · Confirm</span>
+        </div>
+        <div class="side">
+          <div class="branch">
+            <span class="blabel">No</span>
+            <div class="sub"><h3>Edit Answers</h3><p>In the prototype this re-asks all 8 questions with blank fields, unlike the per-answer Edit in step 3.</p>
+              <div class="tags" style="display:flex;margin-top:8px"><span class="tag differs">Restarts all 8, not per-answer</span></div>
+              <span class="loop">↩ back to Review card</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= PHASE 4 ================= -->
+  <section class="phase">
+    <div class="phase-head"><span class="num">Phase 4</span><h2>Payment</h2></div>
+    <div class="flow">
+
+      <div class="row">
+        <div class="main">
+          <div class="node">
+            <div class="top"><span class="step">8</span><div><h3>Pay ₱10,000 via HitPay</h3><div class="who">Payment link expires in 30 minutes</div></div></div>
+            <ul>
+              <li>Shows business name and time left on the invitation.</li>
+              <li>Each new link replaces the old one.</li>
+            </ul>
+            <div class="tags"><span class="tag differs">Prototype payment is simulated</span></div>
+          </div>
+        </div>
+        <div class="side"></div>
+      </div>
+
+      <div class="row has-yes" data-yes="Paid">
+        <div class="main">
+          <div class="decision"><p>Payment result?</p></div>
+          <span class="yes">Paid</span>
+        </div>
+        <div class="side multi">
+          <div class="branch">
+            <span class="blabel">Failed, or link expired</span>
+            <div class="sub"><h3>Try Again</h3><p>Makes a fresh HitPay link, but only while the invite is still valid.</p>
+              <span class="loop">↩ back to step 8 · or ⌛ Invitation expired</span></div>
+          </div>
+          <div class="branch">
+            <span class="blabel neutral">Pay later</span>
+            <div class="sub"><h3>Saved for later</h3><p>"Resume Payment" on My Website, allowed until the invite window closes.</p>
+              <span class="loop">↩ back to step 8 · or ⌛ Invitation expired</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="main">
+          <div class="node ok">
+            <div class="top"><span class="step">9</span><div><h3>Paid</h3><div class="who">Order reference KT10-xxxx</div></div></div>
+            <ul>
+              <li>Confirmation email with order details and all website answers.</li>
+              <li>Details are locked. No edits after payment (by design).</li>
+            </ul>
+            <div class="tags"><span class="tag missing">Payment reminder and failed-payment emails not wired up</span></div>
+          </div>
+        </div>
+        <div class="side"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= PHASE 5 ================= -->
+  <section class="phase">
+    <div class="phase-head"><span class="num">Phase 5</span><h2>Handoff to Hermes</h2></div>
+    <div class="flow">
+
+      <div class="row last">
+        <div class="main">
+          <div class="node int">
+            <div class="top"><span class="step">10</span><div><h3>Hermes builds the website</h3><div class="who">Starts only for paid orders · 6 internal stages</div></div></div>
+            <div class="stages">
+              <div><b>1</b>Receive order</div>
+              <div><b>2</b>Website Remix</div>
+              <div><b>3</b>Content Builder</div>
+              <div><b>4</b>CMS Creator</div>
+              <div><b>5</b>Quality check</div>
+              <div><b>6</b>Publish &amp; deliver</div>
+            </div>
+          </div>
+          <div class="node" style="margin-top:14px">
+            <h3 style="font-size:15px">What the supplier sees on My Website</h3>
+            <div class="track"><span class="pill prog">In progress 1/6</span>→<span class="pill prog">… 6/6</span>→<span class="pill done">Delivered</span></div>
+            <div class="tags"><span class="tag missing">"Website live" email missing</span><span class="tag proposed">Who does the quality check?</span></div>
+          </div>
+        </div>
+        <div class="side"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= NOTES ================= -->
+  <section class="notes">
+    <h2>Open items found in the cross-check</h2>
+    <p>Checked against notes/chatbot-flow-review.md, notes/hermes-journey.md and chatbot.html on 6 Nov 2026.</p>
+    <ol>
+      <li><b>Waitlist email does not exist.</b> Waitlisted suppliers are told to check their email, but no waitlist email is sent. What they should be told, now that spots never reopen, is still undecided.</li>
+      <li><b>24-hour invite window is proposed, not final.</b> It's set in .env as INVITE_EXPIRY_HOURS=24.</li>
+      <li><b>Expired-invite text in chatbot.html is wrong.</b> It still says the spot goes to the next waitlisted supplier, which contradicts the no-auto-promotion decision.</li>
+      <li><b>Edit after Chatbot 2 restarts all 8 questions</b> instead of editing one answer like Chatbot 1.</li>
+      <li><b>No "website live" email</b>, although My Website tells the supplier to check their email for the link.</li>
+      <li><b>Hermes stages don't move in chatbot.html</b>. The order stays at 1/6 until Hermes is connected.</li>
+    </ol>
+  </section>
+
+  <p class="foot">WedWorks · Supplier journey flowchart · Bold blue style</p>
+</div>
+</body>
+</html>

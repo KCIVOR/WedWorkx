@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WedWorks Email Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{--blue-600:#2f5bea;--blue-100:#e8eefe;--navy-900:#0f172a;--slate-700:#334155;--slate-500:#64748b;--slate-200:#e2e8f0;--slate-100:#f1f5f9;--slate-50:#f8fafc;
+  --font-display:'DM Sans','Inter',system-ui,sans-serif;--font-body:'Inter',system-ui,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --sh-sm:0 2px 8px rgba(15,23,42,.05);--ease-out:cubic-bezier(.22,1,.36,1);--dur-base:240ms}
+*{box-sizing:border-box}
+html{color-scheme:light;scroll-behavior:smooth}
+body{margin:0;background:var(--slate-50);color:var(--slate-700);font-family:var(--font-body);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h4{margin:0;color:var(--navy-900);font-family:var(--font-display);letter-spacing:-.02em;line-height:1.15}
+.wrap{max-width:1040px;margin:0 auto;padding:40px 24px 80px}
+.eyebrow{display:inline-flex;padding:6px 12px;border-radius:999px;background:var(--blue-100);color:var(--blue-600);font-size:12px;font-weight:600;letter-spacing:.04em;margin-bottom:16px}
+h1{font-size:clamp(28px,4.4vw,44px);margin-bottom:12px} h1 em{font-style:normal;color:var(--blue-600)}
+.lead{max-width:720px;color:var(--slate-500);font-size:16px;margin:0 0 20px}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
+.jump a{font-size:13px;padding:6px 12px;border-radius:999px;border:1px solid var(--slate-200);background:#fff;color:var(--slate-700);text-decoration:none}
+.jump a:hover{border-color:var(--blue-600);color:var(--blue-600)}
+h2{font-size:24px;margin:48px 0 14px}
+.grid{display:grid;gap:20px} .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:#fff;border:1px solid var(--slate-200);border-radius:20px;padding:22px;box-shadow:var(--sh-sm);min-width:0}
+.card h4{font-size:19px;margin-bottom:8px} .stack{display:grid;gap:12px}
+ul.clean{padding-left:18px;margin:0;display:grid;gap:8px;font-size:14.5px}
+.tok{font-family:var(--font-mono);font-size:12px;background:var(--slate-100);padding:2px 6px;border-radius:6px;color:var(--navy-900)}
+.table-wrap{overflow-x:auto}
+table.spec{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px;background:#fff;border-radius:16px}
+table.spec th{text-align:left;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-500);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--slate-200)}
+table.spec td{padding:10px 12px;border-bottom:1px solid var(--slate-100);vertical-align:top}
+table.spec td:first-child{font-weight:600;color:var(--navy-900);white-space:nowrap}
+:focus-visible{outline:2px solid var(--blue-600);outline-offset:2px}
+@media (max-width:760px){.g2{grid-template-columns:minmax(0,1fr)}.wrap{padding:28px 16px 64px}}
+
+.em-list{display:grid;gap:24px}
+.em-card{background:#fff;border:1px solid var(--slate-200);border-radius:20px;box-shadow:var(--sh-sm);overflow:hidden;min-width:0;scroll-margin-top:24px}
+.em-top{display:flex;justify-content:space-between;align-items:center;gap:12px 16px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--slate-200)}
+.em-name{font:700 17px/1.2 var(--font-display);color:var(--navy-900)}
+.em-when{font-size:13px;color:var(--slate-500)}
+.em-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.em-seg{display:inline-flex;padding:3px;border-radius:999px;background:var(--slate-100)}
+.em-seg button{border:0;background:transparent;padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;color:var(--slate-500);cursor:pointer;min-height:32px}
+.em-seg button.on{background:#fff;color:var(--blue-600);box-shadow:0 1px 3px rgba(15,23,42,.12)}
+.em-copy{border:1px solid var(--slate-200);background:#fff;border-radius:999px;padding:6px 14px;min-height:36px;font-size:13px;font-weight:600;cursor:pointer;color:var(--navy-900)}
+.em-copy:hover{border-color:var(--blue-600);color:var(--blue-600)}
+.em-meta{padding:14px 20px;background:var(--slate-50);border-bottom:1px solid var(--slate-200);display:grid;gap:2px;font-size:13px;color:var(--slate-500);min-width:0}
+.em-subj{font:600 15px/1.35 var(--font-display);color:var(--navy-900)}
+.em-from,.em-pre{overflow-wrap:anywhere}
+.em-pre{font-style:italic}
+.em-view{background:#eef2ff;padding:20px 12px;display:flex;justify-content:center}
+.em-frame{display:block;width:100%;max-width:680px;height:900px;border:0;background:#f8fafc;border-radius:14px;transition:max-width var(--dur-base) var(--ease-out)}
+.em-card.mob .em-frame{max-width:375px;border:8px solid var(--navy-900);border-radius:32px}
+@media (max-width:620px){.em-view{padding:12px 0}.em-card.mob .em-frame{border-width:0;border-radius:0}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Bold · Email · Desktop + mobile</div>
+  <h1>WedWorks <em>email</em> templates</h1>
+  <p class="lead">Eight transactional emails for the 10-10-10 Campaign, one for each moment the chatbot tells a supplier to “check your email”. They use the Bold design system: royal blue header, white card, pill buttons and the same label/value rows as the in-chat cards. Each preview is the real email HTML. Switch to Mobile to see the phone layout, or Copy HTML to grab the full file for your email service.</p>
+  <nav class="jump" aria-label="Templates"><a href="#em-registered">Registration received</a><a href="#em-invite">Invitation</a><a href="#em-reminder">Payment reminder</a><a href="#em-confirmed">Payment receipt</a><a href="#em-failed">Payment unsuccessful</a><a href="#em-updated">Details updated</a><a href="#em-waitlist">Waiting list</a><a href="#em-expired">Invitation expired</a></nav>
+  <h2 style="margin-top:0">Which email, when</h2>
+  <div class="table-wrap" style="margin-bottom:20px"><table class="spec"><tr><th>Email</th><th>Subject line</th><th>Sent when</th></tr><tr><td>Registration received</td><td>We’ve received your registration</td><td>Right after the supplier finishes registration in the chat</td></tr><tr><td>Invitation</td><td>You’re in! Your 10-10-10 website invitation</td><td>Supplier is one of the first 10 and has 24 hours to pay</td></tr><tr><td>Payment reminder</td><td>Reminder: your invitation expires in 2 hours</td><td>About 2 hours before the 24-hour invitation ends</td></tr><tr><td>Payment receipt</td><td>Payment confirmed. Your website order is in</td><td>Payment succeeds. Replaces the old ‘order confirmed’ email</td></tr><tr><td>Payment unsuccessful</td><td>Your payment didn’t go through</td><td>Payment attempt fails or is cancelled</td></tr><tr><td>Details updated</td><td>Your details were updated</td><td>Supplier edits their details or website information in the chat</td></tr><tr><td>Waiting list</td><td>You’re on the waiting list</td><td>All 10 slots are taken when the supplier registers</td></tr><tr><td>Invitation expired</td><td>Your invitation has expired</td><td>The 24-hour window ends without payment</td></tr></table></div>
+  <h2>Templates</h2>
+  <div class="em-list">
+<article class="em-card" id="em-registered">
+  <div class="em-top">
+    <div><div class="em-name">Registration received</div><div class="em-when">Right after the supplier finishes registration in the chat</div></div>
+    <div class="em-tools">
+      <div class="em-seg" role="group" aria-label="Preview width"><button type="button" class="on" data-w="desk">Desktop</button><button type="button" data-w="mob">Mobile</button></div>
+      <button type="button" class="em-copy">Copy HTML</button>
+    </div>
+  </div>
+  <div class="em-meta"><div class="em-subj">We’ve received your registration</div><div class="em-from">From: Kasalang Tagaytay &lt;campaign@kasalangtagaytay.ph&gt; &middot; To: maria@rosalcatering.ph</div><div class="em-pre">Thanks, Maria. Here’s what happens next for Rosal Catering.</div></div>
+  <div class="em-view"><iframe class="em-frame" title="Registration received email preview" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:o=&quot;urn:schemas-microsoft-com:office:office&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;x-apple-disable-message-reformatting&quot;&gt;
+&lt;meta name=&quot;color-scheme&quot; content=&quot;light&quot;&gt;
+&lt;meta name=&quot;supported-color-schemes&quot; content=&quot;light&quot;&gt;
+&lt;title&gt;We’ve received your registration&lt;/title&gt;
+&lt;!--[if mso]&gt;&lt;noscript&gt;&lt;xml&gt;&lt;o:OfficeDocumentSettings&gt;&lt;o:PixelsPerInch&gt;96&lt;/o:PixelsPerInch&gt;&lt;/o:OfficeDocumentSettings&gt;&lt;/xml&gt;&lt;/noscript&gt;&lt;![endif]--&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&amp;family=Inter:wght@400;600&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+  body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+  table,td{mso-table-lspace:0;mso-table-rspace:0}
+  body{margin:0!important;padding:0!important;width:100%!important;background:#f8fafc}
+  a{color:#2f5bea}
+  @media only screen and (max-width:620px){
+    .outer{padding:12px 8px!important}
+    .px{padding-left:20px!important;padding-right:20px!important}
+    .hd{padding:18px 20px!important}
+    .h1{font-size:22px!important;line-height:28px!important}
+    .amount{font-size:34px!important;line-height:42px!important}
+    .btn table{width:100%!important}
+    .btn a{display:block!important}
+    .rk,.rv{padding-left:14px!important;padding-right:14px!important}
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body style=&quot;margin:0;padding:0;background:#f8fafc&quot;&gt;
+&lt;div style=&quot;display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8fafc&quot;&gt;Thanks, Maria. Here’s what happens next for Rosal Catering.&amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &lt;/div&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; bgcolor=&quot;#f8fafc&quot; style=&quot;background:#f8fafc&quot;&gt;
+&lt;tr&gt;&lt;td class=&quot;outer&quot; align=&quot;center&quot; style=&quot;padding:32px 16px&quot;&gt;
+&lt;!--[if mso]&gt;&lt;table role=&quot;presentation&quot; width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;![endif]--&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;max-width:600px;width:100%&quot;&gt;
+  &lt;tr&gt;&lt;td class=&quot;hd&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:20px 20px 0 0;padding:22px 32px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;
+      &lt;td width=&quot;40&quot; height=&quot;40&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px&quot;&gt;W&lt;/td&gt;
+      &lt;td style=&quot;padding-left:12px&quot;&gt;
+        &lt;div style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px&quot;&gt;WedWorks&lt;/div&gt;
+        &lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc&quot;&gt;Kasalang Tagaytay &amp;middot; 10-10-10 Campaign&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;&lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td class=&quot;px&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border:1px solid #e2e8f0;border-top:0;border-radius:0 0 20px 20px;padding:32px 36px 36px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;
+&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td width=&quot;48&quot; height=&quot;48&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:48px;height:48px;border-radius:50%;background:#e8eefe;color:#2349c9;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;line-height:48px&quot;&gt;&amp;#10003;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;h1&quot; style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:26px;line-height:32px;font-weight:700;letter-spacing:-0.4px;color:#0f172a&quot;&gt;Thanks, Maria. We’ve got your registration.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#334155&quot;&gt;We’ve received your registration for &lt;strong style=&quot;color:#0f172a&quot;&gt;Rosal Catering&lt;/strong&gt;. Here’s a copy of what you shared with us.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border:1px solid #e2e8f0;border-radius:16px;border-collapse:separate;background:#ffffff&quot;&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;padding:14px 18px 4px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#64748b&quot;&gt;Your details&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Name&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Maria Reyes&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Business&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Rosal Catering&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Business type&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Caterer&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Mobile&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;0917 555 0142&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Location&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Tagaytay City&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background:#f3f6ff;border:1px solid #d6e0fc;border-radius:12px;border-collapse:separate&quot;&gt;&lt;tr&gt;&lt;td width=&quot;22&quot; valign=&quot;top&quot; style=&quot;padding:14px 0 14px 16px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;line-height:22px;color:#2f5bea&quot;&gt;i&lt;/td&gt;&lt;td style=&quot;padding:14px 16px 14px 10px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#334155&quot;&gt;This offer is limited to the first 10 suppliers. Keep an eye on your inbox over the next 24 hours for your next step.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;btn&quot;&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td align=&quot;center&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:999px&quot;&gt;&lt;a href=&quot;https://wedworks.example/my-website&quot; target=&quot;_blank&quot; style=&quot;display:inline-block;padding:14px 28px;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:15px;font-weight:600;line-height:20px;text-decoration:none;border-radius:999px;color:#ffffff;border:1px solid #2f5bea&quot;&gt;Go to my website&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;height:28px;line-height:28px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border-top:1px solid #e2e8f0;font-size:0;line-height:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:20px;line-height:20px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b&quot;&gt;Questions? Just reply to this email and our team will help.&lt;br&gt;&amp;mdash; The Kasalang Tagaytay Team&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:22px 24px 8px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#64748b;text-align:center&quot;&gt;
+    You&amp;rsquo;re receiving this because you registered for the 10-10-10 Campaign at Kasalang Tagaytay.&lt;br&gt;We only contact you by email.&lt;br&gt;&lt;br&gt;
+    Kasalang Tagaytay &amp;middot; Tagaytay City, Philippines&lt;br&gt;
+    &lt;a href=&quot;https://wedworks.example/my-website&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;My website&lt;/a&gt; &amp;nbsp;&amp;middot;&amp;nbsp; &lt;a href=&quot;https://wedworks.example/privacy&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;Privacy&lt;/a&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;!--[if mso]&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;![endif]--&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe></div>
+</article>
+<article class="em-card" id="em-invite">
+  <div class="em-top">
+    <div><div class="em-name">Invitation</div><div class="em-when">Supplier is one of the first 10 and has 24 hours to pay</div></div>
+    <div class="em-tools">
+      <div class="em-seg" role="group" aria-label="Preview width"><button type="button" class="on" data-w="desk">Desktop</button><button type="button" data-w="mob">Mobile</button></div>
+      <button type="button" class="em-copy">Copy HTML</button>
+    </div>
+  </div>
+  <div class="em-meta"><div class="em-subj">You’re in! Your 10-10-10 website invitation</div><div class="em-from">From: Kasalang Tagaytay &lt;campaign@kasalangtagaytay.ph&gt; &middot; To: maria@rosalcatering.ph</div><div class="em-pre">Slot 4 of 10 is yours. Complete your order within 24 hours.</div></div>
+  <div class="em-view"><iframe class="em-frame" title="Invitation email preview" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:o=&quot;urn:schemas-microsoft-com:office:office&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;x-apple-disable-message-reformatting&quot;&gt;
+&lt;meta name=&quot;color-scheme&quot; content=&quot;light&quot;&gt;
+&lt;meta name=&quot;supported-color-schemes&quot; content=&quot;light&quot;&gt;
+&lt;title&gt;You’re in! Your 10-10-10 website invitation&lt;/title&gt;
+&lt;!--[if mso]&gt;&lt;noscript&gt;&lt;xml&gt;&lt;o:OfficeDocumentSettings&gt;&lt;o:PixelsPerInch&gt;96&lt;/o:PixelsPerInch&gt;&lt;/o:OfficeDocumentSettings&gt;&lt;/xml&gt;&lt;/noscript&gt;&lt;![endif]--&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&amp;family=Inter:wght@400;600&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+  body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+  table,td{mso-table-lspace:0;mso-table-rspace:0}
+  body{margin:0!important;padding:0!important;width:100%!important;background:#f8fafc}
+  a{color:#2f5bea}
+  @media only screen and (max-width:620px){
+    .outer{padding:12px 8px!important}
+    .px{padding-left:20px!important;padding-right:20px!important}
+    .hd{padding:18px 20px!important}
+    .h1{font-size:22px!important;line-height:28px!important}
+    .amount{font-size:34px!important;line-height:42px!important}
+    .btn table{width:100%!important}
+    .btn a{display:block!important}
+    .rk,.rv{padding-left:14px!important;padding-right:14px!important}
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body style=&quot;margin:0;padding:0;background:#f8fafc&quot;&gt;
+&lt;div style=&quot;display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8fafc&quot;&gt;Slot 4 of 10 is yours. Complete your order within 24 hours.&amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &lt;/div&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; bgcolor=&quot;#f8fafc&quot; style=&quot;background:#f8fafc&quot;&gt;
+&lt;tr&gt;&lt;td class=&quot;outer&quot; align=&quot;center&quot; style=&quot;padding:32px 16px&quot;&gt;
+&lt;!--[if mso]&gt;&lt;table role=&quot;presentation&quot; width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;![endif]--&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;max-width:600px;width:100%&quot;&gt;
+  &lt;tr&gt;&lt;td class=&quot;hd&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:20px 20px 0 0;padding:22px 32px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;
+      &lt;td width=&quot;40&quot; height=&quot;40&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px&quot;&gt;W&lt;/td&gt;
+      &lt;td style=&quot;padding-left:12px&quot;&gt;
+        &lt;div style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px&quot;&gt;WedWorks&lt;/div&gt;
+        &lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc&quot;&gt;Kasalang Tagaytay &amp;middot; 10-10-10 Campaign&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;&lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td class=&quot;px&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border:1px solid #e2e8f0;border-top:0;border-radius:0 0 20px 20px;padding:32px 36px 36px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;
+&lt;tr&gt;&lt;td&gt;&lt;span style=&quot;display:inline-block;padding:4px 12px;border-radius:999px;background:#e8eefe;color:#2349c9;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;line-height:18px;white-space:nowrap&quot;&gt;Invited &amp;middot; slot 4 of 10&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;h1&quot; style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:26px;line-height:32px;font-weight:700;letter-spacing:-0.4px;color:#0f172a&quot;&gt;Congratulations, Maria! You’re one of the first 10.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#334155&quot;&gt;You’ve been selected to continue with the 10-10-10 Campaign. Tell us more about Rosal Catering and complete your order so we can prepare your website.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#e2e8f0&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#e2e8f0&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#e2e8f0&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#e2e8f0&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#e2e8f0&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#e2e8f0&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;div style=&quot;padding-top:8px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;color:#64748b&quot;&gt;4 of 10 slots taken&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border:1px solid #e2e8f0;border-radius:16px;border-collapse:separate;background:#ffffff&quot;&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Package&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Standard website&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Amount&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;&amp;#8369;10,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Complete payment by&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Nov 7, 2026 &amp;middot; 10:58 AM&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background:#fff7e6;border:1px solid #fde1a8;border-radius:12px;border-collapse:separate&quot;&gt;&lt;tr&gt;&lt;td width=&quot;22&quot; valign=&quot;top&quot; style=&quot;padding:14px 0 14px 16px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;line-height:22px;color:#b45309&quot;&gt;!&lt;/td&gt;&lt;td style=&quot;padding:14px 16px 14px 10px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#334155&quot;&gt;If payment isn’t completed by the deadline, your slot goes to the next supplier on the waiting list.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;btn&quot;&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td align=&quot;center&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:999px&quot;&gt;&lt;a href=&quot;https://wedworks.example/my-website&quot; target=&quot;_blank&quot; style=&quot;display:inline-block;padding:14px 28px;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:15px;font-weight:600;line-height:20px;text-decoration:none;border-radius:999px;color:#ffffff;border:1px solid #2f5bea&quot;&gt;Continue to Website Chatbot&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;height:28px;line-height:28px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border-top:1px solid #e2e8f0;font-size:0;line-height:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:20px;line-height:20px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b&quot;&gt;Questions? Just reply to this email and our team will help.&lt;br&gt;&amp;mdash; The Kasalang Tagaytay Team&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:22px 24px 8px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#64748b;text-align:center&quot;&gt;
+    You&amp;rsquo;re receiving this because you registered for the 10-10-10 Campaign at Kasalang Tagaytay.&lt;br&gt;We only contact you by email.&lt;br&gt;&lt;br&gt;
+    Kasalang Tagaytay &amp;middot; Tagaytay City, Philippines&lt;br&gt;
+    &lt;a href=&quot;https://wedworks.example/my-website&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;My website&lt;/a&gt; &amp;nbsp;&amp;middot;&amp;nbsp; &lt;a href=&quot;https://wedworks.example/privacy&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;Privacy&lt;/a&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;!--[if mso]&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;![endif]--&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe></div>
+</article>
+<article class="em-card" id="em-reminder">
+  <div class="em-top">
+    <div><div class="em-name">Payment reminder</div><div class="em-when">About 2 hours before the 24-hour invitation ends</div></div>
+    <div class="em-tools">
+      <div class="em-seg" role="group" aria-label="Preview width"><button type="button" class="on" data-w="desk">Desktop</button><button type="button" data-w="mob">Mobile</button></div>
+      <button type="button" class="em-copy">Copy HTML</button>
+    </div>
+  </div>
+  <div class="em-meta"><div class="em-subj">Reminder: your invitation expires in 2 hours</div><div class="em-from">From: Kasalang Tagaytay &lt;campaign@kasalangtagaytay.ph&gt; &middot; To: maria@rosalcatering.ph</div><div class="em-pre">Complete your ₱10,000 order before 10:58 AM to keep slot 4.</div></div>
+  <div class="em-view"><iframe class="em-frame" title="Payment reminder email preview" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:o=&quot;urn:schemas-microsoft-com:office:office&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;x-apple-disable-message-reformatting&quot;&gt;
+&lt;meta name=&quot;color-scheme&quot; content=&quot;light&quot;&gt;
+&lt;meta name=&quot;supported-color-schemes&quot; content=&quot;light&quot;&gt;
+&lt;title&gt;Reminder: your invitation expires in 2 hours&lt;/title&gt;
+&lt;!--[if mso]&gt;&lt;noscript&gt;&lt;xml&gt;&lt;o:OfficeDocumentSettings&gt;&lt;o:PixelsPerInch&gt;96&lt;/o:PixelsPerInch&gt;&lt;/o:OfficeDocumentSettings&gt;&lt;/xml&gt;&lt;/noscript&gt;&lt;![endif]--&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&amp;family=Inter:wght@400;600&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+  body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+  table,td{mso-table-lspace:0;mso-table-rspace:0}
+  body{margin:0!important;padding:0!important;width:100%!important;background:#f8fafc}
+  a{color:#2f5bea}
+  @media only screen and (max-width:620px){
+    .outer{padding:12px 8px!important}
+    .px{padding-left:20px!important;padding-right:20px!important}
+    .hd{padding:18px 20px!important}
+    .h1{font-size:22px!important;line-height:28px!important}
+    .amount{font-size:34px!important;line-height:42px!important}
+    .btn table{width:100%!important}
+    .btn a{display:block!important}
+    .rk,.rv{padding-left:14px!important;padding-right:14px!important}
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body style=&quot;margin:0;padding:0;background:#f8fafc&quot;&gt;
+&lt;div style=&quot;display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8fafc&quot;&gt;Complete your ₱10,000 order before 10:58 AM to keep slot 4.&amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &lt;/div&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; bgcolor=&quot;#f8fafc&quot; style=&quot;background:#f8fafc&quot;&gt;
+&lt;tr&gt;&lt;td class=&quot;outer&quot; align=&quot;center&quot; style=&quot;padding:32px 16px&quot;&gt;
+&lt;!--[if mso]&gt;&lt;table role=&quot;presentation&quot; width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;![endif]--&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;max-width:600px;width:100%&quot;&gt;
+  &lt;tr&gt;&lt;td class=&quot;hd&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:20px 20px 0 0;padding:22px 32px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;
+      &lt;td width=&quot;40&quot; height=&quot;40&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px&quot;&gt;W&lt;/td&gt;
+      &lt;td style=&quot;padding-left:12px&quot;&gt;
+        &lt;div style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px&quot;&gt;WedWorks&lt;/div&gt;
+        &lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc&quot;&gt;Kasalang Tagaytay &amp;middot; 10-10-10 Campaign&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;&lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td class=&quot;px&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border:1px solid #e2e8f0;border-top:0;border-radius:0 0 20px 20px;padding:32px 36px 36px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;
+&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td width=&quot;48&quot; height=&quot;48&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:48px;height:48px;border-radius:50%;background:#fff7e6;color:#b45309;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;line-height:48px&quot;&gt;!&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span style=&quot;display:inline-block;padding:4px 12px;border-radius:999px;background:#fff7e6;color:#b45309;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;line-height:18px;white-space:nowrap&quot;&gt;Expires in about 2 hours&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;h1&quot; style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:26px;line-height:32px;font-weight:700;letter-spacing:-0.4px;color:#0f172a&quot;&gt;Your slot is still waiting for you&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#334155&quot;&gt;Hi Maria, your invitation for Rosal Catering ends soon. Complete your order before the deadline to keep your slot.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:6px 0;text-align:center&quot;&gt;&lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#64748b&quot;&gt;Amount due&lt;/div&gt;&lt;div class=&quot;amount&quot; style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:40px;line-height:48px;font-weight:700;letter-spacing:-1px;color:#0f172a&quot;&gt;&lt;span style=&quot;color:#2f5bea;font-size:26px;vertical-align:top&quot;&gt;&amp;#8369;&lt;/span&gt;10,000&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border:1px solid #e2e8f0;border-radius:16px;border-collapse:separate;background:#ffffff&quot;&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Slot&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;4 of 10&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Deadline&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Nov 7, 2026 &amp;middot; 10:58 AM&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Payment status&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;&lt;span style=&quot;display:inline-block;padding:4px 12px;border-radius:999px;background:#fff7e6;color:#b45309;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;line-height:18px;white-space:nowrap&quot;&gt;Not yet paid&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;btn&quot;&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td align=&quot;center&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:999px&quot;&gt;&lt;a href=&quot;https://wedworks.example/my-website&quot; target=&quot;_blank&quot; style=&quot;display:inline-block;padding:14px 28px;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:15px;font-weight:600;line-height:20px;text-decoration:none;border-radius:999px;color:#ffffff;border:1px solid #2f5bea&quot;&gt;Pay &amp;#8369;10,000&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;height:28px;line-height:28px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border-top:1px solid #e2e8f0;font-size:0;line-height:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:20px;line-height:20px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b&quot;&gt;Questions? Just reply to this email and our team will help.&lt;br&gt;&amp;mdash; The Kasalang Tagaytay Team&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:22px 24px 8px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#64748b;text-align:center&quot;&gt;
+    You&amp;rsquo;re receiving this because you registered for the 10-10-10 Campaign at Kasalang Tagaytay.&lt;br&gt;We only contact you by email.&lt;br&gt;&lt;br&gt;
+    Kasalang Tagaytay &amp;middot; Tagaytay City, Philippines&lt;br&gt;
+    &lt;a href=&quot;https://wedworks.example/my-website&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;My website&lt;/a&gt; &amp;nbsp;&amp;middot;&amp;nbsp; &lt;a href=&quot;https://wedworks.example/privacy&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;Privacy&lt;/a&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;!--[if mso]&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;![endif]--&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe></div>
+</article>
+<article class="em-card" id="em-confirmed">
+  <div class="em-top">
+    <div><div class="em-name">Payment receipt</div><div class="em-when">Payment succeeds. Replaces the old ‘order confirmed’ email</div></div>
+    <div class="em-tools">
+      <div class="em-seg" role="group" aria-label="Preview width"><button type="button" class="on" data-w="desk">Desktop</button><button type="button" data-w="mob">Mobile</button></div>
+      <button type="button" class="em-copy">Copy HTML</button>
+    </div>
+  </div>
+  <div class="em-meta"><div class="em-subj">Payment confirmed. Your website order is in</div><div class="em-from">From: Kasalang Tagaytay &lt;campaign@kasalangtagaytay.ph&gt; &middot; To: maria@rosalcatering.ph</div><div class="em-pre">Receipt WW-1010-0042 · ₱10,000 for Rosal Catering.</div></div>
+  <div class="em-view"><iframe class="em-frame" title="Payment receipt email preview" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:o=&quot;urn:schemas-microsoft-com:office:office&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;x-apple-disable-message-reformatting&quot;&gt;
+&lt;meta name=&quot;color-scheme&quot; content=&quot;light&quot;&gt;
+&lt;meta name=&quot;supported-color-schemes&quot; content=&quot;light&quot;&gt;
+&lt;title&gt;Payment confirmed. Your website order is in&lt;/title&gt;
+&lt;!--[if mso]&gt;&lt;noscript&gt;&lt;xml&gt;&lt;o:OfficeDocumentSettings&gt;&lt;o:PixelsPerInch&gt;96&lt;/o:PixelsPerInch&gt;&lt;/o:OfficeDocumentSettings&gt;&lt;/xml&gt;&lt;/noscript&gt;&lt;![endif]--&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&amp;family=Inter:wght@400;600&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+  body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+  table,td{mso-table-lspace:0;mso-table-rspace:0}
+  body{margin:0!important;padding:0!important;width:100%!important;background:#f8fafc}
+  a{color:#2f5bea}
+  @media only screen and (max-width:620px){
+    .outer{padding:12px 8px!important}
+    .px{padding-left:20px!important;padding-right:20px!important}
+    .hd{padding:18px 20px!important}
+    .h1{font-size:22px!important;line-height:28px!important}
+    .amount{font-size:34px!important;line-height:42px!important}
+    .btn table{width:100%!important}
+    .btn a{display:block!important}
+    .rk,.rv{padding-left:14px!important;padding-right:14px!important}
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body style=&quot;margin:0;padding:0;background:#f8fafc&quot;&gt;
+&lt;div style=&quot;display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8fafc&quot;&gt;Receipt WW-1010-0042 · ₱10,000 for Rosal Catering.&amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &lt;/div&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; bgcolor=&quot;#f8fafc&quot; style=&quot;background:#f8fafc&quot;&gt;
+&lt;tr&gt;&lt;td class=&quot;outer&quot; align=&quot;center&quot; style=&quot;padding:32px 16px&quot;&gt;
+&lt;!--[if mso]&gt;&lt;table role=&quot;presentation&quot; width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;![endif]--&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;max-width:600px;width:100%&quot;&gt;
+  &lt;tr&gt;&lt;td class=&quot;hd&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:20px 20px 0 0;padding:22px 32px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;
+      &lt;td width=&quot;40&quot; height=&quot;40&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px&quot;&gt;W&lt;/td&gt;
+      &lt;td style=&quot;padding-left:12px&quot;&gt;
+        &lt;div style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px&quot;&gt;WedWorks&lt;/div&gt;
+        &lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc&quot;&gt;Kasalang Tagaytay &amp;middot; 10-10-10 Campaign&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;&lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td class=&quot;px&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border:1px solid #e2e8f0;border-top:0;border-radius:0 0 20px 20px;padding:32px 36px 36px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;
+&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td width=&quot;48&quot; height=&quot;48&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:48px;height:48px;border-radius:50%;background:#ecfdf3;color:#15803d;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;line-height:48px&quot;&gt;&amp;#10003;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;h1&quot; style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:26px;line-height:32px;font-weight:700;letter-spacing:-0.4px;color:#0f172a&quot;&gt;Payment confirmed!&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#334155&quot;&gt;Thank you, Maria! We’ve received your payment and your website information for &lt;strong style=&quot;color:#0f172a&quot;&gt;Rosal Catering&lt;/strong&gt;.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:6px 0;text-align:center&quot;&gt;&lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#64748b&quot;&gt;Amount paid&lt;/div&gt;&lt;div class=&quot;amount&quot; style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:40px;line-height:48px;font-weight:700;letter-spacing:-1px;color:#0f172a&quot;&gt;&lt;span style=&quot;color:#2f5bea;font-size:26px;vertical-align:top&quot;&gt;&amp;#8369;&lt;/span&gt;10,000&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border:1px solid #e2e8f0;border-radius:16px;border-collapse:separate;background:#ffffff&quot;&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;padding:14px 18px 4px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#64748b&quot;&gt;Receipt&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Order reference&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;WW-1010-0042&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Business&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Rosal Catering&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Package&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Standard website&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Paid on&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Nov 6, 2026 &amp;middot; 11:04 AM&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Payment method&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;GCash&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Status&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;&lt;span style=&quot;display:inline-block;padding:4px 12px;border-radius:999px;background:#ecfdf3;color:#15803d;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;line-height:18px;white-space:nowrap&quot;&gt;Confirmed&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#2f5bea&quot;&gt;What happens next&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td width=&quot;28&quot; valign=&quot;top&quot; style=&quot;padding:0 12px 14px 0&quot;&gt;&lt;div style=&quot;width:26px;height:26px;border-radius:50%;background:#e8eefe;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;line-height:26px;text-align:center&quot;&gt;1&lt;/div&gt;&lt;/td&gt;&lt;td valign=&quot;top&quot; style=&quot;padding:2px 0 14px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#334155&quot;&gt;Our team reviews your website information.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td width=&quot;28&quot; valign=&quot;top&quot; style=&quot;padding:0 12px 14px 0&quot;&gt;&lt;div style=&quot;width:26px;height:26px;border-radius:50%;background:#e8eefe;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;line-height:26px;text-align:center&quot;&gt;2&lt;/div&gt;&lt;/td&gt;&lt;td valign=&quot;top&quot; style=&quot;padding:2px 0 14px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#334155&quot;&gt;We build your website after the event.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td width=&quot;28&quot; valign=&quot;top&quot; style=&quot;padding:0 12px 14px 0&quot;&gt;&lt;div style=&quot;width:26px;height:26px;border-radius:50%;background:#e8eefe;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;line-height:26px;text-align:center&quot;&gt;3&lt;/div&gt;&lt;/td&gt;&lt;td valign=&quot;top&quot; style=&quot;padding:2px 0 14px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#334155&quot;&gt;We target delivery within five days after the event, subject to complete requirements.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;btn&quot;&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td align=&quot;center&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:999px&quot;&gt;&lt;a href=&quot;https://wedworks.example/my-website&quot; target=&quot;_blank&quot; style=&quot;display:inline-block;padding:14px 28px;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:15px;font-weight:600;line-height:20px;text-decoration:none;border-radius:999px;color:#ffffff;border:1px solid #2f5bea&quot;&gt;View my website status&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;height:28px;line-height:28px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border-top:1px solid #e2e8f0;font-size:0;line-height:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:20px;line-height:20px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b&quot;&gt;Questions? Just reply to this email and our team will help.&lt;br&gt;&amp;mdash; The Kasalang Tagaytay Team&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:22px 24px 8px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#64748b;text-align:center&quot;&gt;
+    You&amp;rsquo;re receiving this because you registered for the 10-10-10 Campaign at Kasalang Tagaytay.&lt;br&gt;We only contact you by email.&lt;br&gt;&lt;br&gt;
+    Kasalang Tagaytay &amp;middot; Tagaytay City, Philippines&lt;br&gt;
+    &lt;a href=&quot;https://wedworks.example/my-website&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;My website&lt;/a&gt; &amp;nbsp;&amp;middot;&amp;nbsp; &lt;a href=&quot;https://wedworks.example/privacy&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;Privacy&lt;/a&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;!--[if mso]&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;![endif]--&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe></div>
+</article>
+<article class="em-card" id="em-failed">
+  <div class="em-top">
+    <div><div class="em-name">Payment unsuccessful</div><div class="em-when">Payment attempt fails or is cancelled</div></div>
+    <div class="em-tools">
+      <div class="em-seg" role="group" aria-label="Preview width"><button type="button" class="on" data-w="desk">Desktop</button><button type="button" data-w="mob">Mobile</button></div>
+      <button type="button" class="em-copy">Copy HTML</button>
+    </div>
+  </div>
+  <div class="em-meta"><div class="em-subj">Your payment didn’t go through</div><div class="em-from">From: Kasalang Tagaytay &lt;campaign@kasalangtagaytay.ph&gt; &middot; To: maria@rosalcatering.ph</div><div class="em-pre">Your invitation is still valid. You can try again before 10:58 AM.</div></div>
+  <div class="em-view"><iframe class="em-frame" title="Payment unsuccessful email preview" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:o=&quot;urn:schemas-microsoft-com:office:office&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;x-apple-disable-message-reformatting&quot;&gt;
+&lt;meta name=&quot;color-scheme&quot; content=&quot;light&quot;&gt;
+&lt;meta name=&quot;supported-color-schemes&quot; content=&quot;light&quot;&gt;
+&lt;title&gt;Your payment didn’t go through&lt;/title&gt;
+&lt;!--[if mso]&gt;&lt;noscript&gt;&lt;xml&gt;&lt;o:OfficeDocumentSettings&gt;&lt;o:PixelsPerInch&gt;96&lt;/o:PixelsPerInch&gt;&lt;/o:OfficeDocumentSettings&gt;&lt;/xml&gt;&lt;/noscript&gt;&lt;![endif]--&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&amp;family=Inter:wght@400;600&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+  body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+  table,td{mso-table-lspace:0;mso-table-rspace:0}
+  body{margin:0!important;padding:0!important;width:100%!important;background:#f8fafc}
+  a{color:#2f5bea}
+  @media only screen and (max-width:620px){
+    .outer{padding:12px 8px!important}
+    .px{padding-left:20px!important;padding-right:20px!important}
+    .hd{padding:18px 20px!important}
+    .h1{font-size:22px!important;line-height:28px!important}
+    .amount{font-size:34px!important;line-height:42px!important}
+    .btn table{width:100%!important}
+    .btn a{display:block!important}
+    .rk,.rv{padding-left:14px!important;padding-right:14px!important}
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body style=&quot;margin:0;padding:0;background:#f8fafc&quot;&gt;
+&lt;div style=&quot;display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8fafc&quot;&gt;Your invitation is still valid. You can try again before 10:58 AM.&amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &lt;/div&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; bgcolor=&quot;#f8fafc&quot; style=&quot;background:#f8fafc&quot;&gt;
+&lt;tr&gt;&lt;td class=&quot;outer&quot; align=&quot;center&quot; style=&quot;padding:32px 16px&quot;&gt;
+&lt;!--[if mso]&gt;&lt;table role=&quot;presentation&quot; width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;![endif]--&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;max-width:600px;width:100%&quot;&gt;
+  &lt;tr&gt;&lt;td class=&quot;hd&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:20px 20px 0 0;padding:22px 32px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;
+      &lt;td width=&quot;40&quot; height=&quot;40&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px&quot;&gt;W&lt;/td&gt;
+      &lt;td style=&quot;padding-left:12px&quot;&gt;
+        &lt;div style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px&quot;&gt;WedWorks&lt;/div&gt;
+        &lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc&quot;&gt;Kasalang Tagaytay &amp;middot; 10-10-10 Campaign&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;&lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td class=&quot;px&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border:1px solid #e2e8f0;border-top:0;border-radius:0 0 20px 20px;padding:32px 36px 36px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;
+&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td width=&quot;48&quot; height=&quot;48&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:48px;height:48px;border-radius:50%;background:#fef2f2;color:#c62828;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;line-height:48px&quot;&gt;&amp;#10005;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;h1&quot; style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:26px;line-height:32px;font-weight:700;letter-spacing:-0.4px;color:#0f172a&quot;&gt;Your payment didn’t go through&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#334155&quot;&gt;Hi Maria, we couldn’t complete your &amp;#8369;10,000 payment. You haven’t been charged, and your invitation is still valid.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border:1px solid #e2e8f0;border-radius:16px;border-collapse:separate;background:#ffffff&quot;&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Slot&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;4 of 10&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Try again before&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;Nov 7, 2026 &amp;middot; 10:58 AM&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;rk&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b&quot;&gt;Payment status&lt;/td&gt;&lt;td class=&quot;rv&quot; align=&quot;right&quot; style=&quot;border-top:1px solid #f1f5f9;padding:12px 18px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;font-weight:600;color:#0f172a;text-align:right&quot;&gt;&lt;span style=&quot;display:inline-block;padding:4px 12px;border-radius:999px;background:#fef2f2;color:#c62828;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;line-height:18px;white-space:nowrap&quot;&gt;Failed, retry needed&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;btn&quot;&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td align=&quot;center&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:999px&quot;&gt;&lt;a href=&quot;https://wedworks.example/my-website&quot; target=&quot;_blank&quot; style=&quot;display:inline-block;padding:14px 28px;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:15px;font-weight:600;line-height:20px;text-decoration:none;border-radius:999px;color:#ffffff;border:1px solid #2f5bea&quot;&gt;Try again&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;height:28px;line-height:28px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border-top:1px solid #e2e8f0;font-size:0;line-height:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:20px;line-height:20px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b&quot;&gt;Questions? Just reply to this email and our team will help.&lt;br&gt;&amp;mdash; The Kasalang Tagaytay Team&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:22px 24px 8px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#64748b;text-align:center&quot;&gt;
+    You&amp;rsquo;re receiving this because you registered for the 10-10-10 Campaign at Kasalang Tagaytay.&lt;br&gt;We only contact you by email.&lt;br&gt;&lt;br&gt;
+    Kasalang Tagaytay &amp;middot; Tagaytay City, Philippines&lt;br&gt;
+    &lt;a href=&quot;https://wedworks.example/my-website&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;My website&lt;/a&gt; &amp;nbsp;&amp;middot;&amp;nbsp; &lt;a href=&quot;https://wedworks.example/privacy&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;Privacy&lt;/a&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;!--[if mso]&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;![endif]--&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe></div>
+</article>
+<article class="em-card" id="em-updated">
+  <div class="em-top">
+    <div><div class="em-name">Details updated</div><div class="em-when">Supplier edits their details or website information in the chat</div></div>
+    <div class="em-tools">
+      <div class="em-seg" role="group" aria-label="Preview width"><button type="button" class="on" data-w="desk">Desktop</button><button type="button" data-w="mob">Mobile</button></div>
+      <button type="button" class="em-copy">Copy HTML</button>
+    </div>
+  </div>
+  <div class="em-meta"><div class="em-subj">Your details were updated</div><div class="em-from">From: Kasalang Tagaytay &lt;campaign@kasalangtagaytay.ph&gt; &middot; To: maria@rosalcatering.ph</div><div class="em-pre">We saved 2 changes to Rosal Catering’s details.</div></div>
+  <div class="em-view"><iframe class="em-frame" title="Details updated email preview" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:o=&quot;urn:schemas-microsoft-com:office:office&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;x-apple-disable-message-reformatting&quot;&gt;
+&lt;meta name=&quot;color-scheme&quot; content=&quot;light&quot;&gt;
+&lt;meta name=&quot;supported-color-schemes&quot; content=&quot;light&quot;&gt;
+&lt;title&gt;Your details were updated&lt;/title&gt;
+&lt;!--[if mso]&gt;&lt;noscript&gt;&lt;xml&gt;&lt;o:OfficeDocumentSettings&gt;&lt;o:PixelsPerInch&gt;96&lt;/o:PixelsPerInch&gt;&lt;/o:OfficeDocumentSettings&gt;&lt;/xml&gt;&lt;/noscript&gt;&lt;![endif]--&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&amp;family=Inter:wght@400;600&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+  body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+  table,td{mso-table-lspace:0;mso-table-rspace:0}
+  body{margin:0!important;padding:0!important;width:100%!important;background:#f8fafc}
+  a{color:#2f5bea}
+  @media only screen and (max-width:620px){
+    .outer{padding:12px 8px!important}
+    .px{padding-left:20px!important;padding-right:20px!important}
+    .hd{padding:18px 20px!important}
+    .h1{font-size:22px!important;line-height:28px!important}
+    .amount{font-size:34px!important;line-height:42px!important}
+    .btn table{width:100%!important}
+    .btn a{display:block!important}
+    .rk,.rv{padding-left:14px!important;padding-right:14px!important}
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body style=&quot;margin:0;padding:0;background:#f8fafc&quot;&gt;
+&lt;div style=&quot;display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8fafc&quot;&gt;We saved 2 changes to Rosal Catering’s details.&amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &lt;/div&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; bgcolor=&quot;#f8fafc&quot; style=&quot;background:#f8fafc&quot;&gt;
+&lt;tr&gt;&lt;td class=&quot;outer&quot; align=&quot;center&quot; style=&quot;padding:32px 16px&quot;&gt;
+&lt;!--[if mso]&gt;&lt;table role=&quot;presentation&quot; width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;![endif]--&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;max-width:600px;width:100%&quot;&gt;
+  &lt;tr&gt;&lt;td class=&quot;hd&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:20px 20px 0 0;padding:22px 32px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;
+      &lt;td width=&quot;40&quot; height=&quot;40&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px&quot;&gt;W&lt;/td&gt;
+      &lt;td style=&quot;padding-left:12px&quot;&gt;
+        &lt;div style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px&quot;&gt;WedWorks&lt;/div&gt;
+        &lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc&quot;&gt;Kasalang Tagaytay &amp;middot; 10-10-10 Campaign&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;&lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td class=&quot;px&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border:1px solid #e2e8f0;border-top:0;border-radius:0 0 20px 20px;padding:32px 36px 36px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;
+&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td width=&quot;48&quot; height=&quot;48&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:48px;height:48px;border-radius:50%;background:#e8eefe;color:#2349c9;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;line-height:48px&quot;&gt;i&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;h1&quot; style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:26px;line-height:32px;font-weight:700;letter-spacing:-0.4px;color:#0f172a&quot;&gt;Your details were updated&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#334155&quot;&gt;Hi Maria, we saved these changes to &lt;strong style=&quot;color:#0f172a&quot;&gt;Rosal Catering&lt;/strong&gt; on Nov 6, 2026 at 11:20 AM.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;border:1px solid #e2e8f0;border-radius:16px;border-collapse:separate;background:#ffffff&quot;&gt;&lt;tr&gt;&lt;td style=&quot;padding:14px 18px&quot;&gt;&lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#64748b&quot;&gt;Email&lt;/div&gt;&lt;div style=&quot;padding-top:4px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b;text-decoration:line-through&quot;&gt;maria@rosalcatering.com&lt;/div&gt;&lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:15px;line-height:22px;font-weight:600;color:#0f172a&quot;&gt;maria@rosalcatering.ph&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border-top:1px solid #f1f5f9;padding:14px 18px&quot;&gt;&lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#64748b&quot;&gt;Mobile&lt;/div&gt;&lt;div style=&quot;padding-top:4px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#64748b;text-decoration:line-through&quot;&gt;0917 555 0100&lt;/div&gt;&lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:15px;line-height:22px;font-weight:600;color:#0f172a&quot;&gt;0917 555 0142&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background:#fff7e6;border:1px solid #fde1a8;border-radius:12px;border-collapse:separate&quot;&gt;&lt;tr&gt;&lt;td width=&quot;22&quot; valign=&quot;top&quot; style=&quot;padding:14px 0 14px 16px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;line-height:22px;color:#b45309&quot;&gt;!&lt;/td&gt;&lt;td style=&quot;padding:14px 16px 14px 10px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#334155&quot;&gt;Didn’t make this change? Reply to this email right away and we’ll secure your registration.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;btn&quot;&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td align=&quot;center&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border-radius:999px;border:1px solid #cbd5e1&quot;&gt;&lt;a href=&quot;https://wedworks.example/my-website&quot; target=&quot;_blank&quot; style=&quot;display:inline-block;padding:14px 28px;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:15px;font-weight:600;line-height:20px;text-decoration:none;border-radius:999px;color:#0f172a&quot;&gt;Review my details&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;height:28px;line-height:28px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border-top:1px solid #e2e8f0;font-size:0;line-height:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:20px;line-height:20px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b&quot;&gt;Questions? Just reply to this email and our team will help.&lt;br&gt;&amp;mdash; The Kasalang Tagaytay Team&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:22px 24px 8px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#64748b;text-align:center&quot;&gt;
+    You&amp;rsquo;re receiving this because you registered for the 10-10-10 Campaign at Kasalang Tagaytay.&lt;br&gt;We only contact you by email.&lt;br&gt;&lt;br&gt;
+    Kasalang Tagaytay &amp;middot; Tagaytay City, Philippines&lt;br&gt;
+    &lt;a href=&quot;https://wedworks.example/my-website&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;My website&lt;/a&gt; &amp;nbsp;&amp;middot;&amp;nbsp; &lt;a href=&quot;https://wedworks.example/privacy&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;Privacy&lt;/a&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;!--[if mso]&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;![endif]--&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe></div>
+</article>
+<article class="em-card" id="em-waitlist">
+  <div class="em-top">
+    <div><div class="em-name">Waiting list</div><div class="em-when">All 10 slots are taken when the supplier registers</div></div>
+    <div class="em-tools">
+      <div class="em-seg" role="group" aria-label="Preview width"><button type="button" class="on" data-w="desk">Desktop</button><button type="button" data-w="mob">Mobile</button></div>
+      <button type="button" class="em-copy">Copy HTML</button>
+    </div>
+  </div>
+  <div class="em-meta"><div class="em-subj">You’re on the waiting list</div><div class="em-from">From: Kasalang Tagaytay &lt;campaign@kasalangtagaytay.ph&gt; &middot; To: maria@rosalcatering.ph</div><div class="em-pre">All 10 slots are taken for now. You’re #3 in line.</div></div>
+  <div class="em-view"><iframe class="em-frame" title="Waiting list email preview" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:o=&quot;urn:schemas-microsoft-com:office:office&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;x-apple-disable-message-reformatting&quot;&gt;
+&lt;meta name=&quot;color-scheme&quot; content=&quot;light&quot;&gt;
+&lt;meta name=&quot;supported-color-schemes&quot; content=&quot;light&quot;&gt;
+&lt;title&gt;You’re on the waiting list&lt;/title&gt;
+&lt;!--[if mso]&gt;&lt;noscript&gt;&lt;xml&gt;&lt;o:OfficeDocumentSettings&gt;&lt;o:PixelsPerInch&gt;96&lt;/o:PixelsPerInch&gt;&lt;/o:OfficeDocumentSettings&gt;&lt;/xml&gt;&lt;/noscript&gt;&lt;![endif]--&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&amp;family=Inter:wght@400;600&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+  body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+  table,td{mso-table-lspace:0;mso-table-rspace:0}
+  body{margin:0!important;padding:0!important;width:100%!important;background:#f8fafc}
+  a{color:#2f5bea}
+  @media only screen and (max-width:620px){
+    .outer{padding:12px 8px!important}
+    .px{padding-left:20px!important;padding-right:20px!important}
+    .hd{padding:18px 20px!important}
+    .h1{font-size:22px!important;line-height:28px!important}
+    .amount{font-size:34px!important;line-height:42px!important}
+    .btn table{width:100%!important}
+    .btn a{display:block!important}
+    .rk,.rv{padding-left:14px!important;padding-right:14px!important}
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body style=&quot;margin:0;padding:0;background:#f8fafc&quot;&gt;
+&lt;div style=&quot;display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8fafc&quot;&gt;All 10 slots are taken for now. You’re #3 in line.&amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &lt;/div&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; bgcolor=&quot;#f8fafc&quot; style=&quot;background:#f8fafc&quot;&gt;
+&lt;tr&gt;&lt;td class=&quot;outer&quot; align=&quot;center&quot; style=&quot;padding:32px 16px&quot;&gt;
+&lt;!--[if mso]&gt;&lt;table role=&quot;presentation&quot; width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;![endif]--&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;max-width:600px;width:100%&quot;&gt;
+  &lt;tr&gt;&lt;td class=&quot;hd&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:20px 20px 0 0;padding:22px 32px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;
+      &lt;td width=&quot;40&quot; height=&quot;40&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px&quot;&gt;W&lt;/td&gt;
+      &lt;td style=&quot;padding-left:12px&quot;&gt;
+        &lt;div style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px&quot;&gt;WedWorks&lt;/div&gt;
+        &lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc&quot;&gt;Kasalang Tagaytay &amp;middot; 10-10-10 Campaign&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;&lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td class=&quot;px&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border:1px solid #e2e8f0;border-top:0;border-radius:0 0 20px 20px;padding:32px 36px 36px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;
+&lt;tr&gt;&lt;td&gt;&lt;span style=&quot;display:inline-block;padding:4px 12px;border-radius:999px;background:#fff7e6;color:#b45309;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;line-height:18px;white-space:nowrap&quot;&gt;Waiting list &amp;middot; #3&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;h1&quot; style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:26px;line-height:32px;font-weight:700;letter-spacing:-0.4px;color:#0f172a&quot;&gt;You’re on the waiting list&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#334155&quot;&gt;Hi Maria, all 10 slots are taken for now. If a supplier doesn’t complete payment in time, we’ll email you an invitation for Rosal Catering.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;td width=&quot;10%&quot; style=&quot;padding:0 2px&quot;&gt;&lt;div style=&quot;height:6px;line-height:6px;font-size:0;border-radius:999px;background:#2f5bea&quot;&gt;&amp;nbsp;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;div style=&quot;padding-top:8px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;color:#64748b&quot;&gt;10 of 10 slots taken&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;btn&quot;&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td align=&quot;center&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border-radius:999px;border:1px solid #cbd5e1&quot;&gt;&lt;a href=&quot;https://wedworks.example/my-website&quot; target=&quot;_blank&quot; style=&quot;display:inline-block;padding:14px 28px;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:15px;font-weight:600;line-height:20px;text-decoration:none;border-radius:999px;color:#0f172a&quot;&gt;Go to my website&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;height:28px;line-height:28px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border-top:1px solid #e2e8f0;font-size:0;line-height:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:20px;line-height:20px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b&quot;&gt;Questions? Just reply to this email and our team will help.&lt;br&gt;&amp;mdash; The Kasalang Tagaytay Team&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:22px 24px 8px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#64748b;text-align:center&quot;&gt;
+    You&amp;rsquo;re receiving this because you registered for the 10-10-10 Campaign at Kasalang Tagaytay.&lt;br&gt;We only contact you by email.&lt;br&gt;&lt;br&gt;
+    Kasalang Tagaytay &amp;middot; Tagaytay City, Philippines&lt;br&gt;
+    &lt;a href=&quot;https://wedworks.example/my-website&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;My website&lt;/a&gt; &amp;nbsp;&amp;middot;&amp;nbsp; &lt;a href=&quot;https://wedworks.example/privacy&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;Privacy&lt;/a&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;!--[if mso]&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;![endif]--&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe></div>
+</article>
+<article class="em-card" id="em-expired">
+  <div class="em-top">
+    <div><div class="em-name">Invitation expired</div><div class="em-when">The 24-hour window ends without payment</div></div>
+    <div class="em-tools">
+      <div class="em-seg" role="group" aria-label="Preview width"><button type="button" class="on" data-w="desk">Desktop</button><button type="button" data-w="mob">Mobile</button></div>
+      <button type="button" class="em-copy">Copy HTML</button>
+    </div>
+  </div>
+  <div class="em-meta"><div class="em-subj">Your invitation has expired</div><div class="em-from">From: Kasalang Tagaytay &lt;campaign@kasalangtagaytay.ph&gt; &middot; To: maria@rosalcatering.ph</div><div class="em-pre">The 24-hour window for slot 4 has ended.</div></div>
+  <div class="em-view"><iframe class="em-frame" title="Invitation expired email preview" loading="lazy" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:o=&quot;urn:schemas-microsoft-com:office:office&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;x-apple-disable-message-reformatting&quot;&gt;
+&lt;meta name=&quot;color-scheme&quot; content=&quot;light&quot;&gt;
+&lt;meta name=&quot;supported-color-schemes&quot; content=&quot;light&quot;&gt;
+&lt;title&gt;Your invitation has expired&lt;/title&gt;
+&lt;!--[if mso]&gt;&lt;noscript&gt;&lt;xml&gt;&lt;o:OfficeDocumentSettings&gt;&lt;o:PixelsPerInch&gt;96&lt;/o:PixelsPerInch&gt;&lt;/o:OfficeDocumentSettings&gt;&lt;/xml&gt;&lt;/noscript&gt;&lt;![endif]--&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&amp;family=Inter:wght@400;600&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+  body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+  table,td{mso-table-lspace:0;mso-table-rspace:0}
+  body{margin:0!important;padding:0!important;width:100%!important;background:#f8fafc}
+  a{color:#2f5bea}
+  @media only screen and (max-width:620px){
+    .outer{padding:12px 8px!important}
+    .px{padding-left:20px!important;padding-right:20px!important}
+    .hd{padding:18px 20px!important}
+    .h1{font-size:22px!important;line-height:28px!important}
+    .amount{font-size:34px!important;line-height:42px!important}
+    .btn table{width:100%!important}
+    .btn a{display:block!important}
+    .rk,.rv{padding-left:14px!important;padding-right:14px!important}
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body style=&quot;margin:0;padding:0;background:#f8fafc&quot;&gt;
+&lt;div style=&quot;display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f8fafc&quot;&gt;The 24-hour window for slot 4 has ended.&amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &amp;#847; &amp;zwnj; &amp;nbsp; &lt;/div&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; bgcolor=&quot;#f8fafc&quot; style=&quot;background:#f8fafc&quot;&gt;
+&lt;tr&gt;&lt;td class=&quot;outer&quot; align=&quot;center&quot; style=&quot;padding:32px 16px&quot;&gt;
+&lt;!--[if mso]&gt;&lt;table role=&quot;presentation&quot; width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;![endif]--&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;max-width:600px;width:100%&quot;&gt;
+  &lt;tr&gt;&lt;td class=&quot;hd&quot; bgcolor=&quot;#2f5bea&quot; style=&quot;background:#2f5bea;border-radius:20px 20px 0 0;padding:22px 32px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;
+      &lt;td width=&quot;40&quot; height=&quot;40&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px&quot;&gt;W&lt;/td&gt;
+      &lt;td style=&quot;padding-left:12px&quot;&gt;
+        &lt;div style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px&quot;&gt;WedWorks&lt;/div&gt;
+        &lt;div style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc&quot;&gt;Kasalang Tagaytay &amp;middot; 10-10-10 Campaign&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;&lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td class=&quot;px&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border:1px solid #e2e8f0;border-top:0;border-radius:0 0 20px 20px;padding:32px 36px 36px&quot;&gt;
+    &lt;table role=&quot;presentation&quot; width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;
+&lt;tr&gt;&lt;td&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td width=&quot;48&quot; height=&quot;48&quot; align=&quot;center&quot; valign=&quot;middle&quot; style=&quot;width:48px;height:48px;border-radius:50%;background:#fef2f2;color:#c62828;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;line-height:48px&quot;&gt;!&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;span style=&quot;display:inline-block;padding:4px 12px;border-radius:999px;background:#fef2f2;color:#c62828;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;font-weight:600;line-height:18px;white-space:nowrap&quot;&gt;Invitation expired&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;h1&quot; style=&quot;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:26px;line-height:32px;font-weight:700;letter-spacing:-0.4px;color:#0f172a&quot;&gt;Your invitation has expired&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#334155&quot;&gt;Hi Maria, your 24-hour invitation ended before payment was completed, so the slot was offered to the next supplier on the waiting list.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b&quot;&gt;If a slot opens again, we’ll let you know by email.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:16px;line-height:16px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;btn&quot;&gt;&lt;table role=&quot;presentation&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;&gt;&lt;tr&gt;&lt;td align=&quot;center&quot; bgcolor=&quot;#ffffff&quot; style=&quot;background:#ffffff;border-radius:999px;border:1px solid #cbd5e1&quot;&gt;&lt;a href=&quot;https://wedworks.example/my-website&quot; target=&quot;_blank&quot; style=&quot;display:inline-block;padding:14px 28px;font-family:&#x27;DM Sans&#x27;,Arial,Helvetica,sans-serif;font-size:15px;font-weight:600;line-height:20px;text-decoration:none;border-radius:999px;color:#0f172a&quot;&gt;Go to my website&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;height:28px;line-height:28px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border-top:1px solid #e2e8f0;font-size:0;line-height:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;height:20px;line-height:20px;font-size:0&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b&quot;&gt;Questions? Just reply to this email and our team will help.&lt;br&gt;&amp;mdash; The Kasalang Tagaytay Team&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:22px 24px 8px;font-family:&#x27;Inter&#x27;,Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#64748b;text-align:center&quot;&gt;
+    You&amp;rsquo;re receiving this because you registered for the 10-10-10 Campaign at Kasalang Tagaytay.&lt;br&gt;We only contact you by email.&lt;br&gt;&lt;br&gt;
+    Kasalang Tagaytay &amp;middot; Tagaytay City, Philippines&lt;br&gt;
+    &lt;a href=&quot;https://wedworks.example/my-website&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;My website&lt;/a&gt; &amp;nbsp;&amp;middot;&amp;nbsp; &lt;a href=&quot;https://wedworks.example/privacy&quot; style=&quot;color:#64748b;text-decoration:underline&quot;&gt;Privacy&lt;/a&gt;
+  &lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;!--[if mso]&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;![endif]--&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;"></iframe></div>
+</article>
+  </div>
+  <h2>Rules</h2>
+  <div class="grid g2" >
+  <div class="card stack"><h4>Anatomy</h4><ul class="clean">
+    <li><strong>Header:</strong> solid blue band, white W mark, “WedWorks” in DM Sans 19 bold, campaign line in pale blue.</li>
+    <li><strong>Body:</strong> white card, 1px slate hairline, 20px bottom corners, 36px padding (20px on phones).</li>
+    <li><strong>Top of body:</strong> one status icon or one status pill, never both colors fighting. Then a DM Sans 26 headline.</li>
+    <li><strong>Details:</strong> label/value rows in a 16px rounded box, the same as the in-chat review and payment rows.</li>
+    <li><strong>Action:</strong> one blue pill button per email. Optional outline button for low-stakes links.</li>
+    <li><strong>Footer:</strong> why they got the email, “we only contact you by email”, address and links in slate 12px.</li>
+  </ul></div>
+  <div class="card stack"><h4>Email-safe rules</h4><ul class="clean">
+    <li>Tables and inline styles only. The small <span class="tok">&lt;style&gt;</span> block holds the phone rules (under 620px).</li>
+    <li>600px max width, fluid below it. Buttons go full width on phones.</li>
+    <li>DM Sans and Inter load in Apple Mail and iOS. Gmail and Outlook fall back to Arial, so layouts must still work in Arial.</li>
+    <li>No shadows, gradients or SVG. Outlook on Windows shows square corners; that is expected.</li>
+    <li>Show deadlines as a fixed date and time, not a live countdown. Emails can’t update after they’re sent.</li>
+    <li>Light only: the <span class="tok">color-scheme</span> meta asks clients not to invert colors. Some Gmail apps still darken; text stays readable either way.</li>
+    <li>Replace the W mark with a hosted PNG logo and the example.com links with real URLs before sending.</li>
+  </ul></div>
+</div>
+</div>
+<script>
+(function(){
+  const fit=f=>{try{const d=f.contentDocument;if(d&&d.body)f.style.height=d.documentElement.scrollHeight+'px';}catch(_){}};
+  document.querySelectorAll('.em-frame').forEach(f=>{f.addEventListener('load',()=>{fit(f);setTimeout(()=>fit(f),400);});});
+  document.querySelectorAll('.em-card').forEach(card=>{
+    const f=card.querySelector('.em-frame');
+    card.querySelectorAll('.em-seg button').forEach(b=>b.addEventListener('click',()=>{
+      card.querySelectorAll('.em-seg button').forEach(x=>x.classList.toggle('on',x===b));
+      card.classList.toggle('mob',b.dataset.w==='mob');
+      setTimeout(()=>fit(f),300);
+    }));
+    card.querySelector('.em-copy').addEventListener('click',async e=>{
+      const b=e.currentTarget;
+      try{await navigator.clipboard.writeText(f.getAttribute('srcdoc'));b.textContent='Copied';}
+      catch(_){b.textContent='Copy blocked';}
+      setTimeout(()=>b.textContent='Copy HTML',1600);
+    });
+  });
+  addEventListener('resize',()=>document.querySelectorAll('.em-frame').forEach(fit));
+})();
+</script>
+</body>
+</html>

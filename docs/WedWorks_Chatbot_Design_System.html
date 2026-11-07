@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WedWorks Chatbot Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   WedWorks Chatbot Design System · "Bold"
+   Royal blue on white and pale blue. AI chat, mobile first, desktop ready.
+   1) tokens  2) page chrome  3) chat components (wb-*)  4) doc helpers
+   ===================================================================== */
+:root{
+  /* Primitives */
+  --blue-600:#2f5bea;   /* brand, primary actions, user bubble, header */
+  --blue-700:#2349c9;   /* hover / pressed */
+  --blue-500:#5b7cfa;   /* gradient end, focus glow */
+  --blue-200:#d6e0fc;   /* borders on blue surfaces */
+  --blue-100:#e8eefe;   /* AI bubble, soft fills */
+  --blue-50:#f3f6ff;    /* note boxes, editing row */
+  --navy-900:#0f172a;   /* headings, strong text */
+  --slate-700:#334155;  /* body text */
+  --slate-500:#64748b;  /* secondary text, timestamps */
+  --slate-400:#94a3b8;  /* disabled, decorative only */
+  --slate-200:#e2e8f0;  /* hairlines */
+  --slate-100:#f1f5f9;
+  --slate-50:#f8fafc;   /* chat canvas */
+  --white:#ffffff;
+  --green-700:#15803d; --green-50:#ecfdf3; --green-200:#bbf0cf;
+  --amber-700:#b45309; --amber-50:#fff7e6; --amber-200:#fde1a8;
+  --red-600:#c62828;   --red-50:#fef2f2;   --red-200:#fbcaca;
+
+  /* Semantic */
+  --wb-accent:var(--blue-600);
+  --wb-accent-hover:var(--blue-700);
+  --wb-accent-soft:rgba(47,91,234,.12);
+  --wb-accent-shadow:rgba(47,91,234,.28);
+  --wb-canvas:var(--slate-50);
+  --wb-surface:var(--white);
+  --wb-text:var(--slate-700);
+  --wb-heading:var(--navy-900);
+  --wb-muted:var(--slate-500);
+  --wb-line:var(--slate-200);
+  --wb-ai-bg:var(--blue-100);
+  --wb-ai-line:var(--blue-200);
+  --wb-ai-text:var(--navy-900);
+  --wb-user-bg:var(--blue-600);
+  --wb-user-text:#fff;
+  --wb-placeholder:#6b7a90;
+
+  /* Type */
+  --font-display:'DM Sans','Inter',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+
+  /* Radius */
+  --r-sm:10px; --r-field:12px; --r-md:16px; --r-card:20px; --r-shell:24px; --r-bubble:18px; --r-tail:4px; --r-pill:999px;
+
+  /* Spacing (4px base) */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px; --s-8:32px; --s-10:40px; --s-12:48px; --s-16:64px;
+
+  /* Elevation */
+  --sh-sm:0 2px 8px rgba(15,23,42,.05);
+  --sh-md:0 10px 30px rgba(15,23,42,.08);
+  --sh-lg:0 30px 60px rgba(15,23,42,.12);
+  --sh-blue:0 8px 18px var(--wb-accent-shadow);
+
+  /* Motion */
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --dur-fast:120ms; --dur-base:240ms; --dur-slow:480ms;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;color-scheme:light}
+body{margin:0;background:var(--slate-50);color:var(--wb-text);font-family:var(--font-body);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;color:var(--navy-900);font-family:var(--font-display);letter-spacing:-.02em;line-height:1.12;text-wrap:balance}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+code,pre{font-family:var(--font-mono)}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--blue-600);outline-offset:2px}
+.ic{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ======================= 2) PAGE CHROME ======================= */
+.shell{display:grid;grid-template-columns:272px minmax(0,1fr);max-width:1440px;margin:0 auto}
+.side{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;padding:32px 24px;border-right:1px solid var(--slate-200);background:#fff}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:var(--blue-600);color:#fff;display:grid;place-items:center;font-size:22px;box-shadow:var(--sh-blue)}
+.brand h1{font-size:22px}
+.brand small{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-500);margin-top:2px}
+.nav-group{margin-top:22px}
+.nav-title{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-500);margin-bottom:8px}
+.nav-links{display:grid;gap:2px}
+.nav-links a{padding:8px 12px;border-radius:10px;font-size:14px;color:var(--slate-700);transition:background var(--dur-fast),color var(--dur-fast)}
+.nav-links a:hover{background:var(--slate-100)}
+.nav-links a.on{background:var(--blue-100);color:var(--blue-600);font-weight:600}
+.menu-btn{display:none}
+.main{padding:40px 44px 88px;min-width:0}
+.hero{padding:40px;border:1px solid var(--slate-200);border-radius:28px;background:radial-gradient(60% 90% at 100% 0%,var(--blue-100),transparent 70%),#fff;box-shadow:var(--sh-md)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--blue-100);color:var(--blue-600);font-size:12px;font-weight:600;letter-spacing:.04em;margin-bottom:18px}
+.hero h2{font-size:clamp(30px,4.6vw,52px);max-width:820px;margin-bottom:14px}
+.hero h2 em{font-style:normal;color:var(--blue-600)}
+.hero p{max-width:720px;font-size:17px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tag{font-size:12.5px;padding:5px 12px;border-radius:999px;border:1px solid var(--slate-200);background:#fff;color:var(--slate-700)}
+.section{margin-top:56px;scroll-margin-top:24px}
+.section-head{margin-bottom:20px;display:grid;gap:8px}
+.section-head .num{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-600)}
+.section-head h3{font-size:clamp(26px,3.2vw,34px)}
+.section-head p{max-width:720px;color:var(--slate-500)}
+.group-title{margin-top:64px;padding-top:20px;border-top:1px solid var(--slate-200);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-500)}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:#fff;border:1px solid var(--slate-200);border-radius:20px;padding:22px;box-shadow:var(--sh-sm);min-width:0}
+.card h4{font-size:19px;margin-bottom:8px}
+.sub{color:var(--slate-500);font-size:14px}
+.label{font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-500);margin-bottom:10px}
+.stack{display:grid;gap:12px}
+ul.clean{padding-left:18px;margin:0;display:grid;gap:8px;font-size:14.5px}
+.swatch{display:grid;gap:10px}
+.chip-c{height:72px;border-radius:14px;border:1px solid rgba(15,23,42,.06)}
+.chip-meta{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:14px}
+.chip-meta code{font-size:12px;color:var(--slate-500)}
+.type-row{display:grid;grid-template-columns:132px 1fr;gap:16px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--slate-200)}
+.type-row:last-child{border-bottom:0}
+.type-row .meta{font-size:12px;color:var(--slate-500);font-family:var(--font-mono)}
+.space-row{display:flex;align-items:center;gap:8px 14px;font-size:13px;flex-wrap:wrap}
+.space-row .space-bar{max-width:100%}
+.space-row code{width:70px;color:var(--slate-500);font-size:12px}
+.space-bar{height:12px;border-radius:999px;background:linear-gradient(90deg,var(--blue-600),var(--blue-200))}
+.radius-demo{padding:16px 18px;background:var(--blue-50);border:1px solid var(--blue-200);font-size:14px}
+.motion-item{padding:18px;border:1px solid var(--slate-200);border-radius:18px;background:#fff;display:grid;gap:8px}
+.motion-item h4{font-size:17px}
+.stage{border-radius:24px;padding:28px;background:linear-gradient(160deg,#eef2ff,#f8fafc 60%);border:1px solid var(--slate-200);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:28px 24px;align-items:start;min-width:0}
+.stage.one{grid-template-columns:minmax(0,1fr)}
+.stage > .col{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;justify-items:center;align-content:start;min-width:0}
+.stage > .col > .cap{justify-self:start;width:100%;max-width:400px}
+.stage .cap{font-size:12px;color:var(--slate-500);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.demo{width:100%;max-width:400px;min-width:0;background:var(--wb-canvas);border:1px solid var(--slate-200);border-radius:24px;padding:18px;display:grid;gap:18px;box-shadow:var(--sh-sm)}
+.demo.plain{background:#fff}
+.table-wrap{overflow-x:auto}
+table.spec{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+table.spec th{text-align:left;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-500);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--slate-200)}
+table.spec td{padding:10px 12px;border-bottom:1px solid var(--slate-100);vertical-align:top}
+table.spec td:first-child{font-weight:600;color:var(--navy-900);white-space:nowrap}
+.tok{font-family:var(--font-mono);font-size:12px;background:var(--slate-100);padding:2px 6px;border-radius:6px;color:var(--navy-900)}
+pre.code{margin:0;white-space:pre-wrap;font-size:12.5px;line-height:1.7;background:var(--navy-900);color:#dbe4ff;padding:20px;border-radius:16px;overflow-x:auto}
+.copy{margin-bottom:12px;border:1px solid var(--slate-200);background:#fff;border-radius:999px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;color:var(--navy-900)}
+.copy:hover{border-color:var(--blue-600);color:var(--blue-600)}
+.do-dont .ok,.do-dont .no{font-weight:600}
+.footer-note{margin-top:48px;padding:20px 24px;border:1px solid var(--slate-200);border-radius:20px;background:#fff;font-size:14px}
+
+/* ======================= 3) CHAT COMPONENTS (wb-*) ======================= */
+/* Shell */
+.wb-shell{height:100%;display:flex;flex-direction:column;background:var(--wb-surface);border:1px solid var(--wb-line);border-radius:var(--r-shell);overflow:hidden;box-shadow:var(--sh-md);font-family:var(--font-body);color:var(--wb-text)}
+.wb-header{flex:none;display:flex;align-items:center;gap:12px;padding:16px 16px 20px;background:var(--wb-accent);color:#fff;border-radius:0 0 var(--r-shell) var(--r-shell);position:relative;z-index:1}
+.wb-header .title{flex:1;min-width:0;display:grid;gap:1px}
+.wb-header strong{font-family:var(--font-display);font-weight:700;font-size:16px;letter-spacing:-.01em}
+.wb-header small{font-size:12px;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:6px}
+.wb-header small::before{content:"";width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 3px rgba(74,222,128,.25)}
+.wb-icon-btn{width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;display:grid;place-items:center;cursor:pointer;font-size:16px}
+.wb-icon-btn:hover{background:rgba(255,255,255,.26)}
+.wb-icon-btn:focus-visible{outline-color:#fff}
+.wb-log{flex:1;min-height:0;overflow-y:auto;padding:20px 18px;display:flex;flex-direction:column;gap:18px;background:var(--wb-canvas);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 10px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 14px,#000 calc(100% - 10px),transparent 100%)}
+/* Scrollbar: slim floating pill, faint at rest, solid on hover */
+.wb-log::-webkit-scrollbar{width:10px}
+.wb-log::-webkit-scrollbar-track{background:transparent;margin-block:14px}
+.wb-log::-webkit-scrollbar-thumb{background:var(--wb-accent);background-clip:padding-box;border:3.5px solid transparent;border-radius:999px;min-height:40px}
+.wb-log:not(:hover)::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--wb-accent) 24%,transparent);background-clip:padding-box}
+.wb-log::-webkit-scrollbar-button{display:none;height:0}
+@supports not selector(::-webkit-scrollbar){.wb-log{scrollbar-width:thin;scrollbar-color:var(--wb-accent) transparent}}
+.wb-day{align-self:center;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--wb-muted);background:var(--slate-100);border-radius:999px;padding:4px 12px}
+
+/* Avatars */
+.wb-avatar{width:28px;height:28px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:15px}
+.wb-avatar.ai{background:#fff;color:var(--wb-accent);box-shadow:0 0 0 1px var(--wb-ai-line)}
+.wb-avatar.user{background:var(--blue-100);color:var(--wb-accent);font:700 10.5px var(--font-display)}
+.wb-avatar.lg{width:40px;height:40px;font-size:22px}
+.wb-avatar.on-blue{box-shadow:none}
+
+/* Messages */
+.wb-msg{display:grid;gap:6px;max-width:86%;animation:wbIn var(--dur-base) var(--ease-out)}
+.wb-msg.user{align-self:flex-end;justify-items:end}
+.wb-msg.wide{max-width:94%;width:100%}
+.wb-who{display:flex;align-items:center;gap:8px;font:600 12.5px var(--font-display);color:var(--wb-heading)}
+.wb-bubble{padding:12px 16px;border-radius:var(--r-bubble);font-size:14.5px;line-height:1.5;min-width:0;overflow-wrap:anywhere}
+.wb-msg.ai .wb-bubble{background:var(--wb-ai-bg);color:var(--wb-ai-text);border:1px solid var(--wb-ai-line);border-top-left-radius:var(--r-tail)}
+.wb-msg.user .wb-bubble{background:var(--wb-user-bg);color:var(--wb-user-text);border-top-right-radius:var(--r-tail);box-shadow:0 8px 20px rgba(47,91,234,.25)}
+.wb-time{font-size:11px;color:var(--wb-muted);font-variant-numeric:tabular-nums;padding:0 4px}
+.wb-state{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--wb-muted);padding:0 4px}
+.wb-state.fail{color:var(--red-600)}
+.wb-state button{border:0;background:none;color:var(--wb-accent);font:600 11px var(--font-body);cursor:pointer;padding:0;text-decoration:underline}
+@keyframes wbIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Quick replies + suggested chips */
+.wb-qr-row{display:flex;gap:8px;flex-wrap:wrap}
+.wb-qr{font:600 14px var(--font-display);min-height:44px;min-width:88px;padding:0 22px;border-radius:var(--r-pill);cursor:pointer;transition:transform var(--dur-fast),background var(--dur-fast)}
+.wb-qr:active{transform:scale(.97)}
+.wb-qr.yes{background:var(--wb-accent);color:#fff;border:1px solid var(--wb-accent);box-shadow:var(--sh-blue)}
+.wb-qr.yes:hover{background:var(--wb-accent-hover)}
+.wb-qr.no{background:#fff;color:var(--wb-heading);border:1px solid #cbd5e1}
+.wb-qr.no:hover{border-color:var(--wb-accent);color:var(--wb-accent)}
+.wb-qr[disabled]{opacity:.4;cursor:default;box-shadow:none}
+.wb-chips{display:flex;flex-wrap:wrap;gap:6px}
+.wb-chip{font:500 13px var(--font-body);min-height:36px;padding:0 14px;border-radius:var(--r-pill);cursor:pointer;color:var(--wb-accent);background:#fff;border:1px solid var(--wb-ai-line);transition:border-color var(--dur-fast),background var(--dur-fast)}
+.wb-chip:hover{border-color:var(--wb-accent);background:var(--blue-50)}
+.wb-chip.selected{background:var(--wb-accent);color:#fff;border-color:var(--wb-accent)}
+
+/* Typing + streaming */
+.wb-typing{justify-self:start;display:inline-flex;gap:5px;padding:14px 16px;border-radius:var(--r-bubble);border-top-left-radius:var(--r-tail);background:var(--wb-ai-bg);border:1px solid var(--wb-ai-line)}
+.wb-typing i{width:6px;height:6px;border-radius:50%;background:var(--wb-accent);animation:wbPulse 1.2s infinite ease-in-out}
+.wb-typing i:nth-child(2){animation-delay:.15s}.wb-typing i:nth-child(3){animation-delay:.3s}
+@keyframes wbPulse{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+.wb-caret{display:inline-block;width:2px;height:1.05em;margin-left:2px;vertical-align:-2px;background:var(--wb-accent);border-radius:1px;animation:wbBlink 1s steps(2) infinite}
+@keyframes wbBlink{50%{opacity:0}}
+
+/* Input bar */
+.wb-input-zone{flex:none;padding:12px 14px 16px;background:#fff}
+.wb-field-bar{display:flex;align-items:center;gap:4px;padding:5px 5px 5px 18px;border-radius:var(--r-pill);background:var(--slate-50);border:1px solid var(--wb-line);transition:border-color var(--dur-fast),box-shadow var(--dur-fast)}
+.wb-field-bar:focus-within{border-color:var(--wb-accent);box-shadow:0 0 0 4px var(--wb-accent-soft);background:#fff}
+.wb-field-bar input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:14.5px;color:var(--wb-heading);outline:none;height:38px}
+.wb-field-bar input::placeholder{color:var(--wb-placeholder)}
+.wb-attach{width:38px;height:38px;border:0;background:none;display:grid;place-items:center;color:var(--wb-muted);border-radius:50%;cursor:pointer;font-size:18px}
+.wb-attach:hover{color:var(--wb-accent);background:var(--blue-50)}
+.wb-send{width:40px;height:40px;flex:none;display:grid;place-items:center;border:0;cursor:pointer;border-radius:50%;background:var(--wb-accent);color:#fff;box-shadow:var(--sh-blue);font-size:17px}
+.wb-send:hover{background:var(--wb-accent-hover)}
+.wb-send[disabled]{background:var(--slate-200);box-shadow:none;color:var(--slate-400);cursor:default}
+.wb-hint{font-size:10.5px;color:var(--wb-muted);text-align:center;margin-top:8px}
+
+/* Card inside the chat (a "card bubble") */
+.wb-card{background:#fff;border:1px solid var(--wb-line);border-radius:var(--r-card);border-top-left-radius:var(--r-tail);padding:18px;box-shadow:var(--sh-sm);display:grid;gap:12px;min-width:0}
+.wb-card-icon{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:21px;background:var(--blue-100);color:var(--wb-accent)}
+.wb-card-icon.success{background:var(--green-50);color:var(--green-700)}
+.wb-card-icon.warning{background:var(--amber-50);color:var(--amber-700)}
+.wb-card-icon.danger{background:var(--red-50);color:var(--red-600)}
+.wb-card-title{font:700 18px/1.2 var(--font-display);color:var(--wb-heading);letter-spacing:-.01em}
+.wb-card-text{font-size:14px;color:var(--wb-muted);line-height:1.55}
+.wb-card-text strong{color:var(--wb-heading);font-weight:600}
+.wb-card-eyebrow{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--wb-accent)}
+.wb-card.center{text-align:center;justify-items:center}
+.wb-divider{height:1px;background:var(--wb-line)}
+.wb-actions{display:grid;gap:8px}
+.wb-actions.row{grid-template-columns:1fr 1fr}
+.wb-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:var(--r-pill);border:1px solid transparent;font:600 14px var(--font-display);cursor:pointer;transition:transform var(--dur-fast),background var(--dur-fast),border-color var(--dur-fast)}
+.wb-btn:active{transform:scale(.98)}
+.wb-btn.primary{background:var(--wb-accent);color:#fff;box-shadow:var(--sh-blue)}
+.wb-btn.primary:hover{background:var(--wb-accent-hover)}
+.wb-btn.outline{background:#fff;color:var(--wb-heading);border-color:#cbd5e1}
+.wb-btn.outline:hover{border-color:var(--wb-accent);color:var(--wb-accent)}
+.wb-btn.danger{background:var(--red-600);color:#fff}
+.wb-btn.ghost{background:transparent;color:var(--wb-accent)}
+.wb-btn.block{width:100%}
+.wb-btn.sm{min-height:36px;padding:0 14px;font-size:13px}
+.wb-btn[disabled]{background:var(--slate-200);color:var(--slate-500);box-shadow:none;cursor:default}
+
+/* Rows */
+.wb-rows{display:grid}
+.wb-review-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:11px 0;border-bottom:1px solid var(--wb-line)}
+.wb-review-row:last-child{border-bottom:0}
+.wb-review-row .k{grid-column:1;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--wb-muted)}
+.wb-review-row .v{grid-column:1;font-size:14.5px;color:var(--wb-heading);overflow-wrap:anywhere}
+.wb-review-row .edit{grid-column:2;grid-row:1/3;align-self:center;border:0;background:none;color:var(--wb-accent);font:600 13px var(--font-body);cursor:pointer;padding:6px 4px;border-radius:8px}
+.wb-review-row .edit:hover{background:var(--blue-50)}
+.wb-review-row.editing{display:block;margin:4px -10px;padding:14px 10px;background:var(--blue-50);border:1px solid var(--blue-200);border-radius:14px}
+.wb-review-row.editing .k{display:flex;justify-content:space-between;margin-bottom:8px}
+.wb-pay-row{display:flex;justify-content:space-between;gap:16px;padding:10px 0;font-size:14px;border-bottom:1px solid var(--wb-line)}
+.wb-pay-row:last-child{border-bottom:0}
+.wb-pay-row span{color:var(--wb-muted)}
+.wb-pay-row strong{color:var(--wb-heading);text-align:right;font-weight:600}
+.wb-amount{font:700 38px/1 var(--font-display);color:var(--wb-heading);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.wb-amount small{font-size:.55em;margin-right:2px;color:var(--wb-accent)}
+
+/* Form fields in cards */
+.wb-field{display:grid;gap:6px;text-align:left}
+.wb-field label{font-size:13px;font-weight:600;color:var(--wb-heading)}
+.wb-input,.wb-select,.wb-textarea{width:100%;border:1.5px solid #cbd5e1;background:#fff;border-radius:var(--r-field);padding:11px 14px;font:inherit;font-size:14.5px;color:var(--wb-heading);outline:none;transition:border-color var(--dur-fast),box-shadow var(--dur-fast)}
+.wb-textarea{min-height:84px;resize:vertical}
+.wb-input:focus,.wb-select:focus,.wb-textarea:focus{border-color:var(--wb-accent);box-shadow:0 0 0 4px var(--wb-accent-soft)}
+.wb-input.invalid{border-color:var(--red-600);box-shadow:0 0 0 4px rgba(198,40,40,.10)}
+.wb-help{font-size:12.5px;color:var(--wb-muted)}
+.wb-error{font-size:12.5px;color:var(--red-600);display:flex;gap:6px;align-items:center}
+
+/* Note + alerts */
+.wb-note{display:flex;gap:10px;padding:12px 14px;border-radius:14px;background:var(--blue-50);border:1px solid var(--blue-200);font-size:13px;color:var(--slate-700);text-align:left}
+.wb-note .ic{margin-top:2px;color:var(--wb-accent);font-size:16px}
+.wb-alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;border:1px solid;font-size:13.5px;text-align:left}
+.wb-alert .ic{font-size:17px;margin-top:1px}
+.wb-alert strong{display:block;font-weight:600;color:var(--wb-heading)}
+.wb-alert.success{background:var(--green-50);border-color:var(--green-200);color:var(--green-700)}
+.wb-alert.warning{background:var(--amber-50);border-color:var(--amber-200);color:var(--amber-700)}
+.wb-alert.danger{background:var(--red-50);border-color:var(--red-200);color:var(--red-600)}
+.wb-alert.info{background:var(--blue-50);border-color:var(--blue-200);color:var(--blue-700)}
+.wb-alert span{color:var(--slate-700)}
+
+/* Pills + status */
+.wb-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.wb-pill.info{background:var(--blue-100);color:var(--blue-700)}
+.wb-pill.success{background:var(--green-50);color:var(--green-700)}
+.wb-pill.warning{background:var(--amber-50);color:var(--amber-700)}
+.wb-pill.danger{background:var(--red-50);color:var(--red-600)}
+.wb-pill.muted{background:var(--slate-100);color:var(--slate-500)}
+.wb-status-card{background:#fff;border:1px solid var(--wb-line);border-radius:16px;padding:14px;display:grid;gap:8px;justify-items:start}
+.wb-status-card strong{font-size:13px;color:var(--wb-heading)}
+.wb-count{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.wb-count div{background:var(--slate-50);border:1px solid var(--wb-line);border-radius:14px;padding:10px 4px;text-align:center}
+.wb-count b{display:block;font:700 22px var(--font-display);color:var(--wb-heading);font-variant-numeric:tabular-nums}
+.wb-count span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--wb-muted)}
+.wb-toast{display:inline-flex;align-items:center;gap:10px;background:var(--navy-900);color:#fff;padding:12px 16px;border-radius:14px;font-size:13.5px;box-shadow:var(--sh-lg)}
+.wb-toast .ic{color:#4ade80;font-size:17px}
+.wb-slots{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;width:100%}
+.wb-slots i{height:6px;border-radius:3px;background:var(--slate-200)}
+.wb-slots i.on{background:var(--wb-accent)}
+
+/* Layout demo frames */
+.phone{width:min(100%,390px);height:700px;border-radius:44px;padding:10px;background:var(--navy-900);box-shadow:var(--sh-lg)}
+.phone .wb-shell{border-radius:34px;border:0;box-shadow:none}
+.desk-wrap{overflow-x:auto;width:100%}
+.desk{min-width:880px;border-radius:16px;overflow:hidden;border:1px solid var(--slate-200);box-shadow:var(--sh-lg);background:#fff}
+.desk-bar{height:34px;display:flex;align-items:center;gap:6px;padding:0 14px;background:#eef1f7;border-bottom:1px solid #dfe4ee}
+.desk-bar i{width:10px;height:10px;border-radius:50%;background:#cbd2e0}
+.desk-bar span{margin-left:12px;font:11px var(--font-mono);color:var(--slate-500)}
+.desk-body{display:grid;grid-template-columns:300px minmax(0,1fr);gap:36px;padding:32px 40px;height:700px;background:linear-gradient(160deg,#eef2ff,#fff 65%)}
+.desk-body .wb-shell{max-width:600px;width:100%;justify-self:center;box-shadow:var(--sh-lg)}
+.aside{display:grid;align-content:start;gap:18px}
+.aside h3{font-size:30px}
+.aside h3 em{font-style:normal;color:var(--blue-600)}
+.aside .k{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-500)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .wb-msg{animation:none}
+  .wb-typing i,.wb-caret{animation:none;opacity:.6}
+  *{transition-duration:.01ms!important}
+}
+
+/* ======================= RESPONSIVE (page) ======================= */
+@media (max-width:1080px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:980px){
+  .shell{grid-template-columns:1fr}
+  .side{position:sticky;top:0;z-index:20;height:auto;max-height:100vh;border-right:0;border-bottom:1px solid var(--slate-200);padding:12px 16px}
+  .brand{margin:0}
+  .brand small{display:none}
+  .menu-btn{display:inline-flex;margin-left:auto;align-items:center;gap:6px;border:1px solid var(--slate-200);background:#fff;border-radius:999px;padding:8px 14px;font:600 13px var(--font-body);color:var(--navy-900);cursor:pointer}
+  .nav-wrap{display:none;padding-bottom:12px}
+  .side.open .nav-wrap{display:block}
+  .main{padding:24px 16px 64px}
+  .hero{padding:26px 20px}
+}
+@media (max-width:760px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .type-row{grid-template-columns:1fr;gap:4px}
+  .stage{padding:16px}
+  .phone{height:680px;border-radius:36px;padding:8px}
+  .phone .wb-shell{border-radius:28px}
+}
+</style>
+</head>
+<body>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-rings" viewBox="0 0 24 24"><circle cx="9.5" cy="12" r="5"/><circle cx="14.5" cy="12" r="5"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-attach" viewBox="0 0 24 24"><path d="M21 11.5l-8.6 8.6a5 5 0 01-7.1-7.1l8.6-8.6a3.3 3.3 0 014.7 4.7l-8.6 8.6a1.7 1.7 0 01-2.4-2.4l7.9-7.9"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M5 12h13M12 5l7 7-7 7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="M4 7.5l8 5.5 8-5.5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 15.5H3L12 4z"/><path d="M12 10v4.5M12 17.2v.01"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M3 10.5h18"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-retry" viewBox="0 0 24 24"><path d="M4 12a8 8 0 108-8H8M8 4L5 7l3 3"/></symbol>
+</svg>
+
+<div class="shell">
+  <aside class="side" id="side">
+    <div style="display:flex;align-items:center">
+      <div class="brand">
+        <div class="brand-mark"><svg class="ic"><use href="#i-rings"/></svg></div>
+        <div><h1>WedWorks</h1><small>Chatbot Design System</small></div>
+      </div>
+      <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="navWrap"><svg class="ic"><use href="#i-menu"/></svg>Menu</button>
+    </div>
+    <div class="nav-wrap" id="navWrap">
+      <div class="nav-group"><div class="nav-title">Foundations</div><div class="nav-links">
+        <a href="#brand">Direction</a><a href="#color">01 · Color</a><a href="#type">02 · Typography</a><a href="#spacing">03 · Spacing, radius, depth</a><a href="#motion">04 · Motion</a>
+      </div></div>
+      <div class="nav-group"><div class="nav-title">Chat components</div><div class="nav-links">
+        <a href="#shell">05 · Shell & header</a><a href="#messages">06 · Messages & avatars</a><a href="#replies">07 · Quick replies & chips</a><a href="#typing">08 · Typing & streaming</a><a href="#input">09 · Input bar</a><a href="#scroll">10 · Scrollbar</a>
+      </div></div>
+      <div class="nav-group"><div class="nav-title">Cards in the chat</div><div class="nav-links">
+        <a href="#cards">11 · Card anatomy</a><a href="#edit">12 · Review & edit</a><a href="#payment">13 · Payment</a><a href="#invite">14 · Invite & deadline</a><a href="#confirm">15 · Confirmation</a><a href="#status">16 · Status & alerts</a>
+      </div></div>
+      <div class="nav-group"><div class="nav-title">System</div><div class="nav-links">
+        <a href="#layout">17 · Mobile & desktop</a><a href="#principles">18 · Usage principles</a><a href="#tokens">19 · Core tokens</a>
+      </div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="hero" id="brand">
+      <div class="eyebrow">Bold · AI chat · Mobile first</div>
+      <h2>One calm, confident <em>blue</em> for every message, card and button in the WedWorks chatbot.</h2>
+      <p>This system styles the WedWorks AI assistant used for the 10-10-10 Campaign at Kasalang Tagaytay. It is minimal and a little futuristic: a solid royal-blue header, pale blue AI replies, rounded pill controls with a soft blue shadow, and clean white cards for anything that needs a decision, such as reviewing details, paying, or checking an invitation deadline.</p>
+      <div class="hero-meta"><span class="tag">DM Sans + Inter</span><span class="tag">Royal blue #2f5bea</span><span class="tag">Pill controls</span><span class="tag">Light theme</span><span class="tag">Phone first, desktop ready</span></div>
+    </section>
+
+    <!-- ============ FOUNDATIONS ============ -->
+    <section class="section" id="color">
+      <div class="section-head"><div class="num">Foundations</div><h3>01. Color system</h3>
+        <p>One brand blue does the work. Everything else is white, pale blue or slate. Green, amber and red are only for status, never decoration.</p></div>
+      <div class="grid g4">
+        <div class="card swatch"><div class="chip-c" style="background:var(--blue-600)"></div><div class="chip-meta"><strong>Royal Blue</strong><code>#2F5BEA</code></div><div class="sub">Header, primary buttons, your bubble, links, focus</div></div>
+        <div class="card swatch"><div class="chip-c" style="background:var(--blue-700)"></div><div class="chip-meta"><strong>Deep Blue</strong><code>#2349C9</code></div><div class="sub">Hover and pressed states, info text</div></div>
+        <div class="card swatch"><div class="chip-c" style="background:var(--blue-100)"></div><div class="chip-meta"><strong>Pale Blue</strong><code>#E8EEFE</code></div><div class="sub">AI bubble, your avatar, soft fills</div></div>
+        <div class="card swatch"><div class="chip-c" style="background:var(--blue-50)"></div><div class="chip-meta"><strong>Mist</strong><code>#F3F6FF</code></div><div class="sub">Note boxes, the row being edited</div></div>
+        <div class="card swatch"><div class="chip-c" style="background:var(--navy-900)"></div><div class="chip-meta"><strong>Navy</strong><code>#0F172A</code></div><div class="sub">Headings, names, strong values</div></div>
+        <div class="card swatch"><div class="chip-c" style="background:var(--slate-700)"></div><div class="chip-meta"><strong>Slate</strong><code>#334155</code></div><div class="sub">Body text</div></div>
+        <div class="card swatch"><div class="chip-c" style="background:var(--slate-500)"></div><div class="chip-meta"><strong>Muted</strong><code>#64748B</code></div><div class="sub">Timestamps, hints, labels (4.8:1 on white)</div></div>
+        <div class="card swatch"><div class="chip-c" style="background:var(--slate-50)"></div><div class="chip-meta"><strong>Canvas</strong><code>#F8FAFC</code></div><div class="sub">Chat background behind bubbles</div></div>
+      </div>
+      <div class="label" style="margin-top:24px">Status colors (only for state)</div>
+      <div class="grid g4">
+        <div class="card swatch"><div class="chip-c" style="background:var(--green-50);border-color:var(--green-200)"></div><div class="chip-meta"><strong>Success</strong><code>#15803D</code></div><div class="sub">Paid, confirmed, redeemed</div></div>
+        <div class="card swatch"><div class="chip-c" style="background:var(--amber-50);border-color:var(--amber-200)"></div><div class="chip-meta"><strong>Warning</strong><code>#B45309</code></div><div class="sub">Pending, waiting list, expiring soon</div></div>
+        <div class="card swatch"><div class="chip-c" style="background:var(--red-50);border-color:var(--red-200)"></div><div class="chip-meta"><strong>Danger</strong><code>#C62828</code></div><div class="sub">Failed payment, expired, errors</div></div>
+        <div class="card swatch"><div class="chip-c" style="background:var(--slate-100)"></div><div class="chip-meta"><strong>Neutral</strong><code>#F1F5F9</code></div><div class="sub">Not started, day dividers</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="type">
+      <div class="section-head"><div class="num">Foundations</div><h3>02. Typography</h3>
+        <p>DM Sans gives titles, names, amounts and buttons a clean geometric voice. Inter keeps message text and form fields easy to read at small sizes.</p></div>
+      <div class="card">
+        <div class="type-row"><div class="meta">Amount · 38/1 · 700</div><div class="wb-amount"><small>₱</small>10,000</div></div>
+        <div class="type-row"><div class="meta">Page title · 34 · 700</div><div style="font:700 34px/1.1 var(--font-display);letter-spacing:-.02em;color:var(--navy-900)">Confirm your order</div></div>
+        <div class="type-row"><div class="meta">Card title · 18 · 700</div><div class="wb-card-title">Review your information</div></div>
+        <div class="type-row"><div class="meta">Name / button · 12.5–14 · 600</div><div style="font:600 14px var(--font-display);color:var(--navy-900)">WedWorks Assistant &nbsp;·&nbsp; Pay ₱10,000</div></div>
+        <div class="type-row"><div class="meta">Message · Inter 14.5/1.5 · 400</div><div style="font-size:14.5px;line-height:1.5;color:var(--navy-900)">Yes, caterers can join. Slots are limited to the first 10 suppliers.</div></div>
+        <div class="type-row"><div class="meta">Card text · 14/1.55 · 400</div><div class="wb-card-text">We’ve received your registration. Please check your inbox.</div></div>
+        <div class="type-row"><div class="meta">Label · 11 · 600 · caps</div><div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-500)">Business name</div></div>
+        <div class="type-row"><div class="meta">Timestamp · 11 · 400</div><div class="wb-time" style="padding:0">10:45 AM</div></div>
+      </div>
+      <p class="sub" style="margin-top:12px">Message text never goes below 14px. Use tabular numbers (<span class="tok">font-variant-numeric: tabular-nums</span>) for times, amounts and countdowns so digits do not jump.</p>
+    </section>
+
+    <section class="section" id="spacing">
+      <div class="section-head"><div class="num">Foundations</div><h3>03. Spacing, radius and depth</h3>
+        <p>A 4px base keeps phone layouts tight and desktop layouts the same. Shapes are round and friendly; shadows are soft and tinted blue only where an action lives.</p></div>
+      <div class="grid g2">
+        <div class="card stack">
+          <div class="label">Spacing scale</div>
+          <div class="space-row"><code>4 · 8 · 12</code><div class="space-bar" style="width:72px"></div><span>Inside chips, between icon and text</span></div>
+          <div class="space-row"><code>16 · 18 · 20</code><div class="space-bar" style="width:130px"></div><span>Bubble padding, card padding, log padding</span></div>
+          <div class="space-row"><code>24 · 32</code><div class="space-bar" style="width:190px"></div><span>Between message groups on desktop</span></div>
+          <div class="space-row"><code>40 · 48 · 64</code><div class="space-bar" style="width:250px"></div><span>Desktop panel and page rhythm</span></div>
+          <div class="table-wrap"><table class="spec"><tr><th>Where</th><th>Value</th></tr>
+            <tr><td>Gap between messages</td><td>18px</td></tr>
+            <tr><td>Gap inside a message (name, bubble, time)</td><td>6px</td></tr>
+            <tr><td>Bubble padding</td><td>12px 16px</td></tr>
+            <tr><td>Card padding · gap between card parts</td><td>18px · 12px</td></tr>
+            <tr><td>Input zone</td><td>12px 14px 16px</td></tr></table></div>
+        </div>
+        <div class="card stack">
+          <div class="label">Radius</div>
+          <div class="radius-demo" style="border-radius:10px">10px · small chips, icon buttons</div>
+          <div class="radius-demo" style="border-radius:12px">12px · form fields</div>
+          <div class="radius-demo" style="border-radius:18px 18px 18px 4px">18px with a 4px tail · message bubbles</div>
+          <div class="radius-demo" style="border-radius:20px 20px 20px 4px">20px with a 4px tail · cards in the chat</div>
+          <div class="radius-demo" style="border-radius:24px">24px · chat shell, header curve</div>
+          <div class="radius-demo" style="border-radius:999px">Pill · buttons, chips, input bar, status pills</div>
+          <div class="label" style="margin-top:8px">Depth</div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <div class="radius-demo" style="border-radius:14px;background:#fff;box-shadow:var(--sh-sm)">sm · cards</div>
+            <div class="radius-demo" style="border-radius:14px;background:#fff;box-shadow:var(--sh-md)">md · shell</div>
+            <div class="radius-demo" style="border-radius:14px;background:#fff;box-shadow:var(--sh-blue)">blue · actions</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="motion">
+      <div class="section-head"><div class="num">Foundations</div><h3>04. Motion</h3>
+        <p>Motion tells people the AI is working and where new content came from. It is quick and quiet. Everything stops when the device asks for reduced motion.</p></div>
+      <div class="grid g3">
+        <div class="motion-item"><h4>Message in</h4><p class="sub">Fade up 8px as a new message arrives.</p><span class="tok">240ms · ease-out</span></div>
+        <div class="motion-item"><h4>Typing dots</h4><p class="sub">Three dots pulse in turn while the AI thinks.</p><span class="tok">1.2s loop · 150ms stagger</span></div>
+        <div class="motion-item"><h4>Streaming caret</h4><p class="sub">A thin blue caret blinks at the end of text being written.</p><span class="tok">1s · steps(2)</span></div>
+        <div class="motion-item"><h4>Press</h4><p class="sub">Buttons and replies shrink to 97% on press.</p><span class="tok">120ms</span></div>
+        <div class="motion-item"><h4>Focus ring</h4><p class="sub">Inputs grow a soft 4px blue ring.</p><span class="tok">120ms</span></div>
+        <div class="motion-item"><h4>Card swap</h4><p class="sub">A card updates in place (for example payment pending to confirmed) instead of adding a second one.</p><span class="tok">240ms</span></div>
+      </div>
+    </section>
+
+    <!-- ============ CHAT COMPONENTS ============ -->
+    <div class="group-title">Chat components</div>
+
+    <section class="section" id="shell" style="margin-top:28px">
+      <div class="section-head"><div class="num">Chat components</div><h3>05. Shell and header</h3>
+        <p>The shell is a white rounded card. The header is solid royal blue with a 24px curve underneath, a white AI avatar, a short status line and one small control. There is no progress bar, because this is an open conversation.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Header</div>
+          <div style="width:min(100%,380px);border-radius:24px;overflow:hidden;box-shadow:var(--sh-md)">
+            <div class="wb-header"><span class="wb-avatar ai lg on-blue"><svg class="ic"><use href="#i-rings"/></svg></span><div class="title"><strong>WedWorks Assistant</strong><small>AI assistant · Online</small></div><button class="wb-icon-btn" type="button" aria-label="Minimize chat"><svg class="ic"><use href="#i-minus"/></svg></button></div>
+          </div>
+        </div>
+        <div class="col"><div class="cap">Anatomy</div>
+          <ul class="clean" style="max-width:360px"><li><strong>Avatar</strong>: white circle with the two-ring mark, 40px.</li><li><strong>Title</strong>: assistant name, DM Sans 16 bold.</li><li><strong>Status</strong>: green dot and “AI assistant · Online”. Use “Thinking…” while a reply is being prepared.</li><li><strong>Control</strong>: minimize on desktop widgets; hide it when the chat is full-screen on a phone.</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="messages">
+      <div class="section-head"><div class="num">Chat components</div><h3>06. Messages, avatars and timestamps</h3>
+        <p>AI messages sit on the left in pale blue with a small tail at the top-left. Your messages sit on the right in solid royal blue with a soft shadow. Each group has a name and a timestamp.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Conversation</div>
+          <div class="demo">
+            <div class="wb-day">Today</div>
+            <div class="wb-msg ai"><div class="wb-who"><span class="wb-avatar ai"><svg class="ic"><use href="#i-rings"/></svg></span>WedWorks Assistant</div><div class="wb-bubble">Hi! I’m the WedWorks AI assistant. Ask me anything about the 10-10-10 Campaign, or tell me about your wedding business.</div><span class="wb-time">10:44 AM</span></div>
+            <div class="wb-msg user"><div class="wb-who">You <span class="wb-avatar user">MR</span></div><div class="wb-bubble">I’m a caterer in Tagaytay. Can I still join?</div><span class="wb-time">10:45 AM</span></div>
+          </div>
+        </div>
+        <div class="col"><div class="cap">Message states</div>
+          <div class="demo">
+            <div class="wb-msg user"><div class="wb-bubble">Sending this one</div><span class="wb-state">Sending…</span></div>
+            <div class="wb-msg user"><div class="wb-bubble">This one did not go through</div><span class="wb-state fail"><svg class="ic"><use href="#i-alert"/></svg>Not sent <button type="button">Retry</button></span></div>
+            <div class="wb-msg ai"><div class="wb-who"><span class="wb-avatar ai"><svg class="ic"><use href="#i-rings"/></svg></span>WedWorks Assistant</div><div class="wb-bubble">Here is a longer answer with a link-like <strong>bold word</strong> to show that bubbles grow with their content and wrap at 86% of the chat width.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="grid g2" style="margin-top:20px">
+        <div class="card"><div class="label">Spec</div><div class="table-wrap"><table class="spec"><tr><th>Part</th><th>Value</th></tr>
+          <tr><td>AI bubble</td><td>#E8EEFE fill, 1px #D6E0FC border, navy text, radius 18 / top-left 4</td></tr>
+          <tr><td>Your bubble</td><td>#2F5BEA fill, white text, radius 18 / top-right 4, blue shadow</td></tr>
+          <tr><td>AI avatar</td><td>28px white circle, ring mark in blue, 1px #D6E0FC ring</td></tr>
+          <tr><td>Your avatar</td><td>28px pale blue circle, initials in blue, DM Sans 700 10.5px</td></tr>
+          <tr><td>Max width</td><td>86% of the log (cards: 94%)</td></tr>
+          <tr><td>Day divider</td><td>Centered pill, 11px caps, slate on #F1F5F9</td></tr></table></div></div>
+        <div class="card"><div class="label">Guidelines</div><ul class="clean"><li>Show the name and avatar once per group of messages from the same sender.</li><li>Timestamps use the local 12-hour format with AM or PM and are muted, never hidden.</li><li>Keep AI replies short. Use a card when the answer needs a list, an amount or a button.</li><li>Your bubble is the only filled blue block in the log, so it always reads as yours.</li></ul></div>
+      </div>
+    </section>
+
+    <section class="section" id="replies">
+      <div class="section-head"><div class="num">Chat components</div><h3>07. Quick replies and suggested chips</h3>
+        <p>The AI can offer two kinds of shortcuts. Suggested chips are optional ideas for what to ask. Quick replies are Yes and No buttons when the AI asks a direct question.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Suggested chips</div>
+          <div class="demo"><div class="wb-msg ai"><div class="wb-bubble">What would you like to know?</div><div class="wb-chips" id="chipsDemo"><button class="wb-chip" type="button">What is the 10-10-10 Campaign?</button><button class="wb-chip" type="button">How much does it cost?</button><button class="wb-chip selected" type="button">Selected</button><button class="wb-chip" type="button">Talk to a person</button></div></div></div>
+        </div>
+        <div class="col"><div class="cap">Quick replies</div>
+          <div class="demo"><div class="wb-msg ai"><div class="wb-bubble">Can you prepare special meals, like vegetarian or halal, if couples ask?</div><div class="wb-qr-row" id="qrDemo"><button class="wb-qr yes" type="button">Yes</button><button class="wb-qr no" type="button">No</button></div></div>
+          <div class="wb-msg ai"><div class="wb-qr-row"><button class="wb-qr yes" type="button" disabled>Yes</button><button class="wb-qr no" type="button" disabled>No</button></div><span class="wb-state">Disabled once answered</span></div></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px"><div class="label">Rules</div><ul class="clean"><li>Chips: 36px tall, blue text on white, pale blue border. Tapping one sends its text as your message and removes the chips.</li><li>Quick replies: 44px tall pills. Yes is solid blue, No is outlined. Never use red for No; it is not an error.</li><li>Offer at most four chips and two quick replies at once.</li></ul></div>
+    </section>
+
+    <section class="section" id="typing">
+      <div class="section-head"><div class="num">Chat components</div><h3>08. Typing and streaming</h3>
+        <p>Two states show the AI is working. The typing dots appear while it thinks. Once words start arriving they stream into a normal AI bubble with a blinking caret.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Typing</div><div class="demo"><div class="wb-typing" role="status" aria-label="WedWorks Assistant is typing"><i></i><i></i><i></i></div></div></div>
+        <div class="col"><div class="cap">Streaming</div><div class="demo"><div class="wb-msg ai"><div class="wb-who"><span class="wb-avatar ai"><svg class="ic"><use href="#i-rings"/></svg></span>WedWorks Assistant</div><div class="wb-bubble" aria-live="polite">Yes, caterers can join! Slots are limited to the first 10 suppliers, and there’s still one open. Want me to<span class="wb-caret"></span></div></div></div></div>
+      </div>
+      <p class="sub" style="margin-top:12px">Streaming text uses <span class="tok">aria-live="polite"</span> so screen readers announce it once complete. Keep the log scrolled to the newest line while text streams, unless the person has scrolled up.</p>
+    </section>
+
+    <section class="section" id="input">
+      <div class="section-head"><div class="num">Chat components</div><h3>09. Input bar</h3>
+        <p>A single pill with a text field, an attach button and a round blue send button. It grows a soft blue ring when focused. Try it in the live chat in section 17.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Empty</div><div class="demo plain" style="padding:12px 14px"><div class="wb-field-bar"><input type="text" id="inEmpty" placeholder="Type a message" aria-label="Message"><button class="wb-attach" type="button" aria-label="Attach a file"><svg class="ic"><use href="#i-attach"/></svg></button><button class="wb-send" type="button" aria-label="Send" disabled><svg class="ic"><use href="#i-send"/></svg></button></div><div class="wb-hint">Powered by WedWorks</div></div></div>
+        <div class="col"><div class="cap">Focused, with text</div><div class="demo plain" style="padding:12px 14px"><div class="wb-field-bar" style="border-color:var(--wb-accent);box-shadow:0 0 0 4px var(--wb-accent-soft);background:#fff"><input type="text" id="inFull" value="Is there still a slot left?" aria-label="Message"><button class="wb-attach" type="button" aria-label="Attach a file"><svg class="ic"><use href="#i-attach"/></svg></button><button class="wb-send" type="button" aria-label="Send"><svg class="ic"><use href="#i-send"/></svg></button></div><div class="wb-hint">Powered by WedWorks</div></div></div>
+      </div>
+    </section>
+
+    <section class="section" id="scroll">
+      <div class="section-head"><div class="num">Chat components</div><h3>10. Scrollbar</h3>
+        <p>The default grey bar is replaced with a slim floating pill in the brand blue. It is faint while idle and solid when you hover. Messages also fade out softly under the header and above the input.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Scroll this list</div>
+          <div class="demo" style="height:260px;overflow-y:auto;align-content:start;padding:18px 8px 18px 18px" id="scrollDemo" tabindex="0" role="region" aria-label="Scrollbar demo">
+            <div class="wb-msg ai"><div class="wb-bubble">Messages scroll inside the chat.</div></div>
+            <div class="wb-msg user"><div class="wb-bubble">The bar stays slim.</div></div>
+            <div class="wb-msg ai"><div class="wb-bubble">Hover to see it turn solid.</div></div>
+            <div class="wb-msg user"><div class="wb-bubble">Keep going.</div></div>
+            <div class="wb-msg ai"><div class="wb-bubble">Almost there.</div></div>
+            <div class="wb-msg user"><div class="wb-bubble">Last one.</div></div>
+          </div>
+        </div>
+        <div class="col"><div class="cap">Spec</div><div class="table-wrap"><table class="spec" style="min-width:320px"><tr><th>State</th><th>Style</th></tr><tr><td>Track</td><td>Transparent, 14px inset top and bottom</td></tr><tr><td>Thumb · idle</td><td>10px wide pill, brand blue at 24%</td></tr><tr><td>Thumb · hover</td><td>Solid #2F5BEA</td></tr><tr><td>Arrows</td><td>Hidden</td></tr><tr><td>Firefox</td><td>Thin bar in brand blue (the pill shape is not supported)</td></tr></table></div></div>
+      </div>
+    </section>
+
+    <!-- ============ CARDS ============ -->
+    <div class="group-title">Cards inside the chat</div>
+
+    <section class="section" id="cards" style="margin-top:28px">
+      <div class="section-head"><div class="num">Cards in the chat</div><h3>11. Card anatomy</h3>
+        <p>When the AI needs to show structured information or ask for a decision, it sends a card instead of a plain bubble. A card is white with a thin border, a 4px tail at the top-left like an AI bubble, and an optional icon, title, text, rows and actions.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Card</div><div class="demo" data-card="anatomy"></div></div>
+        <div class="col"><div class="cap">Parts</div>
+          <div class="table-wrap"><table class="spec" style="min-width:380px"><tr><th>Part</th><th>Spec</th></tr>
+            <tr><td>Container</td><td>White, 1px slate border, radius 20 / tail 4, padding 18, shadow sm</td></tr>
+            <tr><td>Icon</td><td>44px circle, pale blue (or status tint) with a line icon</td></tr>
+            <tr><td>Title</td><td>DM Sans 18 bold, navy</td></tr>
+            <tr><td>Text</td><td>Inter 14, muted, 1.55 line height</td></tr>
+            <tr><td>Rows</td><td>Label above value, 1px dividers</td></tr>
+            <tr><td>Note</td><td>Mist fill with info icon, for rules and reminders</td></tr>
+            <tr><td>Actions</td><td>One primary pill, one optional outline pill. Full width on phone</td></tr></table></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px"><div class="label">Rules</div><ul class="clean"><li>One main action per card. Secondary actions are outlined.</li><li>A card that changes state (payment pending to confirmed) is replaced in place, not stacked.</li><li>Cards are 94% of the log width so the tail and the avatar still line up with AI bubbles.</li></ul></div>
+    </section>
+
+    <section class="section" id="edit">
+      <div class="section-head"><div class="num">Cards in the chat</div><h3>12. Review and edit information</h3>
+        <p>Before finishing, the AI shows what the supplier provided. Each row has an Edit action. Choosing it turns that row into a field inside the same card, with Save and Cancel. Try it below.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Live example · tap Edit</div><div class="demo" data-card="review" id="reviewDemo"></div></div>
+        <div class="col"><div class="cap">Editing states</div>
+          <div class="demo">
+            <div class="wb-msg wide ai"><div class="wb-card">
+              <div class="wb-rows">
+                <div class="wb-review-row editing">
+                  <div class="k"><span>Email</span><span class="wb-pill warning">Editing</span></div>
+                  <div class="wb-field"><input class="wb-input invalid" id="edErr" value="maria@rosalcatering" aria-label="Email" aria-invalid="true" aria-describedby="edErrMsg"><div class="wb-error" id="edErrMsg"><svg class="ic"><use href="#i-alert"/></svg>Enter a full email address, like name@example.com</div></div>
+                  <div class="wb-actions row" style="margin-top:12px"><button class="wb-btn outline sm" type="button">Cancel</button><button class="wb-btn primary sm" type="button">Save</button></div>
+                </div>
+                <div class="wb-review-row editing" style="margin-top:12px">
+                  <div class="k"><span>Business type</span><span class="wb-pill warning">Editing</span></div>
+                  <div class="wb-field"><select class="wb-select" id="edSel" aria-label="Business type"><option>Caterer</option><option>Venue</option><option>Photographer</option></select></div>
+                </div>
+                <div class="wb-review-row editing" style="margin-top:12px">
+                  <div class="k"><span>What makes you special</span><span class="wb-pill warning">Editing</span></div>
+                  <div class="wb-field"><textarea class="wb-textarea" id="edTa" aria-label="Description">Home-style Filipino menus for intimate garden weddings.</textarea><div class="wb-help">Optional. Up to 300 characters.</div></div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px"><div class="label">Rules</div><ul class="clean"><li>Only one row is editable at a time. Starting another edit saves nothing and closes the first.</li><li>The editing row gets the Mist fill, a blue border and an “Editing” pill so it is obvious what is changing.</li><li>Errors sit under the field in red with an icon and say how to fix it. Save stays available so the message can be read, but it re-checks the field.</li><li>After Save, show the updated value and a brief toast: “Saved”.</li></ul></div>
+    </section>
+
+    <section class="section" id="payment">
+      <div class="section-head"><div class="num">Cards in the chat</div><h3>13. Payment card</h3>
+        <p>The ₱10,000 website payment is a centered card with the amount as the focus, a short order summary and one clear Pay button. The same card moves through four states.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Confirm your order</div><div class="demo" data-card="payment"></div></div>
+        <div class="col"><div class="cap">Saved for later</div><div class="demo" data-card="saved"></div></div>
+        <div class="col"><div class="cap">Payment unsuccessful</div><div class="demo" data-card="failed"></div></div>
+      </div>
+      <div class="card" style="margin-top:20px"><div class="label">Rules</div><ul class="clean"><li>The amount is DM Sans 38 bold with a blue ₱ sign, tabular numbers, centered.</li><li>The Pay button repeats the amount: “Pay ₱10,000”. Nothing else on the card is filled blue.</li><li>Failed payment uses a red icon only. The text says what happened and that the invitation is still valid.</li><li>Payment confirmed is shown in section 15.</li></ul></div>
+    </section>
+
+    <section class="section" id="invite">
+      <div class="section-head"><div class="num">Cards in the chat</div><h3>14. Invite and deadline</h3>
+        <p>After registering, a supplier is either invited with a 24-hour window or placed on the waiting list. The card shows a live countdown, the slot position, and what to do next.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Thank you</div><div class="demo" data-card="thanks"></div></div>
+        <div class="col"><div class="cap">Invited · countdown</div><div class="demo" data-card="invite"></div></div>
+        <div class="col"><div class="cap">Waiting list</div><div class="demo" data-card="waitlist"></div></div>
+        <div class="col"><div class="cap">Expired</div><div class="demo" data-card="expired"></div></div>
+      </div>
+      <div class="card" style="margin-top:20px"><div class="label">Rules</div><ul class="clean"><li>The countdown uses three equal boxes (hours, minutes, seconds) and updates every second.</li><li>Under 2 hours left, switch the status pill to the warning color. At zero, replace the card with the expired card.</li><li>Slot progress is a thin 10-segment bar. It shows how many of the 10 slots are taken, nothing else.</li></ul></div>
+    </section>
+
+    <section class="section" id="confirm">
+      <div class="section-head"><div class="num">Cards in the chat</div><h3>15. Confirmation</h3>
+        <p>When the payment goes through, the payment card is swapped for a confirmation with a green check, the order summary and the next step.</p></div>
+      <div class="stage">
+        <div class="col"><div class="cap">Payment confirmed</div><div class="demo" data-card="confirmed"></div></div>
+        <div class="col"><div class="cap">Toast</div><div class="wb-toast" role="status"><svg class="ic"><use href="#i-check"/></svg>Registration complete! Check your email.</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="status">
+      <div class="section-head"><div class="num">Cards in the chat</div><h3>16. Status and alerts</h3>
+        <p>Pills show the state of one thing. Status cards group several pills on the dashboard. Alerts sit inside the chat for short system messages.</p></div>
+      <div class="grid g2">
+        <div class="card stack"><div class="label">Status pills</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px"><span class="wb-pill info">Invited</span><span class="wb-pill warning">Waiting list</span><span class="wb-pill warning">Pending</span><span class="wb-pill success">Confirmed</span><span class="wb-pill success">Redeemed</span><span class="wb-pill danger">Expired</span><span class="wb-pill danger">Failed, retry needed</span><span class="wb-pill muted">Not started</span></div>
+          <div class="label" style="margin-top:8px">Status cards</div>
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+            <div class="wb-status-card"><strong>Registration</strong><span class="wb-pill success">Complete</span></div>
+            <div class="wb-status-card"><strong>Invitation</strong><span class="wb-pill info">Invited</span></div>
+            <div class="wb-status-card"><strong>Payment</strong><span class="wb-pill warning">Pending</span></div>
+            <div class="wb-status-card"><strong>Website information</strong><span class="wb-pill muted">Not started</span></div>
+            <div class="wb-status-card"><strong>Production</strong><span class="wb-pill warning">In progress (2/6)</span></div>
+            <div class="wb-status-card"><strong>Delivery</strong><span class="wb-pill muted">Not yet</span></div>
+          </div>
+        </div>
+        <div class="card stack"><div class="label">Alerts inside the chat</div>
+          <div class="wb-alert success"><svg class="ic"><use href="#i-check"/></svg><div><strong>Saved</strong><span>Your website information was updated.</span></div></div>
+          <div class="wb-alert info"><svg class="ic"><use href="#i-info"/></svg><div><strong>Reminder</strong><span>We only contact you by email, so keep an eye on your inbox.</span></div></div>
+          <div class="wb-alert warning"><svg class="ic"><use href="#i-clock"/></svg><div><strong>Invitation expires soon</strong><span>1 hour 20 minutes left to complete payment.</span></div></div>
+          <div class="wb-alert danger"><svg class="ic"><use href="#i-alert"/></svg><div><strong>Connection lost</strong><span>We’ll retry automatically. Your answers are saved.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SYSTEM ============ -->
+    <div class="group-title">System</div>
+
+    <section class="section" id="layout" style="margin-top:28px">
+      <div class="section-head"><div class="num">System</div><h3>17. Mobile and desktop</h3>
+        <p>Design for the phone first, then give wide screens more room instead of a different design. The live chat below is real: pick a suggestion or type a message.</p></div>
+      <div class="table-wrap" style="margin-bottom:20px"><table class="spec"><tr><th>Width</th><th>Layout</th></tr>
+        <tr><td>Under 640px</td><td>The chat fills the screen (100dvh). No outer border or shadow. Header curve stays. Input respects the safe area at the bottom.</td></tr>
+        <tr><td>640 to 1023px</td><td>A centered chat card, max width 520px, with the same shadow as the desktop card.</td></tr>
+        <tr><td>1024px and up</td><td>Two columns: a 300px context panel (campaign title, slots, suggested questions) and the chat card, max width 600px, height up to 700px.</td></tr></table></div>
+      <div class="stage one">
+        <div class="col" style="width:100%;justify-items:center"><div class="cap" style="text-align:center">Phone</div>
+          <div class="phone"><div class="wb-shell" id="liveChat">
+            <div class="wb-header"><span class="wb-avatar ai lg on-blue"><svg class="ic"><use href="#i-rings"/></svg></span><div class="title"><strong>WedWorks Assistant</strong><small id="liveStatus">AI assistant · Online</small></div><button class="wb-icon-btn" type="button" aria-label="Minimize chat"><svg class="ic"><use href="#i-minus"/></svg></button></div>
+            <div class="wb-log" id="liveLog" aria-live="off"></div>
+            <div class="wb-input-zone"><form class="wb-field-bar" id="liveForm" autocomplete="off"><input type="text" id="liveInput" placeholder="Type a message" aria-label="Message"><button class="wb-attach" type="button" aria-label="Attach a file"><svg class="ic"><use href="#i-attach"/></svg></button><button class="wb-send" type="submit" aria-label="Send"><svg class="ic"><use href="#i-send"/></svg></button></form><div class="wb-hint">Powered by WedWorks</div></div>
+          </div></div>
+        </div>
+        <div class="col" style="width:100%;justify-items:stretch"><div class="cap" style="max-width:none">Desktop</div>
+          <div class="desk-wrap"><div class="desk"><div class="desk-bar"><i></i><i></i><i></i><span>register.wedworks.ph</span></div>
+            <div class="desk-body">
+              <div class="aside">
+                <span class="wb-pill info" style="justify-self:start">10-10-10 Campaign</span>
+                <h3>Get your wedding business <em>online in 10 days.</em></h3>
+                <p class="sub">Open to the first 10 suppliers who register at Kasalang Tagaytay.</p>
+                <div style="display:grid;gap:8px"><span class="k">Slots taken · 3 of 10</span><div class="wb-slots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+                <div style="display:grid;gap:8px"><span class="k">Try asking</span><div class="wb-chips"><span class="wb-chip">Is there a slot left?</span><span class="wb-chip">What do I get?</span><span class="wb-chip">How do I pay?</span></div></div>
+              </div>
+              <div class="wb-shell">
+                <div class="wb-header"><span class="wb-avatar ai lg on-blue"><svg class="ic"><use href="#i-rings"/></svg></span><div class="title"><strong>WedWorks Assistant</strong><small>AI assistant · Online</small></div><button class="wb-icon-btn" type="button" aria-label="Minimize chat"><svg class="ic"><use href="#i-minus"/></svg></button></div>
+                <div class="wb-log" id="deskLog"></div>
+                <div class="wb-input-zone"><div class="wb-field-bar"><input type="text" placeholder="Type a message" aria-label="Message"><button class="wb-attach" type="button" aria-label="Attach a file"><svg class="ic"><use href="#i-attach"/></svg></button><button class="wb-send" type="button" aria-label="Send"><svg class="ic"><use href="#i-send"/></svg></button></div><div class="wb-hint">Powered by WedWorks</div></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="principles">
+      <div class="section-head"><div class="num">System</div><h3>18. Usage principles</h3>
+        <p>Keep the chat feeling like one fast, friendly conversation, even when it needs a form or a payment.</p></div>
+      <div class="grid g2">
+        <div class="card stack"><h4>Do</h4><ul class="clean"><li>Use one blue. Let white space and the pale blue AI bubble carry the rest.</li><li>Put structured work (review, edit, pay, deadline) in cards, and keep conversation in bubbles.</li><li>Update a card in place when its state changes.</li><li>Keep text at 14px or larger and tap targets at 36px or larger (44px for main buttons).</li><li>Show the AI’s state: online, thinking (dots), writing (caret).</li></ul></div>
+        <div class="card stack"><h4>Avoid</h4><ul class="clean"><li>Step counters or progress bars. This is an open AI conversation, not a fixed form.</li><li>Black or navy filled bubbles. Your messages are blue.</li><li>Red for a plain No. Red is for errors and expired states only.</li><li>Stacking several cards for one decision.</li><li>Light grey timestamps. Use the muted slate so they stay readable.</li></ul></div>
+      </div>
+      <div class="card stack" style="margin-top:20px"><h4>Accessibility checklist</h4><ul class="clean"><li>Blue #2F5BEA on white is 5.5:1 and white on blue is 5.5:1, both above the 4.5:1 minimum.</li><li>Every icon-only button has an aria-label. Inputs have labels; errors use aria-describedby and aria-invalid.</li><li>Focus is always visible: a 2px blue outline, or a white one on the blue header.</li><li>New AI messages are announced politely; the typing state uses role="status".</li><li>Animations are removed when the device asks for reduced motion.</li><li>This system is light only. A dark theme is not included.</li></ul></div>
+    </section>
+
+    <section class="section" id="tokens">
+      <div class="section-head"><div class="num">System</div><h3>19. Core tokens</h3>
+        <p>Copy these variables into the chatbot stylesheet. The component classes in this file (prefixed <span class="tok">wb-</span>) use only these tokens.</p></div>
+      <div class="card">
+        <button class="copy" id="copyTokens" type="button">Copy tokens</button>
+<pre class="code" id="tokenText">:root {
+  /* brand */
+  --blue-600:#2f5bea; --blue-700:#2349c9; --blue-500:#5b7cfa;
+  --blue-200:#d6e0fc; --blue-100:#e8eefe; --blue-50:#f3f6ff;
+  /* neutrals */
+  --navy-900:#0f172a; --slate-700:#334155; --slate-500:#64748b;
+  --slate-200:#e2e8f0; --slate-100:#f1f5f9; --slate-50:#f8fafc;
+  /* status */
+  --green-700:#15803d; --green-50:#ecfdf3;
+  --amber-700:#b45309; --amber-50:#fff7e6;
+  --red-600:#c62828;   --red-50:#fef2f2;
+  /* semantic */
+  --wb-accent:var(--blue-600);   --wb-accent-hover:var(--blue-700);
+  --wb-canvas:var(--slate-50);   --wb-surface:#fff;
+  --wb-text:var(--slate-700);    --wb-heading:var(--navy-900);
+  --wb-muted:var(--slate-500);   --wb-line:var(--slate-200);
+  --wb-ai-bg:var(--blue-100);    --wb-ai-line:var(--blue-200);
+  --wb-user-bg:var(--blue-600);  --wb-user-text:#fff;
+  /* type */
+  --font-display:'DM Sans','Inter',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  /* radius */
+  --r-field:12px; --r-card:20px; --r-shell:24px; --r-bubble:18px; --r-tail:4px; --r-pill:999px;
+  /* spacing: 4px base */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px; --s-8:32px;
+  /* depth */
+  --sh-sm:0 2px 8px rgba(15,23,42,.05);
+  --sh-md:0 10px 30px rgba(15,23,42,.08);
+  --sh-blue:0 8px 18px rgba(47,91,234,.28);
+  /* motion */
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --dur-fast:120ms; --dur-base:240ms;
+}</pre>
+      </div>
+    </section>
+
+    <div class="footer-note"><strong>Implementation note:</strong> the chatbot in <span class="tok">index.html</span> and <span class="tok">chatbot.html</span> currently uses a gold palette and bubble styles of its own. To adopt this system, replace its <span class="tok">:root</span> variables with the tokens above, then restyle <span class="tok">.bubble</span>, <span class="tok">.card-bubble</span>, <span class="tok">.chip</span>, the input bar and the status pills with the <span class="tok">wb-</span> classes from this file. The in-chat cards map one to one: review → section 12, payment → 13, invitation and countdown → 14, payment confirmed → 15, dashboard status → 16.</div>
+  </main>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const I = n => '<svg class="ic"><use href="#i-'+n+'"/></svg>';
+const AI = '<span class="wb-avatar ai">'+I('rings')+'</span>';
+const aiMsg = (inner,time) => '<div class="wb-msg wide ai"><div class="wb-who">'+AI+'WedWorks Assistant</div>'+inner+(time?'<span class="wb-time">'+time+'</span>':'')+'</div>';
+
+/* ---------- card templates (sample content only) ---------- */
+const CARDS = {
+  anatomy:()=>aiMsg('<div class="wb-card"><div class="wb-card-icon">'+I('mail')+'</div><div class="wb-card-title">Card title</div><div class="wb-card-text">Short text that explains what this card is for and what happens next.</div><div class="wb-rows"><div class="wb-review-row"><div class="k">Label</div><div class="v">Value</div></div></div><div class="wb-note">'+I('info')+'<span>A note or reminder goes here.</span></div><div class="wb-actions"><button class="wb-btn primary block" type="button">Primary action</button><button class="wb-btn outline block" type="button">Secondary</button></div></div>','10:52 AM'),
+  review:()=>{
+    const rows=[['Name','Maria Reyes'],['Email','maria@rosalcatering.ph'],['Mobile','0917 555 0142'],['Business name','Rosal Catering'],['Business type','Caterer'],['Location','Tagaytay City']];
+    return aiMsg('<div class="wb-card"><div class="wb-card-title">Review your information</div><div class="wb-card-text">Please check your details. You can edit anything below.</div><div class="wb-rows">'+rows.map((r,i)=>'<div class="wb-review-row" data-i="'+i+'"><div class="k">'+r[0]+'</div><div class="v">'+r[1]+'</div><button class="edit" type="button" aria-label="Edit '+r[0]+'">Edit</button></div>').join('')+'</div><div class="wb-actions"><button class="wb-btn primary block" type="button">Finish registration '+I('send')+'</button></div></div>','10:50 AM');
+  },
+  payment:()=>aiMsg('<div class="wb-card center"><div class="wb-card-title">Confirm your order</div><div class="wb-card-text" style="margin-top:-6px">10-10-10 Campaign</div><div class="wb-amount"><small>₱</small>10,000</div><div class="wb-card-text" style="margin-top:-6px">One-time website package</div><div class="wb-divider" style="width:100%"></div><div class="wb-rows" style="width:100%"><div class="wb-pay-row"><span>Business</span><strong>Rosal Catering</strong></div><div class="wb-pay-row"><span>Package</span><strong>Standard website</strong></div><div class="wb-pay-row"><span>Payment status</span><span class="wb-pill warning">Not yet paid</span></div><div class="wb-pay-row"><span>Invitation expires in</span><strong>21h 40m</strong></div></div><div class="wb-actions" style="width:100%"><button class="wb-btn primary block" type="button">Pay ₱10,000 '+I('send')+'</button></div></div>','10:58 AM'),
+  saved:()=>aiMsg('<div class="wb-card"><div class="wb-card-icon">'+I('pause')+'</div><div class="wb-card-title">Saved for later</div><div class="wb-card-text">No problem. Your website information is saved. You can come back and pay any time before your invitation expires.</div><div class="wb-actions"><button class="wb-btn primary block" type="button">Go to my website</button></div></div>'),
+  failed:()=>aiMsg('<div class="wb-card"><div class="wb-card-icon danger">'+I('x')+'</div><div class="wb-card-title">Payment unsuccessful</div><div class="wb-card-text">Your payment could not be completed. Your invitation is still valid, so you can try again before it expires.</div><div class="wb-actions"><button class="wb-btn primary block" type="button">'+I('retry')+'Try again</button></div></div>'),
+  confirmed:()=>aiMsg('<div class="wb-card"><div class="wb-card-icon success">'+I('check')+'</div><div class="wb-card-title">Payment confirmed!</div><div class="wb-card-text">Thank you, Maria! We’ve received your ₱10,000 payment and your website information for <strong>Rosal Catering</strong>.</div><div class="wb-rows"><div class="wb-pay-row"><span>Order reference</span><strong>WW-1010-0042</strong></div><div class="wb-pay-row"><span>Amount paid</span><strong>₱10,000</strong></div><div class="wb-pay-row"><span>Status</span><span class="wb-pill success">Confirmed</span></div></div><div class="wb-actions"><button class="wb-btn primary block" type="button">'+I('mail')+'View confirmation email</button><button class="wb-btn outline block" type="button">Go to my website</button></div></div>'),
+  thanks:()=>aiMsg('<div class="wb-card"><div class="wb-card-icon">'+I('mail')+'</div><div class="wb-card-title">Thank you, Maria!</div><div class="wb-card-text">We’ve received your registration for <strong>Rosal Catering</strong>. We’ll email <strong>maria@rosalcatering.ph</strong> with your next step.</div><div class="wb-note">'+I('info')+'<span>This offer is limited to the first 10 suppliers. We only reach you by email, so keep an eye on your inbox over the next 24 hours.</span></div><div class="wb-actions"><button class="wb-btn primary block" type="button">'+I('mail')+'Check my email</button><button class="wb-btn outline block" type="button">Go to my website</button></div></div>'),
+  invite:()=>aiMsg('<div class="wb-card"><span class="wb-pill info" style="justify-self:start">Invited · slot 4 of 10</span><div class="wb-card-title">You’re in. Complete payment in:</div><div class="wb-count" aria-live="off"><div><b class="cd-h">23</b><span>Hours</span></div><div><b class="cd-m">41</b><span>Minutes</span></div><div><b class="cd-s">08</b><span>Seconds</span></div></div><div class="wb-slots" aria-label="4 of 10 slots taken"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="wb-note">'+I('clock')+'<span>If payment is not completed before the timer ends, your slot goes to the next supplier on the waiting list.</span></div><div class="wb-actions"><button class="wb-btn primary block" type="button">Continue to payment</button></div></div>'),
+  waitlist:()=>aiMsg('<div class="wb-card"><span class="wb-pill warning" style="justify-self:start">Waiting list · #3</span><div class="wb-card-title">You’re on the waiting list</div><div class="wb-card-text">All 10 slots are taken for now. If a supplier doesn’t complete payment in time, we’ll email <strong>maria@rosalcatering.ph</strong> with your invitation.</div><div class="wb-slots" aria-label="10 of 10 slots taken"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><div class="wb-actions"><button class="wb-btn outline block" type="button">Go to my website</button></div></div>'),
+  expired:()=>aiMsg('<div class="wb-card"><div class="wb-card-icon danger">'+I('clock')+'</div><div class="wb-card-title">Your invitation has expired</div><div class="wb-card-text">Hi Maria, your 24-hour invitation ended before payment was completed, so the slot was offered to the next supplier on the waiting list.</div><span class="wb-pill danger" style="justify-self:start">Invitation expired</span><div class="wb-actions"><button class="wb-btn outline block" type="button">Go to my website</button></div></div>')
+};
+document.querySelectorAll('[data-card]').forEach(el=>{ el.innerHTML = CARDS[el.dataset.card](); });
+
+/* ---------- review card: inline edit with save / cancel ---------- */
+let TOAST;
+function toast(msg){
+  clearTimeout(TOAST);
+  let t=document.getElementById('toastLive');
+  if(!t){ t=document.createElement('div'); t.id='toastLive'; t.className='wb-toast'; t.setAttribute('role','status'); t.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50'; document.body.appendChild(t); }
+  t.innerHTML=I('check')+msg; t.hidden=false;
+  TOAST=setTimeout(()=>{t.hidden=true},2200);
+}
+function closeEditors(root){
+  root.querySelectorAll('.wb-review-row.editing').forEach(r=>{
+    const k=r.dataset.k, v=r.dataset.v;
+    r.className='wb-review-row'; r.innerHTML='<div class="k">'+k+'</div><div class="v">'+v+'</div><button class="edit" type="button" aria-label="Edit '+k+'">Edit</button>';
+  });
+}
+document.addEventListener('click',e=>{
+  const edit=e.target.closest('#reviewDemo .edit');
+  if(edit){
+    const root=document.getElementById('reviewDemo'); closeEditors(root);
+    const row=edit.closest('.wb-review-row'); const k=row.querySelector('.k').textContent, v=row.querySelector('.v').textContent;
+    row.dataset.k=k; row.dataset.v=v; row.classList.add('editing');
+    const id='ed-'+k.replace(/\W+/g,'');
+    row.innerHTML='<div class="k"><span>'+k+'</span><span class="wb-pill warning">Editing</span></div><div class="wb-field"><input class="wb-input" id="'+id+'" value="'+v+'" aria-label="'+k+'"><div class="wb-error" hidden>'+I('alert')+'This can’t be empty.</div></div><div class="wb-actions row" style="margin-top:12px"><button class="wb-btn outline sm" type="button" data-act="cancel">Cancel</button><button class="wb-btn primary sm" type="button" data-act="save">Save</button></div>';
+    row.querySelector('input').focus(); return;
+  }
+  const act=e.target.closest('#reviewDemo [data-act]');
+  if(act){
+    const row=act.closest('.wb-review-row');
+    if(act.dataset.act==='cancel'){ closeEditors(document.getElementById('reviewDemo')); return; }
+    const inp=row.querySelector('input'), err=row.querySelector('.wb-error');
+    if(!inp.value.trim()){ inp.classList.add('invalid'); inp.setAttribute('aria-invalid','true'); err.hidden=false; inp.focus(); return; }
+    row.dataset.v=inp.value.trim(); closeEditors(document.getElementById('reviewDemo')); toast('Saved');
+  }
+});
+
+/* ---------- small demos ---------- */
+document.getElementById('chipsDemo').addEventListener('click',e=>{const c=e.target.closest('.wb-chip'); if(!c) return; c.parentElement.querySelectorAll('.wb-chip').forEach(x=>x.classList.toggle('selected',x===c));});
+document.getElementById('qrDemo').addEventListener('click',e=>{const b=e.target.closest('.wb-qr'); if(!b) return; b.parentElement.querySelectorAll('.wb-qr').forEach(x=>{x.disabled=x!==b; if(x===b){x.disabled=false; x.style.opacity=1}});});
+document.getElementById('inEmpty').addEventListener('input',e=>{e.target.parentElement.querySelector('.wb-send').disabled=!e.target.value.trim();});
+
+/* ---------- countdown on the invite card ---------- */
+(function(){
+  let end=Date.now()+ (23*3600+41*60+8)*1000;
+  const p=n=>String(n).padStart(2,'0');
+  setInterval(()=>{const r=Math.max(0,end-Date.now()),h=Math.floor(r/3600000),m=Math.floor(r%3600000/60000),s=Math.floor(r%60000/1000);
+    document.querySelectorAll('.cd-h').forEach(x=>x.textContent=p(h));document.querySelectorAll('.cd-m').forEach(x=>x.textContent=p(m));document.querySelectorAll('.cd-s').forEach(x=>x.textContent=p(s));},1000);
+})();
+
+/* ---------- live chat (phone) + desktop copy ---------- */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clock = ()=>new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+const log = document.getElementById('liveLog');
+const toBottom = el => { el.scrollTop = el.scrollHeight; };
+function userMsg(el,text){ el.insertAdjacentHTML('beforeend','<div class="wb-msg user"><div class="wb-who">You <span class="wb-avatar user">MR</span></div><div class="wb-bubble"></div><span class="wb-time">'+clock()+'</span></div>'); el.lastElementChild.querySelector('.wb-bubble').textContent=text; toBottom(el); }
+const REPLIES = {
+  default:'Happy to help! I can tell you about the campaign, check if a slot is open, or help you register your business. What would you like to do?',
+  slot:'Good news, there’s still a slot open. Slots go to the first 10 suppliers, and each invitation lasts 24 hours. Want me to start your registration?',
+  cost:'The website package is a one-time ₱10,000. That’s the only payment, and you’ll see a full summary before you pay.',
+  what:'You get a ready-to-launch wedding business website, built from the details you give me, delivered by our team after payment.'
+};
+function pick(t){ t=t.toLowerCase(); return /slot|left|open/.test(t)?REPLIES.slot:/cost|price|pay|much/.test(t)?REPLIES.cost:/get|include|website/.test(t)?REPLIES.what:REPLIES.default; }
+function aiReply(el,text,status){
+  const typing=document.createElement('div'); typing.className='wb-msg ai'; typing.innerHTML='<div class="wb-typing" role="status" aria-label="WedWorks Assistant is typing"><i></i><i></i><i></i></div>'; el.appendChild(typing); toBottom(el);
+  if(status) status.textContent='Thinking…';
+  setTimeout(()=>{
+    typing.remove();
+    const m=document.createElement('div'); m.className='wb-msg ai'; m.innerHTML='<div class="wb-who">'+AI+'WedWorks Assistant</div><div class="wb-bubble"></div>'; el.appendChild(m);
+    const b=m.querySelector('.wb-bubble'); const words=text.split(' '); let i=0;
+    const done=()=>{ b.textContent=text; m.insertAdjacentHTML('beforeend','<span class="wb-time">'+clock()+'</span>'); if(status) status.textContent='AI assistant · Online'; toBottom(el); };
+    if(reduce){ done(); return; }
+    const caret=document.createElement('span'); caret.className='wb-caret';
+    const t=setInterval(()=>{ i++; b.textContent=words.slice(0,i).join(' '); b.appendChild(caret); toBottom(el); if(i>=words.length){ clearInterval(t); done(); } },55);
+  }, reduce?0:900);
+}
+function seed(el,withCards){
+  el.insertAdjacentHTML('beforeend',
+    '<div class="wb-day">Today</div>'+
+    '<div class="wb-msg ai"><div class="wb-who">'+AI+'WedWorks Assistant</div><div class="wb-bubble">Hi! I’m the WedWorks AI assistant. Ask me anything about the 10-10-10 Campaign, or tell me about your wedding business.</div><div class="wb-chips" data-chips><button class="wb-chip" type="button">Is there a slot left?</button><button class="wb-chip" type="button">How much does it cost?</button><button class="wb-chip" type="button">What do I get?</button></div><span class="wb-time">10:44 AM</span></div>');
+  if(withCards){
+    el.insertAdjacentHTML('beforeend','<div class="wb-msg user"><div class="wb-who">You <span class="wb-avatar user">MR</span></div><div class="wb-bubble">I’m a caterer in Tagaytay. Can I still join?</div><span class="wb-time">10:45 AM</span></div>');
+    el.insertAdjacentHTML('beforeend', CARDS.invite());
+  }
+}
+seed(log,false);
+seed(document.getElementById('deskLog'),true);
+toBottom(document.getElementById('deskLog'));
+const status=document.getElementById('liveStatus');
+function send(text){ if(!text.trim()) return; log.querySelectorAll('[data-chips]').forEach(c=>c.remove()); userMsg(log,text); aiReply(log,pick(text),status); }
+document.getElementById('liveForm').addEventListener('submit',e=>{e.preventDefault(); const i=document.getElementById('liveInput'); send(i.value); i.value='';});
+log.addEventListener('click',e=>{const c=e.target.closest('.wb-chip'); if(c) send(c.textContent);});
+
+/* ---------- nav ---------- */
+const side=document.getElementById('side'), mb=document.getElementById('menuBtn');
+mb.addEventListener('click',()=>{const o=side.classList.toggle('open'); mb.setAttribute('aria-expanded',o);});
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>{side.classList.remove('open'); mb.setAttribute('aria-expanded','false');}));
+const links=[...document.querySelectorAll('.nav-links a')];
+const io=new IntersectionObserver(es=>{es.forEach(en=>{ if(en.isIntersecting){ links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+en.target.id)); } });},{rootMargin:'-20% 0px -70% 0px'});
+document.querySelectorAll('section[id]').forEach(s=>io.observe(s));
+
+/* ---------- copy tokens ---------- */
+document.getElementById('copyTokens').addEventListener('click',async e=>{
+  const txt=document.getElementById('tokenText').textContent, b=e.currentTarget;
+  try{ await navigator.clipboard.writeText(txt); b.textContent='Copied'; }
+  catch(_){ const r=document.createRange(); r.selectNodeContents(document.getElementById('tokenText')); const s=getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent='Press Ctrl+C to copy'; }
+  setTimeout(()=>b.textContent='Copy tokens',1800);
+});
+</script>
+</body>
+</html>
