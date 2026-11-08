@@ -31,7 +31,7 @@ See repository `docs/DEPLOYMENT.md` for server requirements and layout. Roll bac
 
 ## Question sequence and client delivery release — 2026-11-08
 
-The current ZIP replaces the earlier payment-history package. SHA-256: `53a352d6ee5a3c05fc5c1a8ab42cbf52ba934d3502fb1bb56cc5a44223fe3ff6`; 8,067,211 bytes. Manifest: `assets/app-DligusaQ.js` and `assets/app-COfYSTQW.css`. Archive CRC, exclusions, changed controller, new sequence helper and referenced assets verified.
+The current ZIP replaces the earlier payment-history package. SHA-256: `2c6f1aaffe1d816414565b0570cf49ddee7cb67410ff75c739e35906ed1cc311`; 8,067,608 bytes. Manifest: `assets/app-DligusaQ.js` and `assets/app-COfYSTQW.css`. Archive CRC, exclusions, changed controller, new sequence helper and referenced assets verified.
 
 Validation: 297 PHP tests / 2,870 assertions; 10 frontend sequence tests; 35 shared protocol tests; 35 plugin tests; Vite build passed. Earlier question/delivery changes had no migrations or Composer dependencies. The subsequent live-chat update below adds one migration. Existing production tables must already be migrated. Preserve server .env, APP_KEY, uploads, public/storage and cPanel-generated PHP settings. Never run migrate:fresh or broad seeders on production.
 
@@ -52,3 +52,7 @@ Admin-only live Hermes viewer added. **This release now requires `php artisan mi
 ## Website question data upgrade
 
 Manual question entry is now replaced by an opt-in data migration: **`php artisan migrate --path=database/data-migrations --force`**, followed by `php artisan optimize:clear`. This is separate from the Active Chats schema migration. See docs/website-question-data-upgrade.md. Five tests / 225 assertions verify ordering, original-key preservation, conflict rollback, idempotence, manual additions, submitted-record preservation and snapshot safeguards. ZIP updated/verified; JS/CSS build unchanged.
+
+## Chat database timezone correction
+
+Chat message TIMESTAMP values now use MySQL UNIX_TIMESTAMP for their actual instant instead of interpreting database-local wall time as Laravel-local time. Client send/poll, admin live viewer and Hermes transcript share UTC ISO output; the frontend still shows Philippine time. Bulk reads select the epoch in the same query; a just-created message retrieves its database epoch once. Existing and future database-generated chat messages work with UTC or +08:00 DB sessions. No migration, backfill, database timezone change, or frontend rebuild is required for this correction. Deploy code and clear caches. Validation: reproduced8-hour failure, then 27PHPtests/372assertions and2frontendtests passed, including UTCvsManila session tests and API equivalence. Package files and CRC verified.

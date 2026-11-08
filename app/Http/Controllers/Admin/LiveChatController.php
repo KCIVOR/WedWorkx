@@ -33,8 +33,8 @@ class LiveChatController extends Controller
         $conversation = null;
         if ($selected) {
             $conversation = $this->summary($selected) + [
-                'messages' => $selected->messages()->limit(200)->get()->map(fn ($m) => [
-                    'id' => $m->id, 'role' => $m->role, 'text' => $m->body, 'at' => $m->created_at->toIso8601String(),
+                'messages' => $selected->messages()->withActualTime()->limit(200)->get()->map(fn ($m) => [
+                    'id' => $m->id, 'role' => $m->role, 'text' => $m->body, 'at' => $m->sentAtIso(),
                 ])->values(),
             ];
         }

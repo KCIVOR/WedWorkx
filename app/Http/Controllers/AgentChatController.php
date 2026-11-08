@@ -63,7 +63,7 @@ class AgentChatController extends Controller
             'awaiting' => $chat->waiting_since !== null, // true while the supplier is waiting for Hermes
             'waiting_seconds' => $this->chats->waitingSeconds($chat),
             'timeout' => (int) config('agentchat.reply_timeout'),
-            'messages' => $chat->messages()->where('id', '>', $after)->get()->map(fn ($m) => $this->shape($m))->values(),
+            'messages' => $chat->messages()->withActualTime()->where('id', '>', $after)->get()->map(fn ($m) => $this->shape($m))->values(),
             'answers' => in_array($chat->status, ['review', 'done', 'fallback'], true) ? ($chat->answers ?? (object) []) : null,
         ]);
     }
@@ -112,8 +112,6 @@ class AgentChatController extends Controller
 
     private function shape($m): array
     {
-        // The database supplies created_at; a just-inserted model needs it reloaded.
-        if ($m->created_at === null) $m->refresh();
-        return ['id' => $m->id, 'role' => $m->role, 'text' => $m->body, 'at' => $m->created_at->toIso8601String()];
+        return ['id' => $m->id, 'role' => $m->role, 'text' => $m->body, 'at' => $m->sentAtIso()];
     }
 }

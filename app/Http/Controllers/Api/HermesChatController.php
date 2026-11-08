@@ -116,7 +116,7 @@ class HermesChatController extends Controller
             'questions' => $this->chats->questions($chat),
             'next_question' => $this->chats->unansweredQuestions($chat)[0] ?? null,
             'collected' => $chat->answers ?? (object) [],
-            'transcript' => $chat->messages()->get()->map(fn ($m) => ['id' => $m->id, 'role' => $m->role, 'text' => $m->body, 'at' => $m->created_at->toIso8601String()])->values(),
+            'transcript' => $chat->messages()->withActualTime()->get()->map(fn ($m) => ['id' => $m->id, 'role' => $m->role, 'text' => $m->body, 'at' => $m->sentAtIso()])->values(),
             'uploads' => $chat->supplier ? $chat->supplier->uploads()->get(['kind', 'original_name', 'size_kb'])->map(fn ($u) => ['kind' => $u->kind, 'name' => $u->original_name, 'size_kb' => $u->size_kb])->values() : [],
         ]]);
     }
