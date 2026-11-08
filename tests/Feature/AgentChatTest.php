@@ -157,7 +157,7 @@ class AgentChatTest extends TestCase
         $this->postJson("/api/hermes/chats/$id/messages", ['text' => 'Hi! May I know your name?'], $this->auth())->assertOk();
         $this->assertSame([], $this->listen()); // nothing waits for Hermes now
 
-        $this->postJson("/agent-chat/$id/messages", ['text' => 'Maria Santos'])->assertOk()->assertJsonPath('message.role', 'supplier');
+        $this->postJson("/agent-chat/$id/messages", ['text' => 'Maria Santos'])->assertOk()->assertJsonPath('message.role', 'supplier')->assertJsonStructure(['message' => ['at']]);
         $this->assertCount(1, $this->listen());
 
         $detail = $this->getJson("/api/hermes/chats/$id", $this->auth())->assertOk()->json('data');

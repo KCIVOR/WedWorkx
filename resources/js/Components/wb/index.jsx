@@ -1,4 +1,5 @@
 import { usePage } from '@inertiajs/react';
+import { chatTime } from '../../lib/chatTime';
 /**
  * React versions of the design system's wb-* components
  * (docs/WedWorks_Chatbot_Design_System.html). Values match its CSS one to one,
@@ -88,7 +89,12 @@ function Avatar({ kind, children }) {
     return <span className={`grid h-[28px] w-[28px] flex-none place-items-center rounded-full ${styles}`}>{children}</span>;
 }
 
-export function AiBubble({ children }) {
+function MessageTime({ at }) {
+    const time = chatTime(at);
+    return time ? <time dateTime={time.iso} title={time.title} className="px-[2px] text-[10px] leading-[1.4] text-wb-muted">{time.label}</time> : null;
+}
+
+export function AiBubble({ children, at }) {
     return (
         <div className="grid max-w-[86%] animate-wb-in gap-[6px]">
             <div className="flex items-center gap-s-2 font-display text-[12.5px] font-semibold text-wb-heading">
@@ -98,16 +104,18 @@ export function AiBubble({ children }) {
             <div className="min-w-0 whitespace-pre-line break-words rounded-r-bubble rounded-tl-r-tail border border-wb-ai-line bg-wb-ai-bg px-s-4 py-s-3 text-[14.5px] leading-[1.5] text-wb-ai-text">
                 {children}
             </div>
+            <MessageTime at={at} />
         </div>
     );
 }
 
-export function UserBubble({ children }) {
+export function UserBubble({ children, at }) {
     return (
         <div className="grid max-w-[86%] animate-wb-in justify-items-end gap-[6px] self-end">
             <div className="min-w-0 break-words rounded-r-bubble rounded-tr-r-tail bg-wb-user-bg px-s-4 py-s-3 text-[14.5px] leading-[1.5] text-wb-user-text shadow-sh-user">
                 {children}
             </div>
+            <MessageTime at={at} />
         </div>
     );
 }

@@ -74,6 +74,7 @@ export default function Register({ businessTypes, questions, ai, agent }) {
     const [typing, setTyping] = useState(true);
     // Reworded questions, kept in memory only (never stored). Missing means: show the scripted text.
     const [worded, setWorded] = useState({});
+    const [messageTimes, setMessageTimes] = useState(draft?.messageTimes ?? {});
     const [submitting, setSubmitting] = useState(false);
     const [serverErrors, setServerErrors] = useState({});
     const logRef = useRef(null);
@@ -104,8 +105,8 @@ export default function Register({ businessTypes, questions, ai, agent }) {
 
     // Persist the draft in the browser session until submit.
     useEffect(() => {
-        if (phase !== 'done' && !agentChat.active) saveDraft({ answers, idx, phase, currentKey: phase === 'chat' ? STEPS[idx]?.key : null });
-    }, [answers, idx, phase, agentChat.active]);
+        if (phase !== 'done' && !agentChat.active) saveDraft({ answers, idx, phase, messageTimes, currentKey: phase === 'chat' ? STEPS[idx]?.key : null });
+    }, [answers, idx, phase, messageTimes, agentChat.active]);
 
     // Typing indicator before each question; prefill when editing.
     useEffect(() => {
@@ -129,6 +130,7 @@ export default function Register({ businessTypes, questions, ai, agent }) {
         Promise.all([minimum, wording]).then(([, text]) => {
             if (cancelled) return;
             if (text) setWorded((w) => ({ ...w, [step.key]: text }));
+            setMessageTimes((times) => (times[step.key]?.asked ? times : { ...times, [step.key]: { ...times[step.key], asked: new Date().toISOString() } }));
             setTyping(false);
         });
 
@@ -149,6 +151,7 @@ export default function Register({ businessTypes, questions, ai, agent }) {
         const stored = s.key === 'mobile' ? normalizeMobile(v) : s.key === 'social_link' ? normalizeLink(v) : v;
         const merged = { ...answers, [s.key]: stored };
         setAnswers(merged);
+        setMessageTimes((times) => ({ ...times, [s.key]: { ...times[s.key], answered: new Date().toISOString() } }));
         setServerErrors({});
         if (editIdx !== null) {
             setEditIdx(null);
@@ -196,19 +199,19 @@ export default function Register({ businessTypes, questions, ai, agent }) {
                         <Log logRef={logRef}>
                             {history.map((s) => (
                                 <div key={s.key} className="contents">
-                                    <AiBubble>{questionText(s)}</AiBubble>
-                                    <UserBubble>{display(s, answers) || '(skipped)'}</UserBubble>
+                                    <AiBubble at={messageTimes[s.key]?.asked}>{questionText(s)}</AiBubble>
+                                    <UserBubble at={messageTimes[s.key]?.answered}>{display(s, answers) || '(skipped)'}</UserBubble>
                                 </div>
                             ))}
 
                             {agentChat.active && phase === 'chat' && (
                                 <>
-                                    {agentChat.messages.map((m) => (m.role === 'hermes' ? <AiBubble key={m.id}>{m.text}</AiBubble> : <UserBubble key={m.id}>{m.text}</UserBubble>))}
+                                    {agentChat.messages.map((m) => (m.role === 'hermes' ? <AiBubble key={m.id} at={m.at}>{m.text}</AiBubble> : <UserBubble key={m.id} at={m.at}>{m.text}</UserBubble>))}
                                     {agentChat.waiting && <Typing />}
                                 </>
                             )}
 
-                            {step && (typing ? <Typing /> : <AiBubble>{questionText(step)}</AiBubble>)}
+                            {step && (typing ? <Typing /> : <AiBubble at={messageTimes[step.key]?.asked}>{questionText(step)}</AiBubble>)}
 
                             {phase === 'review' && editIdx === null && (
                                 <Card>

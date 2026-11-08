@@ -108,6 +108,8 @@ class AgentChatController extends Controller
 
     private function shape($m): array
     {
-        return ['id' => $m->id, 'role' => $m->role, 'text' => $m->body];
+        // The database supplies created_at; a just-inserted model needs it reloaded.
+        if ($m->created_at === null) $m->refresh();
+        return ['id' => $m->id, 'role' => $m->role, 'text' => $m->body, 'at' => $m->created_at->toIso8601String()];
     }
 }

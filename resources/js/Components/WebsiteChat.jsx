@@ -228,6 +228,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
     const [typing, setTyping] = useState(true);
     // Reworded questions, kept in memory only (never stored). Missing means: show the scripted text.
     const [worded, setWorded] = useState({});
+    const [messageTimes, setMessageTimes] = useState(draft?.messageTimes ?? {});
     const [error, setError] = useState('');
     const [serverErrors, setServerErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
@@ -256,9 +257,9 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
 
     useEffect(() => {
         if (phase !== 'saved' && !agentChat.active) {
-            try { sessionStorage.setItem(draftKey, JSON.stringify({ answers, idx, phase, currentKey: phase === 'chat' ? questions[idx]?.key : null })); } catch { /* ignore */ }
+            try { sessionStorage.setItem(draftKey, JSON.stringify({ answers, idx, phase, messageTimes, currentKey: phase === 'chat' ? questions[idx]?.key : null })); } catch { /* ignore */ }
         }
-    }, [answers, idx, phase, draftKey, agentChat.active]);
+    }, [answers, idx, phase, messageTimes, draftKey, agentChat.active]);
 
     useEffect(() => {
         if (!q) { setTyping(false); return undefined; }
@@ -276,6 +277,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
         Promise.all([minimum, wording]).then(([, text]) => {
             if (cancelled) return;
             if (text) setWorded((w) => ({ ...w, [q.key]: text }));
+            setMessageTimes((times) => (times[q.key]?.asked ? times : { ...times, [q.key]: { ...times[q.key], asked: new Date().toISOString() } }));
             setTyping(false);
         });
 
@@ -291,6 +293,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
     function commit(patch) {
         const merged = { ...answers, ...patch };
         setAnswers(merged);
+        setMessageTimes((times) => ({ ...times, [q.key]: { ...times[q.key], answered: new Date().toISOString() } }));
         setServerErrors({});
         if (editIdx !== null) {
             setEditIdx(null);
@@ -426,19 +429,19 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
 
                 {history.map((h) => (
                     <div key={h.key} className="contents">
-                        <AiBubble>{worded[h.key] ?? h.text}</AiBubble>
-                        <UserBubble>{summarize(h, answers, uploads) || '(skipped)'}</UserBubble>
+                        <AiBubble at={messageTimes[h.key]?.asked}>{worded[h.key] ?? h.text}</AiBubble>
+                        <UserBubble at={messageTimes[h.key]?.answered}>{summarize(h, answers, uploads) || '(skipped)'}</UserBubble>
                     </div>
                 ))}
 
                 {agentChat.active && phase === 'chat' && (
                     <>
-                        {agentChat.messages.map((m) => (m.role === 'hermes' ? <AiBubble key={m.id}>{m.text}</AiBubble> : <UserBubble key={m.id}>{m.text}</UserBubble>))}
+                        {agentChat.messages.map((m) => (m.role === 'hermes' ? <AiBubble key={m.id} at={m.at}>{m.text}</AiBubble> : <UserBubble key={m.id} at={m.at}>{m.text}</UserBubble>))}
                         {agentChat.waiting && <Typing />}
                     </>
                 )}
 
-                {q && (typing ? <Typing /> : <AiBubble>{worded[q.key] ?? q.text}</AiBubble>)}
+                {q && (typing ? <Typing /> : <AiBubble at={messageTimes[q.key]?.asked}>{worded[q.key] ?? q.text}</AiBubble>)}
 
                 {phase === 'review' && editIdx === null && (
                     <Card>
