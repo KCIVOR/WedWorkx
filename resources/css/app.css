@@ -95,6 +95,8 @@ a { color: inherit; text-decoration: none; }
 code, pre { font-family: var(--font-mono); }
 button { font-family: inherit; }
 :focus-visible { outline: 2px solid var(--blue-600); outline-offset: 2px; }
+/* The message composer already highlights its outer container on focus. */
+.wb-chat-input:focus-visible { outline: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

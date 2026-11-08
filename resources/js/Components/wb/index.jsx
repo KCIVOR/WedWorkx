@@ -198,7 +198,7 @@ export function InputBar({ value, onChange, onSubmit, placeholder, type = 'text'
                 aria-label={label || placeholder}
                 disabled={disabled}
                 autoFocus
-                className="h-[38px] min-w-0 flex-1 border-0 bg-transparent font-[inherit] text-[14.5px] text-wb-heading outline-none placeholder:text-wb-placeholder"
+                className="wb-chat-input h-[38px] min-w-0 flex-1 border-0 bg-transparent font-[inherit] text-[14.5px] text-wb-heading outline-none placeholder:text-wb-placeholder"
             />
             {onAttach && (
                 <button
