@@ -332,6 +332,38 @@ class AgentChatTest extends TestCase
 
     // ---------- limits and access ----------
 
+    public function test_default_message_budget_supports_the_expanded_intake(): void
+    {
+        $this->assertGreaterThanOrEqual(500, config('agentchat.max_messages'));
+    }
+
+    public function test_full_chat_returns_collected_answers_and_stops_waiting_without_saving_rejected_message(): void
+    {
+        $id = $this->startWebsite($this->supplier());
+        $chat = AgentChat::where('public_id', $id)->firstOrFail();
+        $answers = ['description' => 'We photograph weddings in Tagaytay.'];
+        $chat->update(['answers' => $answers]);
+        config(['agentchat.max_messages' => 1]);
+        $this->postJson("/agent-chat/$id/messages", ['text' => 'first'])->assertOk();
+        $this->postJson("/agent-chat/$id/messages", ['text' => 'unsent'])->assertStatus(422)
+            ->assertJsonPath('error', 'chat_full')->assertJsonPath('fallback', true)
+            ->assertJsonPath('answers.description', $answers['description']);
+        $this->assertSame(1, $chat->messages()->count());
+        $this->assertSame($answers, $chat->fresh()->answers);
+        $this->getJson("/agent-chat/$id")->assertOk()->assertJsonPath('status', 'fallback')->assertJsonPath('awaiting', false);
+    }
+
+    public function test_reloading_an_open_eighty_message_chat_can_continue_the_same_session(): void
+    {
+        $supplier = $this->supplier();
+        $id = $this->startWebsite($supplier);
+        $chat = AgentChat::where('public_id', $id)->firstOrFail();
+        $chat->messages()->createMany(array_fill(0, 80, ['role' => 'hermes', 'body' => 'Earlier conversation']));
+        $this->assertSame($id, $this->startWebsite($supplier));
+        $this->postJson("/agent-chat/$id/messages", ['text' => 'Continue after refreshing'])->assertOk();
+        $this->assertSame(81, $chat->messages()->count());
+    }
+
     public function test_message_limits_and_unknown_chats(): void
     {
         $id = $this->startRegistration();

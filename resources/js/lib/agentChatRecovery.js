@@ -6,6 +6,12 @@ export function replyTimedOut(waitingSeconds, timeout) {
     return waitingSeconds >= timeout + 15;
 }
 
+export function fullChatAnswers(response, accepted = {}) {
+    if (response?.status !== 422 || response.json?.error !== 'chat_full') return null;
+    const answers = response.json.answers;
+    return answers && typeof answers === 'object' && !Array.isArray(answers) ? answers : accepted;
+}
+
 export function isChatPoll(data) {
     return !!data && ['open', 'review', 'done', 'fallback'].includes(data.status)
         && Array.isArray(data.messages) && data.messages.every((m) => m && Number.isInteger(m.id)

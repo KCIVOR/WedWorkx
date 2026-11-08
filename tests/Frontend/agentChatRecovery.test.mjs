@@ -1,6 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { shouldStartAgent, replyTimedOut, isChatPoll } from '../../resources/js/lib/agentChatRecovery.js';
+import { shouldStartAgent, replyTimedOut, isChatPoll, fullChatAnswers } from '../../resources/js/lib/agentChatRecovery.js';
+
+test('a full chat recovers server answers or the last accepted answers without treating other validation errors as completion', () => {
+    const accepted = { description: 'Already collected' };
+    assert.deepEqual(fullChatAnswers({ status: 422, json: { error: 'chat_full', answers: { description: 'Latest server value' } } }, accepted), { description: 'Latest server value' });
+    assert.deepEqual(fullChatAnswers({ status: 422, json: { error: 'chat_full' } }, accepted), accepted);
+    assert.equal(fullChatAnswers({ status: 422, json: { errors: { text: ['Too long'] } } }, accepted), null);
+    assert.equal(fullChatAnswers({ status: 500, json: { error: 'chat_full' } }, accepted), null);
+});
 
 test('server-resumable chat takes precedence over an old fixed-questionnaire draft', () => {
     assert.equal(shouldStartAgent({ enabled: true, resume: true }, { draft: { answers: {} } }), true);

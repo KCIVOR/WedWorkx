@@ -21,7 +21,7 @@ return [
     // again within this many seconds; after that another consumer may take over.
     'lease_seconds' => (int) env('AGENT_CHAT_LEASE_SECONDS', 30),
 
-    'max_messages' => 80,
+    'max_messages' => 500, // Supplier and Hermes messages together; guided intake has conditional follow-ups.
     'max_length' => 1000,
     'website_max_length' => 5000, // allows supplied policy text within the intake's per-field limits
 

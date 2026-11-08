@@ -421,6 +421,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName, re
         <Shell>
             <Header title="WedWorks Assistant" />
             <Log logRef={logRef}>
+                {agentChat.notice && <p role="status" className="text-sm text-wb-muted">{agentChat.notice}</p>}
                 {!!agent?.enabled && !saved && !agentChat.active && phase === 'chat' && (
                     <div><Button variant="outline" onClick={() => agentChat.retry()}>Try AI chat</Button></div>
                 )}

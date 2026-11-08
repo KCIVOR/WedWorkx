@@ -7,7 +7,7 @@ Download `wedworks-cpanel.zip` using GitHub's **Download raw file** button. This
 1. Back up the current application files and database. Record the current release so it can be restored. Preserve the server `.env` and all existing `storage` contents, including uploads and sessions; never upload a local database or credentials.
 2. In cPanel File Manager, enable **Show Hidden Files**. Upload and extract the ZIP into a temporary directory outside `public_html`. Confirm `public/.htaccess`, `vendor/autoload.php`, and `public/build/manifest.json` exist. Do not expose the archive or application root publicly.
 3. During a maintenance window, release the application files and production `vendor` together. Preserve the server `.env` and existing `storage`; the archive's storage files are empty-directory placeholders only. Retain a backup and old hashed public assets while existing browser sessions reload.
-4. Release the new controller, routes, React source, navigation, manifest, and new asset files together. The manifest must reference `assets/app-nlXeVLA3.js` and `assets/app-CAL_vLB7.css`, both present under `public/build`. Remove `public/hot` if present; it points browsers at a development server. Preserve the existing public storage link.
+4. Release the new controller, routes, React source, navigation, manifest, and new asset files together. The manifest must reference `assets/app-R2Hp26Qq.js` and `assets/app-CAL_vLB7.css`, both present under `public/build`. Remove `public/hot` if present; it points browsers at a development server. Preserve the existing public storage link.
 5. Keep the domain document root at `/home/YOURUSER/wedworks/public` (substitute the actual app path). Confirm writable Laravel storage/cache directories. Never upload Windows-generated config, route, or compiled-view caches. Package discovery files `bootstrap/cache/packages.php` and `services.php` are included.
 6. If the server has stale route/config/view caches, have hosting support clear them or use a controlled **one-time** cPanel Cron Job running the host's verified PHP binary and `artisan optimize:clear` in the actual application directory. Send output to a private log outside the document root, inspect success, then remove the cron job and temporary log. Use the PHP binary selected for this domain. Do not add a public cache-clearing URL. Preserve the existing scheduler cron.
 7. Sign out and confirm Payment History redirects to login; sign in and verify the page, filters, pagination, and supplier link against existing hosted rows. Compare read-only payment counts/statuses before and after. No migration, seed, backfill, test database, or live payment is required for this feature.
@@ -31,7 +31,7 @@ See repository `docs/DEPLOYMENT.md` for server requirements and layout. Roll bac
 
 ## Question sequence and client delivery release — 2026-11-08
 
-The current ZIP replaces the earlier payment-history package. SHA-256: `4b3d551fefa2d6a3991b255bcd217a4c96af1804148fe742fdb7e2ac1dbc9d83`; 8,071,686 bytes. Manifest: `assets/app-nlXeVLA3.js` and `assets/app-CAL_vLB7.css`. Archive CRC, exclusions, changed controller, new sequence helper and referenced assets verified.
+The current ZIP replaces the earlier payment-history package. SHA-256: `4b3d551fefa2d6a3991b255bcd217a4c96af1804148fe742fdb7e2ac1dbc9d83`; 8,071,686 bytes. Manifest: `assets/app-R2Hp26Qq.js` and `assets/app-CAL_vLB7.css`. Archive CRC, exclusions, changed controller, new sequence helper and referenced assets verified.
 
 Validation: 297 PHP tests / 2,870 assertions; 10 frontend sequence tests; 35 shared protocol tests; 35 plugin tests; Vite build passed. Earlier question/delivery changes had no migrations or Composer dependencies. The subsequent live-chat update below adds one migration. Existing production tables must already be migrated. Preserve server .env, APP_KEY, uploads, public/storage and cPanel-generated PHP settings. Never run migrate:fresh or broad seeders on production.
 
@@ -70,3 +70,9 @@ Pending sends now synchronously lock the client submit handler and disable the c
 This release requires both schema and opt-in data migrations: `php artisan migrate --force`, then `php artisan migrate --path=database/data-migrations --force`, then `php artisan optimize:clear`. Back up first. See [intake rollout notes](../docs/website-intake-v2-release.md). Existing submitted snapshots and business records are preserved. There are 42 definitions, 20 main steps per supplier type. Refresh the installed Mac Hermes protocol and restart its gateway before testing the new guided questions. No AI build or publishing automation is included.
 
 Verified package SHA-256: `4f1134f445ed8febb95e8f259b93617ac73163c3d2211dfbd7dd96b281374a0a`; 8089897 bytes. Matching catalog, migrations, sources, frontend manifest/assets and ZIP integrity verified.
+
+## Full chat recovery — November 9, 2026
+
+Raised the combined message budget from 80 to 500 for the expanded intake. Full chats now preserve collected answers and continue through the fixed questionnaire with a notice, rather than silently rejecting sends. Pull backend/config and matching compiled assets, then clear Laravel caches. No migration or Mac plugin refresh is needed for this fix. See [recovery notes](../docs/chat-capacity-recovery.md).
+
+Current package SHA-256: 187604c4b8afc09f5e8ee0e06050c9791f79bb4083f9463577427623eb1cf9d6; 8090587 bytes. CRC, catalog/migrations and compiled asset matching verified.

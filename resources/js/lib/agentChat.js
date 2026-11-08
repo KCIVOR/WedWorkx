@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { isChatPoll, replyTimedOut } from './agentChatRecovery';
+import { isChatPoll, replyTimedOut, fullChatAnswers } from './agentChatRecovery';
 import { createSendGate, mergeMessages, newSendId } from './chatSend';
 
 /**
@@ -50,6 +50,7 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
     const [widget, setWidget] = useState(null);
     const [waiting, setWaiting] = useState(true);
     const [sending, setSending] = useState(false);
+    const [notice, setNotice] = useState('');
     const sendGate = useRef(createSendGate());
     const pendingSend = useRef(null);
     const chatId = useRef(null);
@@ -139,6 +140,13 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
                 pendingSend.current = { chat: id, text: trimmed, requestId: newSendId() };
             }
             const r = await call('POST', `/agent-chat/${id}/messages`, { text: trimmed, request_id: pendingSend.current.requestId });
+            const recovered = fullChatAnswers(r, accepted.current);
+            if (recovered !== null && chatId.current === id) {
+                pendingSend.current = null;
+                setNotice('Please continue with the questions below. Your collected answers have been kept; your last message was not sent.');
+                finish('fallback', recovered);
+                return false;
+            }
             if (!r.ok || !r.json?.message || chatId.current !== id) return false;
             // Only polling advances the cursor, so a late POST cannot hide an earlier bot reply.
             setMessages((m) => mergeMessages(m, [r.json.message]));
@@ -150,7 +158,7 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
             sendGate.current.release();
             setSending(false);
         }
-    }, []);
+    }, [finish]);
 
     /** The supplier confirmed on the review card. */
     const complete = useCallback(() => {
@@ -160,6 +168,7 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const retry = () => {
+        setNotice('');
         lastId.current = 0;
         failures.current = 0;
         accepted.current = {}; // Keep corrected fixed-form answers in the page; do not replay an older agent cache.
@@ -167,5 +176,5 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
         setWaiting(true);
         setActive(true);
     };
-    return { active, messages, widget, waiting, sending, send, complete, retry };
+    return { active, messages, widget, waiting, sending, notice, send, complete, retry };
 }

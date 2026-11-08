@@ -68,7 +68,11 @@ class AgentChatController extends Controller
                 }
             }
             if ($chat->messages()->count() >= (int) config('agentchat.max_messages')) {
-                return response()->json(['error' => 'chat_full', 'message' => 'This chat is full.'], 422);
+                $chat->update(['status' => 'fallback', 'waiting_since' => null, 'widget' => null]);
+                return response()->json([
+                    'error' => 'chat_full', 'message' => 'Please continue with the questions below. Your collected answers have been kept; your last message was not sent.',
+                    'fallback' => true, 'answers' => $chat->answers ?? (object) [],
+                ], 422);
             }
             $message = $this->chats->supplierMessage($chat, $text);
             if ($key) Cache::put($key, $message->id, 86400);
