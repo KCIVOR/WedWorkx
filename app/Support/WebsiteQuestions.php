@@ -65,7 +65,7 @@ final class WebsiteQuestions
                     $v = collect($q['options'] ?? [])->firstWhere('value', $v)['label'] ?? $v;
                 }
                 if ($field === 'services' && is_array($v)) {
-                    $v = collect($v)->map(fn ($s) => trim(($s['name'] ?? '').(! empty($s['price']) ? ' ('.$s['price'].')' : '')))->implode(', ');
+                    $v = collect($v)->map(fn ($s) => trim(($s['name'] ?? '').(! empty($s['price']) ? ' ('.$s['price'].')' : '').(! empty($s['details']) ? ': '.$s['details'] : '')))->implode(', ');
                 } elseif (is_array($v)) {
                     $v = implode(', ', $v);
                 }

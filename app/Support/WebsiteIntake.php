@@ -7,6 +7,15 @@ use Illuminate\Validation\Rule;
 
 final class WebsiteIntake
 {
+    private static function publicPhoneRule(): \Closure
+    {
+        return function ($attribute, $value, $fail) {
+            if (! is_string($value) || PhoneNumber::normalizePublic($value) === null) {
+                $fail('Please provide the complete phone number, including country or area code. Masked or incomplete numbers cannot be used.');
+            }
+        };
+    }
+
     public static function fields(array $question): array
     {
         return $question['intake']['fields'] ?? [];
@@ -33,7 +42,10 @@ final class WebsiteIntake
         $rules = [];
         foreach (self::fields($question) as $field) {
             $key = $field['key'];
-            if (! in_array($key, $active, true)) { $rules[$key] = ['nullable']; continue; }
+            if (! in_array($key, $active, true)) {
+                $rules[$key] = $key === 'public_phone' ? ['nullable', 'string', self::publicPhoneRule()] : ['nullable'];
+                continue;
+            }
             $need = ($field['required'] ?? false) ? 'required' : 'present';
             $max = $field['max'] ?? 1000;
             switch ($field['type']) {
@@ -41,7 +53,8 @@ final class WebsiteIntake
                 case 'services':
                     $rules[$key] = [$need, 'array', 'max:20'];
                     $rules[$key.'.*.name'] = ['required', 'string', 'max:120'];
-                    $rules[$key.'.*.price'] = ['nullable', 'string', 'max:40']; break;
+                    $rules[$key.'.*.price'] = ['nullable', 'string', 'max:40'];
+                    $rules[$key.'.*.details'] = ['nullable', 'string', 'max:2000']; break;
                 case 'areas':
                     $rules[$key] = [$need, 'array', 'max:20'];
                     $rules[$key.'.*'] = ['required', 'string', 'max:80']; break;
@@ -57,6 +70,7 @@ final class WebsiteIntake
                     if ($field['type'] === 'email') $rules[$key][] = 'email:rfc';
                     if ($field['type'] === 'url') $rules[$key][] = 'url:http,https';
                     if ($key === 'description') $rules[$key][] = 'min:5';
+                    if ($key === 'public_phone') $rules[$key][] = self::publicPhoneRule();
             }
         }
         foreach ($rules as $key => &$rule) {
@@ -78,11 +92,12 @@ final class WebsiteIntake
             $value = $input[$key];
             if (is_string($value)) $value = trim($value);
             if ($value === '') $value = null;
+            if ($key === 'public_phone' && is_string($value)) $value = PhoneNumber::normalizePublic($value) ?? $value;
             if (is_array($value) && $field['type'] === 'areas') $value = array_values(array_filter(array_map(fn ($v) => is_string($v) ? trim($v) : $v, $value), fn ($v) => $v !== ''));
             if (is_array($value) && $field['type'] === 'services') {
                 $value = collect($value)
                     ->filter(fn ($s) => is_array($s) && is_string($s['name'] ?? null) && trim($s['name']) !== '')
-                    ->map(fn ($s) => ['name' => trim($s['name']), 'price' => is_string($s['price'] ?? null) ? trim($s['price']) : ($s['price'] ?? '')])
+                    ->map(fn ($s) => ['name' => trim($s['name']), 'price' => is_string($s['price'] ?? null) ? trim($s['price']) : ($s['price'] ?? '')] + (array_key_exists('details', $s) ? ['details' => is_string($s['details']) ? trim($s['details']) : $s['details']] : []))
                     ->values()->all();
             }
             $out[$key] = $value;

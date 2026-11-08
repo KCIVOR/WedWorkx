@@ -1,11 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { visibleIntakeFields, intakeComplete, intakeIssue, intakeStartIndex, normalizeIntakePatch, reusableContactValue } from '../../resources/js/lib/websiteIntake.js';
+import { visibleIntakeFields, intakeComplete, intakeIssue, intakeStartIndex, normalizeIntakePatch, reusableContactValue, normalizePublicPhone } from '../../resources/js/lib/websiteIntake.js';
 import { firstUnansweredIndex } from '../../resources/js/lib/questionSequence.js';
 import { summarize } from '../../resources/js/lib/summarize.js';
 const catalog = JSON.parse(fs.readFileSync(new URL('../../database/data/website-intake-v2.json', import.meta.url)));
 const q = (key) => { const row = catalog.find((r) => r.key === key); return { ...row, intake: row.intake_schema }; };
+
+test('public phones reject masked and incomplete digits but accept complete mobile and landline contacts', () => {
+    const field = {key:'public_phone',type:'text',required:false};
+    for (const phone of ['+639**3154','+6393154','1234']) assert.ok(intakeIssue(field, phone));
+    for (const phone of ['0917 123 4567','+639171234567','02 8123 4567','+14155552671']) assert.equal(intakeIssue(field, phone),null);
+    assert.equal(normalizePublicPhone('0917 123 4567'),'+639171234567');
+    assert.equal(intakeIssue(field,null),null);
+});
+
+test('guided service summaries preserve package inclusions', () => {
+    const text = summarize(q('services'),{services_status:'now',services:[{name:'Essential',price:'',details:'Eight hours and an album.'}]});
+    assert.ok(text.includes('Eight hours and an album.'));
+});
 
 test('guided draft resumes the saved unsent subfield rather than skipping typed text', () => {
     const question = q('description');

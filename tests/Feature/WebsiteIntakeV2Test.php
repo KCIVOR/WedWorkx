@@ -23,6 +23,40 @@ class WebsiteIntakeV2Test extends TestCase
     use RefreshDatabase;
     private int $sequence = 0;
 
+    public function test_invalid_agent_phone_never_replaces_a_valid_collected_contact(): void
+    {
+        $this->upgrade();
+        $s = $this->supplier();
+        $chat = AgentChat::create(['public_id' => Str::random(40), 'bot' => 'website', 'supplier_id' => $s->id, 'status' => 'open',
+            'answers' => ['public_contact_mode' => 'different', 'public_contact_permission' => 'approved', 'public_phone' => '+639171234567']]);
+        $result = app(AgentChatService::class)->checkAnswers($chat, ['public_phone' => '+6393154', 'colors' => 'gold']);
+        $this->assertArrayHasKey('public_phone', $result['errors']);
+        $this->assertSame('+639171234567', $chat->fresh()->answers['public_phone']);
+        $this->assertSame('gold', $chat->fresh()->answers['colors']);
+    }
+
+    public function test_guided_services_keep_supplied_package_inclusions(): void
+    {
+        $this->upgrade();
+        $normalized = WebsiteQuestions::normalize(['services' => [['name' => 'Essential', 'details' => 'Eight hours of photography and an album.']]], WebsiteQuestions::for('photographer', ''), true);
+        $this->assertSame('Eight hours of photography and an album.', $normalized['services'][0]['details']);
+    }
+
+    public function test_public_phone_rejects_masked_and_incomplete_numbers_and_normalizes_real_input(): void
+    {
+        $this->upgrade();
+        $s = $this->supplier();
+        $base = array_merge($this->answers($s), ['public_contact_mode' => 'different', 'public_contact_permission' => 'approved',
+            'public_email' => null, 'public_socials' => null, 'public_address_mode' => 'none']);
+        foreach (['+639**3154', '+6393154', '1234', 'not a number'] as $phone) {
+            $input = array_merge($base, ['public_phone' => $phone]);
+            $this->assertTrue(Validator::make($input, WebsiteQuestions::rules($s->business_type, $input, $s))->fails(), $phone);
+        }
+        $normalized = WebsiteQuestions::normalize(array_merge($base, ['public_phone' => '0917 123 4567']), WebsiteQuestions::for($s->business_type, ''), false);
+        $this->assertSame('+639171234567', $normalized['public_phone']);
+        $this->assertFalse(Validator::make($normalized, WebsiteQuestions::rules($s->business_type, $normalized, $s))->fails());
+    }
+
     protected function setUp(): void
     {
         parent::setUp();

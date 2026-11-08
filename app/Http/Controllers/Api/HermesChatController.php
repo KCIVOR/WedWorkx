@@ -175,7 +175,7 @@ class HermesChatController extends Controller
         return [
             'first_name' => explode(' ', trim($s->name))[0],
             'business_name' => $s->business_name,
-            'registration_contacts_for_explicit_review_only' => ['email' => $s->email, 'phone' => $s->mobile, 'socials' => $s->social_link, 'location' => $s->location],
+            'registration_contacts_for_explicit_review_only' => ['email' => $s->email, 'phone' => $s->mobile, 'socials' => $s->social_link, 'location' => trim($s->city.', '.$s->province, ', ')],
             'business_type' => $s->business_type,
             'business_type_label' => BusinessTypes::ALL[$s->business_type] ?? $s->business_type,
         ];

@@ -1,5 +1,12 @@
 export const intakeFields = (q) => q?.intake?.version === 1 ? q.intake.fields ?? [] : [];
 export const emptyIntakeValue = (f) => ['services', 'areas', 'uploads'].includes(f.type) ? [] : null;
+export function normalizePublicPhone(value) {
+    let v = String(value ?? '').replace(/[\s\-().]/g, '');
+    if (/^0[1-9]\d{8,9}$/.test(v)) v = '+63' + v.slice(1);
+    if (!/^\+[1-9]\d{7,14}$/.test(v)) return null;
+    if (v.startsWith('+63') && !/^\+63(?:9\d{9}|[2-8]\d{8,9})$/.test(v)) return null;
+    return v;
+}
 export function visibleIntakeFields(q, answers = {}) {
     const fields = intakeFields(q);
     const visible = (f, seen = new Set()) => {
@@ -17,11 +24,13 @@ export function intakeIssue(f, value) {
         if (!Array.isArray(value)) return 'Please add a valid list.';
         if (['services', 'areas'].includes(f.type) && value.length > 20) return 'Please add no more than 20 items.';
         if (f.type === 'services' && value.some((s) => !s || typeof s.name !== 'string' || !s.name.trim() || typeof s.price !== 'string' || s.name.length > 120 || s.price.length > 40)) return 'Please give each service a name and a valid price or leave its price blank.';
+        if (f.type === 'services' && value.some((s) => s.details != null && (typeof s.details !== 'string' || s.details.length > 2000))) return 'Please keep each service description within 2000 characters.';
         if (f.type === 'areas' && value.some((s) => typeof s !== 'string' || !s.trim() || s.length > 80)) return 'Please enter valid service areas.';
         if (f.type === 'uploads' && value.some((id) => !Number.isInteger(id) || id < 1)) return 'Please upload your photos first.';
         return null;
     }
     if (typeof value !== 'string' || !value.trim()) return 'Please enter an answer.';
+    if (f.key === 'public_phone' && !normalizePublicPhone(value)) return 'Please provide the complete phone number, including country or area code. Masked or incomplete numbers cannot be used.';
     if (f.key === 'description' && value.trim().length < 5) return 'Please add a little more detail about your business.';
     if (f.max && value.length > f.max) return `Please use no more than ${f.max} characters.`;
     if (f.type === 'choice' && !f.options?.some((o) => o.value === value)) return 'Please choose one of the available options.';

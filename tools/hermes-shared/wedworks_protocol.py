@@ -38,6 +38,9 @@ Hard rules:
 - Ask only the questions listed, strictly in the configured order. Always ask the earliest unanswered question. If the supplier volunteers later answers, accept them, then return to the earliest unanswered question; do not regroup topics or jump ahead.
 - Offer optional questions in order too. Only skip one when the supplier explicitly asks to skip it. Only put an answer in "answers" when the supplier actually gave it. Never invent or guess answers. Record an explicit optional skip as an empty string for text fields or an empty list for list fields; include every field of a multi-field question.
 - Send each answer under its field name, in the format given in "how_to_answer". For choices, send the option's value.
+- Corrections: acknowledge a newly supplied correction once, then move on. Accepted answers are authoritative; never repeatedly announce earlier corrections. Do not resend old contact values on unrelated turns. Never reconstruct missing digits from a masked number.
+- When reusing registration contacts, show the actual complete value and ask permission for that specific value before recording it. A generic yes to "your registered number" is not enough. If a number is incomplete, ask for the complete number or offer to skip the optional public contact.
+- Use only exact choice values from the current field schema. Match clear wording to a listed option; use the listed suggest/help option when the supplier asks the team to choose. Do not invent values such as personal when the value is warm. Service rows contain name, price (empty if unspecified), and optional details for supplied inclusions; never silently discard inclusions. Service areas must be an array of strings. Fix your own formatting mistakes from the supplier's existing answer without making them repeat it or describing internal system errors.
 - Preserve the complete digits of contact numbers in "answers". Never mask, redact, abbreviate or replace digits with asterisks. A Philippine number such as 09171234567 becomes +639171234567. Do not ask the supplier to correct a number that you masked yourself.
 
 Reply with ONLY one JSON object and nothing else:
@@ -165,6 +168,71 @@ def problem_notice(problem):
 
 # ------------------------------------------------------------------ applying the plan to the system
 
+def _public_phone(value):
+    raw = re.sub(r'[\s\-().]', '', str(value or ''))
+    if re.fullmatch(r'0[1-9][0-9]{8,9}', raw):
+        raw = '+63' + raw[1:]
+    if not re.fullmatch(r'\+[1-9][0-9]{7,14}', raw):
+        return None
+    if raw.startswith('+63') and not re.fullmatch(r'\+63(?:9[0-9]{9}|[2-8][0-9]{8,9})', raw):
+        return None
+    return raw
+
+
+def _guard_contacts(current, answers):
+    """A model cannot replay old contacts or turn redacted digits into new contact data."""
+    transcript = current.get('transcript', [])
+    latest = transcript[-1] if transcript else {}
+    text = latest.get('text', '') if latest.get('role') == 'supplier' else ''
+    previous = next((m.get('text', '') for m in reversed(transcript[:-1]) if m.get('role') == 'hermes'), '')
+    collected = current.get('collected', {})
+    contacts = (current.get('supplier') or {}).get('registration_contacts_for_explicit_review_only', {})
+    fields = {'public_phone': 'phone', 'public_email': 'email', 'public_socials': 'socials', 'public_address': 'location'}
+    if current.get('bot') == 'registration':
+        fields = {'mobile': 'phone'}
+    rejected = []
+    compact = lambda v: re.sub(r'\s+', ' ', str(v or '')).strip().casefold()
+    for key, source_key in fields.items():
+        if key not in answers:
+            continue
+        value = answers[key]
+        phone = key in ('mobile', 'public_phone')
+        # Use only an unambiguous full number actually present in this supplier turn.
+        numbers = list(dict.fromkeys(filter(None, (_public_phone(v) for v in re.findall(r'(?:\+|0)[0-9][0-9 ().\-]*[0-9]', text))))) if phone else []
+        if len(numbers) == 1:
+            answers[key] = numbers[0]
+            continue
+        normalized = _public_phone(value) if phone else compact(value)
+        supplied = not phone and bool(normalized) and normalized in compact(text)
+        registered = contacts.get(source_key)
+        reusable = collected.get('public_contact_mode') == 'reuse' and bool(registered)
+        same = normalized == (_public_phone(registered) if phone else compact(registered))
+        shown = bool(registered) and compact(registered) in compact(previous)
+        approved = bool(re.fullmatch(r'(?:yes|yes please|yes, please|use this|use this detail|confirmed|confirm|oo|opo)[.! ]*', text.strip(), re.I))
+        skipped = value in (None, '') and bool(re.fullmatch(r'(?:skip|no|none)[.! ]*', text.strip(), re.I)) and key == _next_field(current).get('key')
+        if supplied or (reusable and same and shown and approved) or skipped:
+            continue
+        answers.pop(key)
+        rejected.append(key)
+    return rejected
+
+
+def _next_field(current):
+    question = current.get('next_question') or {}
+    fields = question.get('intake', {}).get('fields', [])
+    collected = current.get('collected', {})
+    by_key = {f['key']: f for f in fields}
+    def visible(f, seen=()):
+        condition = f.get('when')
+        if not condition:
+            return True
+        key = condition['field']
+        return key not in seen and collected.get(key) in condition.get('in', []) and (key not in by_key or visible(by_key[key], seen + (key,)))
+    for field in fields:
+        if visible(field) and (field['key'] not in collected or (field['key'] == 'public_phone' and collected[field['key']] and not _public_phone(collected[field['key']]))):
+            return field
+    return {'key': next((key for key in question.get('fields', []) if key not in collected), None), 'prompt': question.get('text')}
+
 def apply_plan(api, chat_id, plan, snapshot_id, final=False):
     """
     Sends the plan to the system. Returns an Outcome:
@@ -183,6 +251,12 @@ def apply_plan(api, chat_id, plan, snapshot_id, final=False):
     # Only a whole-message number is unambiguous; Laravel still validates it.
     current = body['data']
     answers = dict(plan['answers'])
+    blocked_contacts = _guard_contacts(current, answers)
+    claims_phone_update = re.search(r'(?:\b(?:corrected|updated|recorded|set|saved)\b[^.!?\n]{0,70}\b(?:phone|mobile|number)\b|\b(?:phone|mobile)(?: number)?\b[^.!?\n]{0,70}\b(?:corrected|updated|recorded|set|saved)\b)', plan['reply'], re.I)
+    if claims_phone_update and not any(key in answers for key in ('mobile', 'public_phone')):
+        blocked_contacts.append('repeated phone acknowledgment')
+    if blocked_contacts and not final:
+        return Outcome('problem', 'Contact update has no support in the latest supplier message: ' + ', '.join(blocked_contacts) + '. Keep accepted contacts unchanged. Do not mention an old correction. If reusing a contact, show the complete actual registered value and ask approval first. Return only answers from the latest supplier message and continue the earliest unanswered field.')
     next_question = current.get('next_question') or {}
     if current.get('bot') == 'registration' and (
         'mobile' in answers or 'mobile' in next_question.get('fields', [])
@@ -199,8 +273,10 @@ def apply_plan(api, chat_id, plan, snapshot_id, final=False):
         s, r = api('POST', base + '/answers', {'answers': answers})
         if s == 200 and r.get('errors'):
             problem = 'These answers were refused: ' + json.dumps(r['errors'], ensure_ascii=False)
+        elif s != 200:
+            problem = 'The answer update was not accepted. Keep existing answers and do not claim the update was saved.'
 
-    if plan['ready'] and not problem:
+    if plan['ready'] and not problem and not blocked_contacts:
         s, r = api('POST', base + '/ready')
         if s == 409:
             problem = 'Not ready yet. Questions needing an answer or explicit optional skip: ' + json.dumps(r.get('missing', []), ensure_ascii=False)
@@ -209,7 +285,12 @@ def apply_plan(api, chat_id, plan, snapshot_id, final=False):
         return Outcome('problem', problem)
 
     out = {'text': plan['reply']}
-    if plan['widget']:
+    if blocked_contacts or problem:
+        # Do not publish a fabricated correction even if the model repeats it on the last retry.
+        _, refreshed = api('GET', base)
+        field = _next_field(refreshed.get('data', {}))
+        out['text'] = field.get('prompt') or 'Please provide or confirm the complete contact detail you want to use. Your previously collected contact details have not been changed.'
+    if plan['widget'] and not blocked_contacts:
         out['widget'] = plan['widget']
     s, _ = api('POST', base + '/messages', out)
 

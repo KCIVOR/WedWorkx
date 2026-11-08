@@ -6,7 +6,7 @@ export function summarize(q, a, uploads = []) {
         if (v == null || v === '' || (Array.isArray(v) && !v.length)) return `${f.label}: (skipped)`;
         let display;
         if (f.type === 'choice') display = f.options?.find((o) => o.value === v)?.label ?? '';
-        else if (f.type === 'services') display = Array.isArray(v) ? v.map((r) => `${r.name ?? ''}${r.price ? ` (${r.price})` : ''}`).join(', ') : '';
+        else if (f.type === 'services') display = Array.isArray(v) ? v.map((r) => `${r.name ?? ''}${r.price ? ` (${r.price})` : ''}${r.details ? `: ${r.details}` : ''}`).join(', ') : '';
         else if (f.type === 'uploads') display = Array.isArray(v) ? v.map((id) => uploads.find((u) => u.id === id)?.original_name || `Photo #${id}`).join(', ') : '';
         else display = Array.isArray(v) ? v.filter((x) => typeof x === 'string').join(', ') : typeof v === 'string' ? v : '';
         return `${f.label}: ${display}`;

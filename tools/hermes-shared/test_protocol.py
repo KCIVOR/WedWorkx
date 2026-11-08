@@ -296,6 +296,39 @@ class ApplyPlanTest(unittest.TestCase):
 
 
 class MobilePreservationTest(unittest.TestCase):
+    def test_repeated_phone_acknowledgment_without_a_contact_update_is_retried(self):
+        api = FakeApi([{'id': 1, 'role': 'supplier', 'text': 'gold'}])
+        result = wp.apply_plan(api, 'cid', dict(PLAN, reply="I have corrected your phone number. What fonts do you prefer?", answers={'colors': 'gold'}), 1)
+        self.assertEqual('problem', result.status)
+        self.assertEqual([], api.posted('/messages'))
+
+    def test_unrelated_turn_cannot_rewrite_a_public_phone(self):
+        api = FakeApi([{'id': 1, 'role': 'supplier', 'text': 'gold'}])
+        api.chat_overrides = {'bot': 'website', 'collected': {'public_phone': '+639171234567'}}
+        result = wp.apply_plan(api, 'cid', dict(PLAN, answers={'colors': 'gold', 'public_phone': '+639181234567'}), 1)
+        self.assertEqual('problem', result.status)
+        self.assertEqual([], api.posted('/answers'))
+
+    def test_user_supplied_public_phone_wins_over_model_mask(self):
+        api = FakeApi([{'id': 1, 'role': 'supplier', 'text': 'Correct phone: 0917 123 4567'}])
+        api.chat_overrides = {'bot': 'website'}
+        wp.apply_plan(api, 'cid', dict(PLAN, answers={'public_phone': '+639**4567'}), 1)
+        self.assertEqual('+639171234567', api.posted('/answers')[0][2]['answers']['public_phone'])
+
+    def test_reuse_requires_showing_the_actual_registration_value_before_yes(self):
+        for shown in (False, True):
+            api = FakeApi([{'id': 1, 'role': 'hermes', 'text': 'Publish +639171234567?' if shown else 'Publish your registered phone?'}, {'id': 2, 'role': 'supplier', 'text': 'yes'}])
+            api.chat_overrides = {'bot': 'website', 'collected': {'public_contact_mode': 'reuse'}, 'supplier': {'registration_contacts_for_explicit_review_only': {'phone': '+639171234567'}}}
+            result = wp.apply_plan(api, 'cid', dict(PLAN, answers={'public_phone': '+639171234567'}), 2)
+            self.assertEqual('sent' if shown else 'problem', result.status)
+
+    def test_final_retry_does_not_post_a_false_contact_correction(self):
+        api = FakeApi([{'id': 1, 'role': 'supplier', 'text': 'gold'}])
+        api.chat_overrides = {'bot': 'website', 'next_question': {'text': 'Which colors do you prefer?'}, 'collected': {'public_phone': '+639171234567'}}
+        wp.apply_plan(api, 'cid', dict(PLAN, reply='I corrected your phone.', answers={'colors': 'gold', 'public_phone': '+6393154'}), 1, final=True)
+        self.assertNotIn('public_phone', api.posted('/answers')[0][2]['answers'])
+        self.assertNotIn('corrected your phone', api.posted('/messages')[0][2]['text'])
+
     def test_raw_mobile_is_preserved_when_model_masks_or_omits_it(self):
         for supplied in ('09603883166', '+63 960 388 3166'):
             for answers in ({'mobile': '+639****3166'}, {}):
