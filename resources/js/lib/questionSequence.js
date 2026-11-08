@@ -1,6 +1,8 @@
+import { intakeComplete, intakeFields } from './websiteIntake.js';
 /** Answer keys, rather than a cached step number, determine interview progress. */
 export function firstUnansweredIndex(questions, answers = {}) {
     const index = questions.findIndex((question) => {
+        if (intakeFields(question).length) return !intakeComplete(question, answers);
         const fields = question.fields ?? [question.key];
         // Specialized widgets allow blank values under the server's existing field rules.
         const required = (question.required === true || question.optional === false)

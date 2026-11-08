@@ -62,6 +62,7 @@ function QuestionForm({ bot, question, types, creatable, onDone }) {
     const base = `/${usePage().props.admin.path}${cfg.path}`;
     const isNew = !question;
     const locked = !!question?.locked;
+    const guided = !!question?.intake_schema;
     const used = question?.used_count ?? 0;
     const form = useForm(isNew ? {
         label: '', text: '', type: cfg.newDefaults.type, placeholder: '', required: cfg.newDefaults.required,
@@ -116,7 +117,8 @@ function QuestionForm({ bot, question, types, creatable, onDone }) {
                     )}
                 </div>
 
-                {isChoice && (
+                {guided && <Note>This is a guided intake step. Its heading and introduction are editable; conditional follow-ups and choices are managed together to keep validation consistent.</Note>}
+                {isChoice && !guided && (
                     <Row label="Options" error={errors.options}
                         help={locked ? 'You can reword the options. Their saved values stay the same.' : 'At least two. Suppliers who chose an option keep it, so options they chose cannot be removed.'}>
                         <div className="grid gap-s-2">
@@ -244,9 +246,10 @@ function Manager({ bot, items, deleted, creatable, max, types }) {
                                 <Td className="max-w-[420px]">
                                     <div className="font-semibold text-wb-heading">{q.label}</div>
                                     <div className="mt-[2px] whitespace-pre-line text-[13px] text-wb-muted">{fill(q.text)}</div>
+                                    {q.intake_schema && <details className="mt-s-2 text-[12px] text-wb-muted"><summary className="cursor-pointer">View guided follow-ups ({q.intake_schema.fields.length})</summary><ol className="mt-s-2 grid gap-s-2 pl-s-4">{q.intake_schema.fields.map((f) => <li key={f.key}><strong>{f.label}</strong>: {f.prompt} {f.when ? '(conditional)' : ''} {f.required ? '(answer required when shown)' : '(may skip)'}{f.options && <div>{f.options.map((o) => o.label).join(' / ')}</div>}</li>)}</ol></details>}
                                 </Td>
                                 <Td>
-                                    <Pill tone="info">{TYPE_LABEL[q.type]}</Pill>
+                                    <Pill tone="info">{q.intake_schema ? 'Guided intake' : TYPE_LABEL[q.type]}</Pill>
                                     {q.locked && <div className="mt-s-1"><Pill tone="muted">{cfg.lockedPill}</Pill></div>}
                                 </Td>
                                 {cfg.hasScope && <Td>{appliesLabel(q)}</Td>}

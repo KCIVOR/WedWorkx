@@ -1,3 +1,5 @@
+import IntakeInput from './IntakeInput';
+import { intakeFields, normalizeIntakePatch } from '../lib/websiteIntake';
 import { shouldStartAgent } from '../lib/agentChatRecovery';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { router } from '@inertiajs/react';
@@ -132,7 +134,7 @@ function AreasInput({ q, initialAreas, initialBooking, onSubmit }) {
     );
 }
 
-function MediaInput({ q, initialColors, uploads, limits, token, onUploaded, onRemoved, onSubmit, error, setError }) {
+function MediaInput({ q, initialColors, uploads, limits, token, onUploaded, onRemoved, onSubmit, error, setError, uploadsOnly = false }) {
     const [colors, setColors] = useState(initialColors ?? '');
     const [busy, setBusy] = useState(false);
     const photoRef = useRef(null);
@@ -183,13 +185,13 @@ function MediaInput({ q, initialColors, uploads, limits, token, onUploaded, onRe
                 <QuickReply tone="no" disabled={busy || logos >= limits.maxLogo} onClick={() => logoRef.current?.click()}>
                     {logos ? 'Logo added' : 'Add logo'}
                 </QuickReply>
-                {q.optional && <QuickReply tone="no" disabled={busy} onClick={() => onSubmit('')}>Skip</QuickReply>}
+                {q.optional && !uploadsOnly && <QuickReply tone="no" disabled={busy} onClick={() => onSubmit('')}>Skip</QuickReply>}
             </QuickReplyRow>
             <div className="text-[12.5px] text-wb-muted tabular-nums">
                 {photos} of {limits.maxPhotos} photos · JPG, PNG or WebP, up to {Math.round((limits.maxKb / 1024) * 10) / 10} MB each.
-                Use the paperclip to add photos, and type your favorite colors if you like.
+                {uploadsOnly ? 'Add available photos and/or an optional logo, then confirm permission separately.' : 'Use the paperclip to add photos, and type your favorite colors if you like.'}
             </div>
-            <InputBar
+            {uploadsOnly ? <div className="flex flex-wrap gap-s-2"><Button variant="outline" disabled={busy || photos >= limits.maxPhotos} onClick={() => photoRef.current?.click()}>Add photos</Button><Button disabled={busy} onClick={() => { if (!uploads.length) { setError('Upload an available photo or logo, or go back and choose provide later or stock.'); return; } setError(''); onSubmit(uploads.filter((u) => u.kind === 'photo').map((u) => u.id)); }}>Continue</Button></div> : <InputBar
                 value={colors}
                 onChange={(v) => { setColors(v); setError(''); }}
                 onSubmit={() => onSubmit(colors)}
@@ -198,7 +200,7 @@ function MediaInput({ q, initialColors, uploads, limits, token, onUploaded, onRe
                 onAttach={() => photoRef.current?.click()}
                 attachDisabled={busy || photos >= limits.maxPhotos}
                 disabled={busy}
-            />
+            />}
             {busy && <div className="px-s-2 text-[12.5px] text-wb-muted" role="status">Uploading…</div>}
         </div>
     );
@@ -206,7 +208,7 @@ function MediaInput({ q, initialColors, uploads, limits, token, onUploaded, onRe
 
 /* ---------------- the chat ---------------- */
 
-export default function WebsiteChat({ chat, payment, firstName, businessName }) {
+export default function WebsiteChat({ chat, payment, firstName, businessName, registrationContacts = chat.registrationContacts ?? {} }) {
     const { token, questions, saved, defaultArea, limits, expiresAt, serverNow, slot, ai, agent } = chat;
     const draftKey = `wedworks.website.draft.${token.slice(0, 16)}`;
 
@@ -230,6 +232,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
     // Reworded questions, kept in memory only (never stored). Missing means: show the scripted text.
     const [worded, setWorded] = useState({});
     const [messageTimes, setMessageTimes] = useState(draft?.messageTimes ?? {});
+    const [intakeCursors, setIntakeCursors] = useState(draft?.intakeCursors ?? {});
     const [error, setError] = useState('');
     const [serverErrors, setServerErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
@@ -258,9 +261,9 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
 
     useEffect(() => {
         if (phase !== 'saved' && !agentChat.active) {
-            try { sessionStorage.setItem(draftKey, JSON.stringify({ answers, idx, phase, messageTimes, currentKey: phase === 'chat' ? questions[idx]?.key : null })); } catch { /* ignore */ }
+            try { sessionStorage.setItem(draftKey, JSON.stringify({ answers, idx, phase, messageTimes, intakeCursors, currentKey: phase === 'chat' ? questions[idx]?.key : null })); } catch { /* ignore */ }
         }
-    }, [answers, idx, phase, messageTimes, draftKey, agentChat.active]);
+    }, [answers, idx, phase, messageTimes, intakeCursors, draftKey, agentChat.active]);
 
     useEffect(() => {
         if (!q) { setTyping(false); return undefined; }
@@ -292,6 +295,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
     }, [idx, typing, phase, editIdx, serverErrors, uploads.length]);
 
     function commit(patch) {
+        setIntakeCursors((cursors) => ({ ...cursors, [q.key]: null }));
         const merged = { ...answers, ...patch };
         setAnswers(merged);
         setMessageTimes((times) => ({ ...times, [q.key]: { ...times[q.key], answered: new Date().toISOString() } }));
@@ -325,7 +329,8 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
 
     function confirm() {
         setSubmitting(true);
-        router.post(`/invite/${token}/confirm`, answers, {
+        const normalized = questions.reduce((a, question) => intakeFields(question).length ? { ...a, ...normalizeIntakePatch(question, a) } : a, answers);
+        router.post(`/invite/${token}/confirm`, normalized, {
             preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
@@ -355,6 +360,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
 
     function renderInput() {
         if (!q || typing) return null;
+        if (intakeFields(q).length) return <IntakeInput key={q.key + editIdx} q={q} answers={answers} currentFieldKey={editIdx !== null ? null : intakeCursors[q.key]} registrationContacts={registrationContacts} onDraft={(patch, key) => { setAnswers((a) => ({ ...a, ...patch })); setIntakeCursors((cursors) => ({ ...cursors, [q.key]: key })); }} onSubmit={commit} renderUploads={({ onSubmit }) => <MediaInput q={{ optional: false }} uploadsOnly uploads={uploads} limits={limits} token={token} setError={setError} onUploaded={(u) => setUploads((x) => [...x, u])} onRemoved={(id) => setUploads((x) => x.filter((u) => u.id !== id))} onSubmit={onSubmit} />} />;
         switch (q.type) {
             case 'textarea':
             case 'text':
@@ -511,7 +517,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
                                 setError={setError}
                                 onUploaded={(u) => setUploads((x) => [...x, u])}
                                 onRemoved={(id) => setUploads((x) => x.filter((u) => u.id !== id))}
-                                onSubmit={(colors) => agentChat.send(`I'm done adding my photos.${colors.trim() ? ` My favorite colors: ${colors.trim()}.` : ''}`)}
+                                onSubmit={(colors) => agentChat.send(`I'm done adding my photos. Uploaded photo IDs: ${JSON.stringify(uploads.filter((u) => u.kind === 'photo').map((u) => u.id))}. Image usage permission still needs my explicit answer.${colors.trim() ? ` My favorite colors: ${colors.trim()}.` : ''}`)}
                             />
                             <FieldError>{error}</FieldError>
                         </div>

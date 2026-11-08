@@ -52,10 +52,15 @@ final class WebsiteQuestions
      */
     public static function readable(array $questions, array $answers): array
     {
+        $answers = WebsiteIntake::approvedAnswers($answers);
         return collect($questions)->map(function (array $q) use ($answers) {
             $parts = [];
-            foreach ($q['fields'] as $field) {
+            foreach (! empty($q['intake']) ? array_column(WebsiteIntake::activeFields($q, $answers), 'key') : $q['fields'] as $field) {
                 $v = $answers[$field] ?? null;
+                $descriptor = collect($q['intake']['fields'] ?? [])->firstWhere('key', $field);
+                if (($descriptor['type'] ?? null) === 'choice' && is_string($v)) {
+                    $v = collect($descriptor['options'] ?? [])->firstWhere('value', $v)['label'] ?? $v;
+                }
                 if ($q['type'] === 'choice' && is_string($v)) {
                     $v = collect($q['options'] ?? [])->firstWhere('value', $v)['label'] ?? $v;
                 }
@@ -65,7 +70,7 @@ final class WebsiteQuestions
                     $v = implode(', ', $v);
                 }
                 if ($v !== null && $v !== '') {
-                    $parts[] = (string) $v;
+                    $parts[] = ($descriptor ? $descriptor['label'].': ' : '').(string) $v;
                 }
             }
 
@@ -81,14 +86,18 @@ final class WebsiteQuestions
     {
         $clean = fn ($v) => is_string($v) ? trim($v) : $v;
         $out = [];
+        $intakeQuestions = array_values(array_filter($questions, fn ($q) => ! empty($q['intake'])));
+        $legacyQuestions = array_values(array_filter($questions, fn ($q) => empty($q['intake'])));
+        foreach ($intakeQuestions as $q) $out = array_merge($out, WebsiteIntake::normalize($in, $q, $only));
+        $questions = $legacyQuestions;
 
-        if (! $only || array_key_exists('services', $in)) {
+        if (collect($legacyQuestions)->contains('type', 'services') && (! $only || array_key_exists('services', $in))) {
             $out['services'] = collect($in['services'] ?? [])
                 ->filter(fn ($s) => is_array($s) && trim((string) ($s['name'] ?? '')) !== '')
                 ->map(fn ($s) => ['name' => trim($s['name']), 'price' => trim((string) ($s['price'] ?? ''))])
                 ->values()->all();
         }
-        if (! $only || array_key_exists('service_areas', $in)) {
+        if (collect($legacyQuestions)->contains('type', 'areas') && (! $only || array_key_exists('service_areas', $in))) {
             $out['service_areas'] = collect($in['service_areas'] ?? [])
                 ->map($clean)->filter(fn ($a) => is_string($a) && $a !== '')->values()->all();
         }
@@ -105,12 +114,16 @@ final class WebsiteQuestions
     }
 
     /** Server-side rules for the flat answers payload, built from the same questions. */
-    public static function rules(string $businessType): array
+    public static function rules(string $businessType, array $answers = [], ?Supplier $supplier = null, ?array $questions = null): array
     {
         $rules = [];
 
-        foreach (self::for($businessType, '') as $q) {
-            $need = $q['optional'] ? 'nullable' : 'required';
+        foreach ($questions ?? self::for($businessType, '') as $q) {
+            if (! empty($q['intake'])) {
+                $rules = array_merge($rules, WebsiteIntake::rules($q, $answers, $supplier));
+                continue;
+            }
+            $need = ($q['optional'] ?? !($q['required'] ?? false)) ? 'nullable' : 'required';
 
             switch ($q['type']) {
                 case 'services':
@@ -162,6 +175,11 @@ final class WebsiteQuestions
         }
         if ($q->type === 'choice') {
             $out['options'] = $q->options ?? [];
+        }
+
+        if (is_array($q->intake_schema) && ! empty($q->intake_schema['fields'])) {
+            $out['intake'] = $q->intake_schema;
+            $out['fields'] = array_column($q->intake_schema['fields'], 'key');
         }
 
         return $out;

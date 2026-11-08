@@ -23,6 +23,7 @@ return [
 
     'max_messages' => 80,
     'max_length' => 1000,
+    'website_max_length' => 5000, // allows supplied policy text within the intake's per-field limits
 
     // A chat that has not finished after this many hours is dropped (the supplier uses the fixed chat).
     'expire_hours' => 24,

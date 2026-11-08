@@ -1,0 +1,1269 @@
+[
+  {
+    "step": 1,
+    "key": "description",
+    "label": "Company Description",
+    "text": "Tell us about {business_name}. What do you offer, and what would you like visitors to know about your business?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "description",
+          "label": "Company description",
+          "prompt": "Tell us about your company and its services.",
+          "type": "textarea",
+          "required": true,
+          "max": 1000
+        },
+        {
+          "key": "business_experience",
+          "label": "Business experience",
+          "prompt": "How long have you been operating? If you are just starting, that is fine.",
+          "type": "textarea",
+          "required": false,
+          "max": 1000
+        }
+      ]
+    }
+  },
+  {
+    "step": 2,
+    "key": "q_7be6711e",
+    "label": "Target Audience",
+    "text": "Who would you most like to reach through your website?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "q_7be6711e",
+          "label": "Target audience",
+          "prompt": "Who is your website for? For example: couples planning a wedding in Tagaytay, other suppliers, or corporate clients.",
+          "type": "textarea",
+          "required": true,
+          "max": 1000
+        }
+      ]
+    }
+  },
+  {
+    "step": 3,
+    "key": "q_c074a772",
+    "label": "Main Website Goal",
+    "text": "What is the main action you want visitors to take on your website?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "q_c074a772",
+          "label": "Primary website action",
+          "prompt": "What should visitors do?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "inquiry",
+              "label": "Send an inquiry"
+            },
+            {
+              "value": "quote",
+              "label": "Request a quote"
+            },
+            {
+              "value": "appointment",
+              "label": "Request an appointment"
+            },
+            {
+              "value": "booking",
+              "label": "Ask about a booking"
+            },
+            {
+              "value": "purchase",
+              "label": "Purchase or order"
+            },
+            {
+              "value": "subscribe",
+              "label": "Subscribe"
+            },
+            {
+              "value": "other",
+              "label": "Other"
+            },
+            {
+              "value": "help",
+              "label": "Help me choose"
+            }
+          ]
+        },
+        {
+          "key": "website_goal_other",
+          "label": "Other website goal",
+          "prompt": "Describe the action you want visitors to take.",
+          "type": "textarea",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "q_c074a772",
+            "in": [
+              "other"
+            ]
+          }
+        },
+        {
+          "key": "cta_destination",
+          "label": "Action destination",
+          "prompt": "Do you have a preferred form, contact route or existing booking link? We will confirm public contact details later.",
+          "type": "textarea",
+          "required": false,
+          "max": 1000
+        }
+      ]
+    }
+  },
+  {
+    "step": 4,
+    "key": "q_77963408",
+    "label": "What Makes Your Business Different?",
+    "text": "What makes your business a good choice compared with similar suppliers?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "differentiator_status",
+          "label": "Differentiator decision",
+          "prompt": "Would you like to describe your strengths or get help identifying them?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "describe",
+              "label": "Describe my strengths"
+            },
+            {
+              "value": "help",
+              "label": "I need help identifying this"
+            }
+          ]
+        },
+        {
+          "key": "q_77963408",
+          "label": "Business differentiator",
+          "prompt": "What makes your business a good choice?",
+          "type": "textarea",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "differentiator_status",
+            "in": [
+              "describe"
+            ]
+          }
+        },
+        {
+          "key": "differentiator_help",
+          "label": "Positioning help",
+          "prompt": "What do you put the most care into when serving clients?",
+          "type": "textarea",
+          "required": false,
+          "max": 1000,
+          "when": {
+            "field": "differentiator_status",
+            "in": [
+              "help"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "step": 5,
+    "key": "services",
+    "label": "Services / Packages",
+    "text": "Which services or packages should we feature on your website?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "services_status",
+          "label": "Services readiness",
+          "prompt": "How would you like to provide your services?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "now",
+              "label": "Add services or packages now"
+            },
+            {
+              "value": "main",
+              "label": "Describe my main service"
+            },
+            {
+              "value": "later",
+              "label": "Provide full package details later"
+            }
+          ]
+        },
+        {
+          "key": "services",
+          "label": "Services and packages",
+          "prompt": "Add your actual services. Prices are optional; publication is decided next.",
+          "type": "services",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "services_status",
+            "in": [
+              "now",
+              "main"
+            ]
+          }
+        },
+        {
+          "key": "services_followup",
+          "label": "Main service for follow-up",
+          "prompt": "What is your main service? Full package details can follow later.",
+          "type": "textarea",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "services_status",
+            "in": [
+              "later"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "step": 6,
+    "key": "pricing_display",
+    "label": "Pricing Display",
+    "text": "How would you like pricing to appear on your website?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "pricing_display",
+          "label": "Pricing publication",
+          "prompt": "Choose how prices may be published.",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "exact",
+              "label": "Show exact prices"
+            },
+            {
+              "value": "starting",
+              "label": "Show starting prices"
+            },
+            {
+              "value": "inquire",
+              "label": "Contact us for pricing"
+            },
+            {
+              "value": "team",
+              "label": "Decide with the team"
+            }
+          ]
+        },
+        {
+          "key": "approved_prices",
+          "label": "Approved public prices",
+          "prompt": "List the approved prices and matching service names, or say provide later.",
+          "type": "textarea",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "pricing_display",
+            "in": [
+              "exact",
+              "starting"
+            ]
+          }
+        },
+        {
+          "key": "pricing_currency",
+          "label": "Pricing currency",
+          "prompt": "Which currency should those prices use?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "PHP",
+              "label": "PHP"
+            },
+            {
+              "value": "USD",
+              "label": "USD"
+            },
+            {
+              "value": "other",
+              "label": "Other"
+            },
+            {
+              "value": "pending",
+              "label": "Confirm with the team"
+            }
+          ],
+          "when": {
+            "field": "pricing_display",
+            "in": [
+              "exact",
+              "starting"
+            ]
+          }
+        },
+        {
+          "key": "pricing_currency_other",
+          "label": "Other currency",
+          "prompt": "Enter the currency.",
+          "type": "textarea",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "pricing_currency",
+            "in": [
+              "other"
+            ]
+          }
+        }
+      ]
+    },
+    "type": "textarea",
+    "locked": false
+  },
+  {
+    "step": 9,
+    "key": "areas",
+    "label": "Service Areas & Booking",
+    "text": "Which areas do you serve, and how should clients ask about a booking?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "service_area_status",
+          "label": "Service area readiness",
+          "prompt": "Can you confirm your service areas now?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "known",
+              "label": "Confirm areas now"
+            },
+            {
+              "value": "later",
+              "label": "Confirm with the team later"
+            }
+          ]
+        },
+        {
+          "key": "service_areas",
+          "label": "Service areas",
+          "prompt": "Add towns, cities, nationwide or online service, as applicable.",
+          "type": "areas",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "service_area_status",
+            "in": [
+              "known"
+            ]
+          }
+        },
+        {
+          "key": "booking",
+          "label": "Booking contact method",
+          "prompt": "How should interested clients ask about a booking?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "form",
+              "label": "Website inquiry form"
+            },
+            {
+              "value": "messenger",
+              "label": "Messenger or social message"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "email",
+              "label": "Email"
+            },
+            {
+              "value": "link",
+              "label": "Existing booking link"
+            },
+            {
+              "value": "help",
+              "label": "Help me choose"
+            }
+          ]
+        },
+        {
+          "key": "booking_link",
+          "label": "Existing booking link",
+          "prompt": "Share the public booking link.",
+          "type": "url",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "booking",
+            "in": [
+              "link"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "step": 10,
+    "key": "public_contacts",
+    "label": "Public Business Contacts",
+    "text": "Which business contact details may we publish on your website?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "public_contact_mode",
+          "label": "Public contact decision",
+          "prompt": "Choose how to provide the business contacts for publication.",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "reuse",
+              "label": "Review and reuse selected registration details"
+            },
+            {
+              "value": "different",
+              "label": "Enter different business details"
+            },
+            {
+              "value": "later",
+              "label": "Provide public contacts later"
+            }
+          ]
+        },
+        {
+          "key": "public_contact_permission",
+          "label": "Contact publication approval",
+          "prompt": "Would you like to choose public details now for confirmation in the final summary, or have the team review them later?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "approved",
+              "label": "Choose public details now; I will confirm the summary"
+            },
+            {
+              "value": "review",
+              "label": "Not yet; confirm with the team"
+            }
+          ],
+          "when": {
+            "field": "public_contact_mode",
+            "in": [
+              "reuse",
+              "different"
+            ]
+          }
+        },
+        {
+          "key": "public_email",
+          "label": "Public email",
+          "prompt": "Which business email may appear publicly? Leave blank if you prefer another contact route.",
+          "type": "email",
+          "required": false,
+          "max": 190,
+          "when": {
+            "field": "public_contact_permission",
+            "in": [
+              "approved"
+            ]
+          }
+        },
+        {
+          "key": "public_phone",
+          "label": "Public phone",
+          "prompt": "Which business phone may appear publicly? Leave blank if you prefer another contact route.",
+          "type": "text",
+          "required": false,
+          "max": 100,
+          "when": {
+            "field": "public_contact_permission",
+            "in": [
+              "approved"
+            ]
+          }
+        },
+        {
+          "key": "public_socials",
+          "label": "Public social links",
+          "prompt": "Which social links may appear publicly?",
+          "type": "textarea",
+          "required": false,
+          "max": 1000,
+          "when": {
+            "field": "public_contact_permission",
+            "in": [
+              "approved"
+            ]
+          }
+        },
+        {
+          "key": "public_address_mode",
+          "label": "Address publication",
+          "prompt": "What location may visitors see?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "full",
+              "label": "Full public business address"
+            },
+            {
+              "value": "area",
+              "label": "Service area only"
+            },
+            {
+              "value": "none",
+              "label": "No address"
+            }
+          ],
+          "when": {
+            "field": "public_contact_permission",
+            "in": [
+              "approved"
+            ]
+          }
+        },
+        {
+          "key": "public_address",
+          "label": "Approved public address",
+          "prompt": "Enter the address approved for publication.",
+          "type": "textarea",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "public_address_mode",
+            "in": [
+              "full"
+            ]
+          }
+        }
+      ]
+    },
+    "type": "textarea",
+    "locked": false
+  },
+  {
+    "step": 11,
+    "key": "website_voice",
+    "label": "Website Tone of Voice",
+    "text": "How would you like your website to sound?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "website_voice",
+          "label": "Website voice",
+          "prompt": "Choose a tone for your website copy.",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "warm",
+              "label": "Warm and friendly"
+            },
+            {
+              "value": "elegant",
+              "label": "Elegant and refined"
+            },
+            {
+              "value": "professional",
+              "label": "Clear and professional"
+            },
+            {
+              "value": "creative",
+              "label": "Cheerful and creative"
+            },
+            {
+              "value": "suggest",
+              "label": "Suggest a suitable tone"
+            },
+            {
+              "value": "other",
+              "label": "Other"
+            }
+          ]
+        },
+        {
+          "key": "website_voice_other",
+          "label": "Other website voice",
+          "prompt": "Describe your preferred tone.",
+          "type": "textarea",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "website_voice",
+            "in": [
+              "other"
+            ]
+          }
+        }
+      ]
+    },
+    "type": "textarea",
+    "locked": false
+  },
+  {
+    "step": 12,
+    "key": "style",
+    "label": "Website Style",
+    "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "style",
+          "label": "Website visual style",
+          "prompt": "What kind of look would you like?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "elegant",
+              "label": "Elegant & Luxurious"
+            },
+            {
+              "value": "modern",
+              "label": "Modern & Simple"
+            },
+            {
+              "value": "romantic",
+              "label": "Romantic & Soft"
+            },
+            {
+              "value": "classic",
+              "label": "Classic & Timeless"
+            },
+            {
+              "value": "colorful",
+              "label": "Colorful & Creative"
+            },
+            {
+              "value": "surprise",
+              "label": "Surprise Me!"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "step": 13,
+    "key": "q_19a5f097",
+    "label": "Style References (Links)",
+    "text": "Are there websites or designs you like? Share a link and tell us what you like about it.",
+    "required": false,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "reference_use",
+          "label": "Reference type",
+          "prompt": "Would you like to share a reference?",
+          "type": "choice",
+          "required": false,
+          "max": 1000,
+          "options": [
+            {
+              "value": "none",
+              "label": "No references"
+            },
+            {
+              "value": "inspiration",
+              "label": "Inspiration from other websites"
+            },
+            {
+              "value": "owned",
+              "label": "My own website or approved content source"
+            }
+          ]
+        },
+        {
+          "key": "q_19a5f097",
+          "label": "Reference links and preferences",
+          "prompt": "Share the references and what you like about them.",
+          "type": "textarea",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "reference_use",
+            "in": [
+              "inspiration",
+              "owned"
+            ]
+          }
+        },
+        {
+          "key": "reference_permission",
+          "label": "Existing-content permission",
+          "prompt": "Do you own the content you want reused, or have permission to reuse it?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "approved",
+              "label": "Yes, reuse is permitted"
+            },
+            {
+              "value": "review",
+              "label": "Needs confirmation; do not reuse yet"
+            }
+          ],
+          "when": {
+            "field": "reference_use",
+            "in": [
+              "owned"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "step": 14,
+    "key": "media",
+    "label": "Photos, Logo & Brand Choices",
+    "text": "What photos or brand materials would you like us to use?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "asset_plan",
+          "label": "Photo and asset plan",
+          "prompt": "Choose how to provide your photos.",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "now",
+              "label": "Upload my photos now"
+            },
+            {
+              "value": "later",
+              "label": "Provide my photos later"
+            },
+            {
+              "value": "stock",
+              "label": "Propose suitable stock images for approval"
+            }
+          ]
+        },
+        {
+          "key": "photo_ids",
+          "label": "Approved upload selection",
+          "prompt": "Upload photos of your real work. A logo is optional.",
+          "type": "uploads",
+          "required": false,
+          "max": 1000,
+          "when": {
+            "field": "asset_plan",
+            "in": [
+              "now"
+            ]
+          }
+        },
+        {
+          "key": "asset_permission",
+          "label": "Uploaded asset permission",
+          "prompt": "Do you own these materials or have permission to use them on your website?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "approved",
+              "label": "Yes, usage is permitted"
+            },
+            {
+              "value": "review",
+              "label": "Permission needs review; do not publish yet"
+            }
+          ],
+          "when": {
+            "field": "asset_plan",
+            "in": [
+              "now"
+            ]
+          }
+        },
+        {
+          "key": "colors",
+          "label": "Brand colors",
+          "prompt": "Do you have preferred colors or color codes?",
+          "type": "textarea",
+          "required": false,
+          "max": 120
+        },
+        {
+          "key": "brand_fonts",
+          "label": "Brand fonts",
+          "prompt": "Do you have preferred font names?",
+          "type": "textarea",
+          "required": false,
+          "max": 200
+        },
+        {
+          "key": "brand_guidelines",
+          "label": "Brand guidelines",
+          "prompt": "Do you have brand guidelines or instructions? Share a public link or describe them; do not upload unsupported file types.",
+          "type": "textarea",
+          "required": false,
+          "max": 1000
+        }
+      ]
+    }
+  },
+  {
+    "step": 15,
+    "key": "social_proof",
+    "label": "Testimonials & Reviews",
+    "text": "Do you have genuine customer reviews or testimonials you would like included?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "social_proof",
+          "label": "Social proof status",
+          "prompt": "Choose how to provide genuine reviews.",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "now",
+              "label": "Provide exact review text now"
+            },
+            {
+              "value": "link",
+              "label": "Share a source link for review"
+            },
+            {
+              "value": "later",
+              "label": "Provide later"
+            },
+            {
+              "value": "none",
+              "label": "None yet; omit this section"
+            }
+          ]
+        },
+        {
+          "key": "testimonial_text",
+          "label": "Exact testimonial",
+          "prompt": "Provide the genuine review text and approved attribution.",
+          "type": "textarea",
+          "required": true,
+          "max": 4000,
+          "when": {
+            "field": "social_proof",
+            "in": [
+              "now"
+            ]
+          }
+        },
+        {
+          "key": "testimonial_source",
+          "label": "Review source link",
+          "prompt": "Share the review source link. A link alone does not approve republication.",
+          "type": "url",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "social_proof",
+            "in": [
+              "link"
+            ]
+          }
+        },
+        {
+          "key": "testimonial_permission",
+          "label": "Review publication permission",
+          "prompt": "Is publication of this review and its attribution approved?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "approved",
+              "label": "Yes, publication is approved"
+            },
+            {
+              "value": "review",
+              "label": "Needs permission or team review"
+            }
+          ],
+          "when": {
+            "field": "social_proof",
+            "in": [
+              "now",
+              "link"
+            ]
+          }
+        }
+      ]
+    },
+    "type": "textarea",
+    "locked": false
+  },
+  {
+    "step": 16,
+    "key": "website_scope",
+    "label": "Pages, Features & Existing Content",
+    "text": "Which pages or features are most important for your website?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "scope_mode",
+          "label": "Structure decision",
+          "prompt": "Would you like to describe your scope or have a structure suggested?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "custom",
+              "label": "Describe my required pages or features"
+            },
+            {
+              "value": "suggest",
+              "label": "Suggest a structure for team approval"
+            }
+          ]
+        },
+        {
+          "key": "scope_details",
+          "label": "Required pages and features",
+          "prompt": "Describe your priorities. Requested features still need team approval.",
+          "type": "textarea",
+          "required": true,
+          "max": 2000,
+          "when": {
+            "field": "scope_mode",
+            "in": [
+              "custom"
+            ]
+          }
+        },
+        {
+          "key": "existing_content_mode",
+          "label": "Existing content treatment",
+          "prompt": "Do you have existing content we should keep, rewrite or remove?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "none",
+              "label": "No existing content"
+            },
+            {
+              "value": "keep",
+              "label": "Keep selected existing content"
+            },
+            {
+              "value": "rewrite",
+              "label": "Rewrite selected content"
+            },
+            {
+              "value": "remove",
+              "label": "Remove specified content"
+            },
+            {
+              "value": "mixed",
+              "label": "A mix; I will explain"
+            }
+          ]
+        },
+        {
+          "key": "existing_content_details",
+          "label": "Existing content instructions",
+          "prompt": "Tell us which public source/content to keep, rewrite or remove.",
+          "type": "textarea",
+          "required": true,
+          "max": 2000,
+          "when": {
+            "field": "existing_content_mode",
+            "in": [
+              "keep",
+              "rewrite",
+              "remove",
+              "mixed"
+            ]
+          }
+        }
+      ]
+    },
+    "type": "textarea",
+    "locked": false
+  },
+  {
+    "step": 17,
+    "key": "policies",
+    "label": "Booking Policies & Legal Content",
+    "text": "Do you have booking, deposit, cancellation or refund policies you want visitors to see?",
+    "required": true,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "policies",
+          "label": "Booking policy status",
+          "prompt": "Choose how to provide existing business policies.",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "now",
+              "label": "Provide existing text now"
+            },
+            {
+              "value": "later",
+              "label": "Provide later"
+            },
+            {
+              "value": "none",
+              "label": "No policies to publish at this time"
+            },
+            {
+              "value": "help",
+              "label": "Ask the team to clarify what is needed"
+            }
+          ]
+        },
+        {
+          "key": "booking_policy_text",
+          "label": "Existing booking policies",
+          "prompt": "Provide the actual approved policy wording; do not enter passwords.",
+          "type": "textarea",
+          "required": true,
+          "max": 4000,
+          "when": {
+            "field": "policies",
+            "in": [
+              "now"
+            ]
+          }
+        },
+        {
+          "key": "privacy_status",
+          "label": "Privacy and terms status",
+          "prompt": "Do you have existing website privacy or terms text?",
+          "type": "choice",
+          "required": true,
+          "max": 1000,
+          "options": [
+            {
+              "value": "now",
+              "label": "Provide existing text now"
+            },
+            {
+              "value": "later",
+              "label": "Provide later"
+            },
+            {
+              "value": "none",
+              "label": "No text supplied"
+            },
+            {
+              "value": "help",
+              "label": "Needs team clarification"
+            }
+          ]
+        },
+        {
+          "key": "privacy_text",
+          "label": "Existing privacy or terms text",
+          "prompt": "Provide the supplied wording or its public source for review.",
+          "type": "textarea",
+          "required": true,
+          "max": 4000,
+          "when": {
+            "field": "privacy_status",
+            "in": [
+              "now"
+            ]
+          }
+        }
+      ]
+    },
+    "type": "textarea",
+    "locked": false
+  },
+  {
+    "step": 18,
+    "key": "domain_platform",
+    "label": "Existing Domain & Platform",
+    "text": "Do you already have a domain name or an existing website platform?",
+    "required": false,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "domain_platform",
+          "label": "Domain status",
+          "prompt": "Choose what is known. Deployment is deferred.",
+          "type": "choice",
+          "required": false,
+          "max": 1000,
+          "options": [
+            {
+              "value": "existing",
+              "label": "Existing domain or website"
+            },
+            {
+              "value": "none",
+              "label": "No domain yet"
+            },
+            {
+              "value": "unsure",
+              "label": "Not sure"
+            },
+            {
+              "value": "later",
+              "label": "Discuss later"
+            }
+          ]
+        },
+        {
+          "key": "existing_website_url",
+          "label": "Existing public website",
+          "prompt": "Share the existing public website URL.",
+          "type": "url",
+          "required": true,
+          "max": 1000,
+          "when": {
+            "field": "domain_platform",
+            "in": [
+              "existing"
+            ]
+          }
+        },
+        {
+          "key": "existing_cms",
+          "label": "Existing platform",
+          "prompt": "Do you know which platform it uses? For example: WordPress.",
+          "type": "text",
+          "required": false,
+          "max": 200,
+          "when": {
+            "field": "domain_platform",
+            "in": [
+              "existing"
+            ]
+          }
+        }
+      ]
+    },
+    "type": "textarea",
+    "locked": false
+  },
+  {
+    "step": 19,
+    "key": "q_702f0901",
+    "label": "Search Phrases",
+    "text": "What might someone type into Google to find a business like yours?",
+    "required": false,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "q_702f0901",
+          "label": "Search phrases",
+          "prompt": "For example: wedding coordinator in Tagaytay. You may skip this.",
+          "type": "textarea",
+          "required": false,
+          "max": 1000
+        }
+      ]
+    }
+  },
+  {
+    "step": 20,
+    "key": "additional",
+    "label": "Additional Information",
+    "text": "Is there anything else you would like us to consider for your website?",
+    "required": false,
+    "placeholder": null,
+    "intake_schema": {
+      "version": 1,
+      "fields": [
+        {
+          "key": "additional",
+          "label": "Additional information",
+          "prompt": "Share any other genuine business information or instructions.",
+          "type": "textarea",
+          "required": false,
+          "max": 2000
+        }
+      ]
+    }
+  }
+]

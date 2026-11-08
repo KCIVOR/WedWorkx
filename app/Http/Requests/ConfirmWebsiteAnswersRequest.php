@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Supplier;
 use App\Services\WebsiteDetailsService;
 use App\Support\WebsiteQuestions;
+use App\Support\WebsiteIntake;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ConfirmWebsiteAnswersRequest extends FormRequest
@@ -28,7 +29,7 @@ class ConfirmWebsiteAnswersRequest extends FormRequest
 
     public function rules(): array
     {
-        return WebsiteQuestions::rules($this->supplier()->business_type);
+        return WebsiteQuestions::rules($this->supplier()->business_type, $this->all(), $this->supplier(), $this->questions());
     }
 
     /** Only keys defined for this supplier's questions are stored. */
@@ -36,7 +37,7 @@ class ConfirmWebsiteAnswersRequest extends FormRequest
     {
         $top = array_filter(array_keys($this->rules()), fn ($k) => ! str_contains($k, '.'));
 
-        return $this->safe()->only($top);
+        return WebsiteIntake::approvedAnswers($this->safe()->only($top));
     }
 
     /** The questions this supplier is asked (their business type's). */
@@ -45,7 +46,7 @@ class ConfirmWebsiteAnswersRequest extends FormRequest
         $s = $this->supplier();
 
         return $this->attributes->get('questions')
-            ?? tap(WebsiteQuestions::for($s->business_type, $s->business_name), fn ($q) => $this->attributes->set('questions', $q));
+            ?? tap(WebsiteQuestions::forAnswer($s->websiteAnswer?->submitted_at ? $s->websiteAnswer : null, $s), fn ($q) => $this->attributes->set('questions', $q));
     }
 
     public function messages(): array

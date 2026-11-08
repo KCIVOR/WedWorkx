@@ -16,7 +16,7 @@ class WebsiteQuestion extends Model
     /** Types an admin may create. services, areas and media exist once each. */
     public const CREATABLE = ['text', 'textarea', 'number', 'choice'];
 
-    protected $fillable = ['key', 'type', 'label', 'text', 'placeholder', 'options', 'required', 'applies_to', 'sort_order', 'locked'];
+    protected $fillable = ['key', 'type', 'label', 'text', 'placeholder', 'options', 'required', 'applies_to', 'sort_order', 'locked', 'intake_schema'];
 
     protected function casts(): array
     {
@@ -26,6 +26,7 @@ class WebsiteQuestion extends Model
             'required' => 'boolean',
             'locked' => 'boolean',
             'sort_order' => 'integer',
+            'intake_schema' => 'array',
         ];
     }
 

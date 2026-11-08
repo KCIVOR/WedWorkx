@@ -117,7 +117,7 @@ class HermesChatController extends Controller
             'next_question' => $this->chats->unansweredQuestions($chat)[0] ?? null,
             'collected' => $chat->answers ?? (object) [],
             'transcript' => $chat->messages()->withActualTime()->get()->map(fn ($m) => ['id' => $m->id, 'role' => $m->role, 'text' => $m->body, 'at' => $m->sentAtIso()])->values(),
-            'uploads' => $chat->supplier ? $chat->supplier->uploads()->get(['kind', 'original_name', 'size_kb'])->map(fn ($u) => ['kind' => $u->kind, 'name' => $u->original_name, 'size_kb' => $u->size_kb])->values() : [],
+            'uploads' => $chat->supplier ? $chat->supplier->uploads()->get(['id', 'kind', 'original_name', 'size_kb'])->map(fn ($u) => ['id' => $u->id, 'kind' => $u->kind, 'name' => $u->original_name, 'size_kb' => $u->size_kb])->values() : [],
         ]]);
     }
 
@@ -175,6 +175,7 @@ class HermesChatController extends Controller
         return [
             'first_name' => explode(' ', trim($s->name))[0],
             'business_name' => $s->business_name,
+            'registration_contacts_for_explicit_review_only' => ['email' => $s->email, 'phone' => $s->mobile, 'socials' => $s->social_link, 'location' => $s->location],
             'business_type' => $s->business_type,
             'business_type_label' => BusinessTypes::ALL[$s->business_type] ?? $s->business_type,
         ];

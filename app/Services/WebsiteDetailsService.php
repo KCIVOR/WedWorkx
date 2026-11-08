@@ -42,9 +42,12 @@ class WebsiteDetailsService
             $locked = Supplier::whereKey($supplier->id)->lockForUpdate()->firstOrFail();
             $this->authorizeEdit($locked);
 
+            $existing = $locked->websiteAnswer;
+            $snapshot = $existing?->submitted_at && $existing->question_snapshot
+                ? $existing->question_snapshot : WebsiteQuestions::snapshot($locked);
             WebsiteAnswer::updateOrCreate(
                 ['supplier_id' => $locked->id],
-                ['answers' => $answers, 'question_snapshot' => WebsiteQuestions::snapshot($locked), 'submitted_at' => now()],
+                ['answers' => $answers, 'question_snapshot' => $snapshot, 'submitted_at' => now()],
             );
 
             if ($locked->status === SupplierStatus::Invited) {

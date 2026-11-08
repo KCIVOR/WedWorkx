@@ -53,13 +53,14 @@ class InviteController extends Controller
         }
 
         return Inertia::render('Invite', array_merge($base, ['chat' => [
+            'registrationContacts' => ['email' => $supplier->email, 'phone' => $supplier->mobile, 'socials' => $supplier->social_link, 'location' => trim($supplier->city.', '.$supplier->province, ', ')],
             'token' => $token,
             'ai' => ['enabled' => (bool) config('ai.enabled')],
             'agent' => [
                 'enabled' => app(\App\Services\AgentChatService::class)->mode('website') === 'hermes',
                 'resume' => app(\App\Services\AgentChatService::class)->resumable('website', $supplier) !== null,
             ],
-            'questions' => WebsiteQuestions::for($supplier->business_type, $supplier->business_name),
+            'questions' => WebsiteQuestions::forAnswer($supplier->websiteAnswer?->submitted_at ? $supplier->websiteAnswer : null, $supplier),
             'saved' => $supplier->websiteAnswer?->submitted_at ? $supplier->websiteAnswer->answers : null,
             'defaultArea' => $supplier->city,
             'uploads' => $supplier->uploads()->orderBy('id')->get()

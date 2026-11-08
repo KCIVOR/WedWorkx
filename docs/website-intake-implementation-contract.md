@@ -1,0 +1,15 @@
+# Website intake implementation contract — internal
+
+Approved specification: BOT2_QUESTIONNAIRE_FINAL_DRAFT.md. Implement intake only, not planner/build/deploy.
+
+Questions retain existing row keys/types. New nullable JSON column `website_questions.intake_schema` stores `{version:1, fields:[...]}`. WebsiteQuestion casts it to array. WebsiteQuestions::shape exposes this as `intake` and fields as every schema field key. Old rows/snapshots without intake retain existing behavior. New schema snapshots must remain self-contained.
+
+Field descriptor: `{key,label,prompt,type,required,options?,when?,placeholder?,max?,default?}`. Types: text, textarea, email, url, choice, services, areas (array of strings), uploads (array of owned photo IDs). `options` is an array of `{value,label}`. `when` is `{field,in:[values]}`; visible if referenced answer is in values. All unspecified conditions are visible. No arbitrary executable rules. Do not persist defaults until confirmed. All keys are flat answer keys.
+
+Completion: each visible field must have an answer or explicit optional null/[] skip; required fields must be valid. Hidden fields are ignored for completion and normalized to null/[] on full confirmation. During partial Hermes input, validate sent fields using the merged accepted+incoming context; do not silently erase accepted fields that were not sent. Full ready/confirmation validates dependencies. Do not silently approve rights, contacts or stock use. Request rules/readable summaries support intake as well as legacy types.
+
+Frontend helper functions: `visibleIntakeFields(q, answers)` and `intakeIssue(field,value,answers)` should be reusable by sequence/resume and generic renderer. For intake questions the sequence helper uses visible fields, not legacy services/media nullable exceptions. Generic input shows one visible field at a time, supports Back/Continue/Skip optional and commits the complete patch on completion. Existing uploads callback/widget can be reused; actual owned photo IDs are the stored answer, not a client-supplied count. Upload limits unchanged. Existing bot-specific question rows 7/8 remain unchanged apart from ordering.
+
+Public-contact fields never auto-copy Bot1. Choosing reuse must show and confirm actual reusable contact values via authorized invite props. A contact publication decision and pending status must remain explicit. Do not publish personal data by inference. Domain/platform collection is optional and never requests credentials.
+
+Catalog source `database/data/website-intake-v2.json`: common question entries matched by legacy key or safe label reuse, schema plus wording/required/sort metadata. Treat it as frozen release data. Data upgrade runs explicitly under database/data-migrations; default schema migration adds the column only. Data upgrade preserves ids, existing keys/types/options/scopes, submitted snapshots, answers, paid orders, uploads. It reuses manually added matching-label questions only if compatible and aborts transaction on ambiguity/deleted/conflict/cap >20. Baseline35->42 definitions, 20 per type. Local application also needs explicit upgrade to exercise new flow.

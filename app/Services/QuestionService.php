@@ -102,6 +102,7 @@ class QuestionService
             }
 
             if ($q->options !== $options) {
+                if ($q->intake_schema) $this->fail('options', 'This guided intake step has managed follow-up choices. Change its heading or introduction only.');
                 $q->options = $options;
                 $changed[] = 'options';
             }
@@ -211,6 +212,11 @@ class QuestionService
             }
         }
 
+        foreach (WebsiteQuestion::whereNotNull('intake_schema')->get() as $q) {
+            $fields = array_column($q->intake_schema['fields'] ?? [], 'key');
+            $counts[$q->key] = WebsiteAnswer::whereNotNull('submitted_at')->get(['answers'])
+                ->filter(fn ($a) => count(array_intersect(array_keys($a->answers ?? []), $fields)) > 0)->count();
+        }
         return $counts;
     }
 

@@ -7,7 +7,7 @@ Download `wedworks-cpanel.zip` using GitHub's **Download raw file** button. This
 1. Back up the current application files and database. Record the current release so it can be restored. Preserve the server `.env` and all existing `storage` contents, including uploads and sessions; never upload a local database or credentials.
 2. In cPanel File Manager, enable **Show Hidden Files**. Upload and extract the ZIP into a temporary directory outside `public_html`. Confirm `public/.htaccess`, `vendor/autoload.php`, and `public/build/manifest.json` exist. Do not expose the archive or application root publicly.
 3. During a maintenance window, release the application files and production `vendor` together. Preserve the server `.env` and existing `storage`; the archive's storage files are empty-directory placeholders only. Retain a backup and old hashed public assets while existing browser sessions reload.
-4. Release the new controller, routes, React source, navigation, manifest, and new asset files together. The manifest must reference `assets/app-DXj9z0Sr.js` and `assets/app-COfYSTQW.css`, both present under `public/build`. Remove `public/hot` if present; it points browsers at a development server. Preserve the existing public storage link.
+4. Release the new controller, routes, React source, navigation, manifest, and new asset files together. The manifest must reference `assets/app-nlXeVLA3.js` and `assets/app-CAL_vLB7.css`, both present under `public/build`. Remove `public/hot` if present; it points browsers at a development server. Preserve the existing public storage link.
 5. Keep the domain document root at `/home/YOURUSER/wedworks/public` (substitute the actual app path). Confirm writable Laravel storage/cache directories. Never upload Windows-generated config, route, or compiled-view caches. Package discovery files `bootstrap/cache/packages.php` and `services.php` are included.
 6. If the server has stale route/config/view caches, have hosting support clear them or use a controlled **one-time** cPanel Cron Job running the host's verified PHP binary and `artisan optimize:clear` in the actual application directory. Send output to a private log outside the document root, inspect success, then remove the cron job and temporary log. Use the PHP binary selected for this domain. Do not add a public cache-clearing URL. Preserve the existing scheduler cron.
 7. Sign out and confirm Payment History redirects to login; sign in and verify the page, filters, pagination, and supplier link against existing hosted rows. Compare read-only payment counts/statuses before and after. No migration, seed, backfill, test database, or live payment is required for this feature.
@@ -31,7 +31,7 @@ See repository `docs/DEPLOYMENT.md` for server requirements and layout. Roll bac
 
 ## Question sequence and client delivery release — 2026-11-08
 
-The current ZIP replaces the earlier payment-history package. SHA-256: `4b3d551fefa2d6a3991b255bcd217a4c96af1804148fe742fdb7e2ac1dbc9d83`; 8,071,686 bytes. Manifest: `assets/app-DXj9z0Sr.js` and `assets/app-COfYSTQW.css`. Archive CRC, exclusions, changed controller, new sequence helper and referenced assets verified.
+The current ZIP replaces the earlier payment-history package. SHA-256: `4b3d551fefa2d6a3991b255bcd217a4c96af1804148fe742fdb7e2ac1dbc9d83`; 8,071,686 bytes. Manifest: `assets/app-nlXeVLA3.js` and `assets/app-CAL_vLB7.css`. Archive CRC, exclusions, changed controller, new sequence helper and referenced assets verified.
 
 Validation: 297 PHP tests / 2,870 assertions; 10 frontend sequence tests; 35 shared protocol tests; 35 plugin tests; Vite build passed. Earlier question/delivery changes had no migrations or Composer dependencies. The subsequent live-chat update below adds one migration. Existing production tables must already be migrated. Preserve server .env, APP_KEY, uploads, public/storage and cPanel-generated PHP settings. Never run migrate:fresh or broad seeders on production.
 
@@ -64,3 +64,9 @@ Bot2 resumes its open/review conversation by invitation, including across browse
 ## Duplicate chat send fix
 
 Pending sends now synchronously lock the client submit handler and disable the composer. Poll and send responses merge by saved message ID. UUID-scoped cached acknowledgments under a database row lock protect network retries for 24 hours (until cache loss/clear). Legacy requests remain accepted. No schema migration or Hermes restart. Refresh clients after deploying the controller and matching bundle.28PHPtests/378assertions,18frontendtests,build and packageCRC/asset/controller checks passed. See docs/chat-send-protection.md.
+
+## Approved Bot 2 questionnaire — November 9, 2026
+
+This release requires both schema and opt-in data migrations: `php artisan migrate --force`, then `php artisan migrate --path=database/data-migrations --force`, then `php artisan optimize:clear`. Back up first. See [intake rollout notes](../docs/website-intake-v2-release.md). Existing submitted snapshots and business records are preserved. There are 42 definitions, 20 main steps per supplier type. Refresh the installed Mac Hermes protocol and restart its gateway before testing the new guided questions. No AI build or publishing automation is included.
+
+Verified package SHA-256: `4f1134f445ed8febb95e8f259b93617ac73163c3d2211dfbd7dd96b281374a0a`; 8089897 bytes. Matching catalog, migrations, sources, frontend manifest/assets and ZIP integrity verified.

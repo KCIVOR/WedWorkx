@@ -48,6 +48,7 @@ class QuestionController extends Controller
                 'required' => $q->required,
                 'applies_to' => $q->applies_to,
                 'locked' => $q->locked,
+                'intake_schema' => $q->intake_schema,
                 'used_count' => $used[$q->key] ?? 0,
             ])->values(),
             'deleted' => WebsiteQuestion::onlyTrashed()->orderByDesc('deleted_at')->get(['id', 'key', 'label', 'type'])->values(),

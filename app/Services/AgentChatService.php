@@ -10,6 +10,7 @@ use App\Support\BusinessTypes;
 use App\Support\RegistrationInput;
 use App\Support\RegistrationQuestions;
 use App\Support\WebsiteQuestions;
+use App\Support\WebsiteIntake;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -205,9 +206,10 @@ class AgentChatService
             ])->all();
         } else {
             $s = $chat->supplier;
-            $questions = collect(WebsiteQuestions::for($s->business_type, $s->business_name))->map(fn ($q) => [
+            $questions = collect(WebsiteQuestions::forAnswer($s->websiteAnswer?->submitted_at ? $s->websiteAnswer : null, $s))->map(fn ($q) => [
                 'key' => $q['key'], 'label' => $q['label'], 'type' => $q['type'], 'text' => $q['text'],
                 'required' => ! $q['optional'], 'fields' => $q['fields'], 'options' => $q['options'] ?? null,
+                'intake' => $q['intake'] ?? null,
             ])->all();
         }
 
@@ -217,6 +219,7 @@ class AgentChatService
     /** The checks in words, so the agent can ask for the right thing and explain a refusal. */
     private function describe(array $q): string
     {
+        if (! empty($q['intake'])) return 'Ask one visible intake field at a time, in field order. Conditions use accepted plus incoming answers. Every visible optional field requires an explicit null or [] skip. Never infer permissions or apply defaults. Uploads must be actual owned photo IDs. Later/help/review statuses create follow-up work, never authorize building or publication.';
         $need = $q['required'] ? 'Required.' : 'Optional (the supplier may skip).';
 
         $what = match ($q['key']) {
@@ -243,11 +246,11 @@ class AgentChatService
     }
 
     /** The form rules for this chat's bot. */
-    private function rules(AgentChat $chat): array
+    private function rules(AgentChat $chat, ?array $answers = null): array
     {
         return $chat->bot === 'registration'
             ? RegistrationInput::rules()
-            : WebsiteQuestions::rules($chat->supplier->business_type);
+            : WebsiteQuestions::rules($chat->supplier->business_type, $answers ?? $chat->answers ?? [], $chat->supplier, $this->questions($chat));
     }
 
     private function messages(AgentChat $chat): array
@@ -281,7 +284,7 @@ class AgentChatService
             : WebsiteQuestions::normalize($input, $this->questionsForNormalize($chat), true));
 
         // Check only the keys that were sent (including nested ones such as services.*.name).
-        $rules = collect($this->rules($chat))->filter(fn ($r, $k) => array_key_exists(Str::before($k, '.'), $clean))->all();
+        $rules = collect($this->rules($chat, array_merge($chat->answers ?? [], $clean)))->filter(fn ($r, $k) => array_key_exists(Str::before($k, '.'), $clean))->all();
         $validator = Validator::make($clean, $rules, $this->messages($chat));
         foreach ($validator->errors()->messages() as $key => $msgs) {
             $errors[Str::before($key, '.')] = $msgs[0];
@@ -309,7 +312,7 @@ class AgentChatService
         $invalid = array_unique(array_map(fn ($key) => Str::before($key, '.'), array_keys($validator->errors()->messages())));
 
         return array_values(array_filter($this->questions($chat), function ($question) use ($answers, $invalid) {
-            foreach ($question['fields'] as $field) {
+            foreach (! empty($question['intake']) ? array_column(WebsiteIntake::activeFields($question, $answers), 'key') : $question['fields'] as $field) {
                 if (! array_key_exists($field, $answers) || in_array($field, $invalid, true)) {
                     return true;
                 }

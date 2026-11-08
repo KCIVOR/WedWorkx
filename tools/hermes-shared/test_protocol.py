@@ -325,3 +325,26 @@ class MobilePreservationTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class IntakeContextTests(unittest.TestCase):
+    def question(self):
+        return {'key': 'contacts', 'text': 'Contacts?', 'type': 'textarea', 'required': True,
+                'fields': ['mode', 'address_mode', 'address'], 'rules': 'Conditional intake.',
+                'intake': {'version': 1, 'fields': [
+                    {'key': 'mode', 'type': 'choice', 'required': True},
+                    {'key': 'address_mode', 'type': 'choice', 'required': True, 'when': {'field': 'mode', 'in': ['now']}},
+                    {'key': 'address', 'type': 'text', 'required': True, 'when': {'field': 'address_mode', 'in': ['full']}}]}}
+
+    def test_hidden_descendant_is_not_remaining(self):
+        context = wp.build_context(chat(bot='website', questions=[self.question()], collected={'mode': 'later', 'address_mode': 'full'}))
+        self.assertIn('NEXT QUESTION (earliest unanswered):\nnull', context)
+
+    def test_exposes_descriptors_ids_and_explicit_permission_rules(self):
+        data = chat(bot='website', questions=[self.question()], collected={'mode': 'now'})
+        data['uploads'] = [{'id': 42, 'kind': 'photo'}]
+        context = wp.build_context(data)
+        self.assertIn('"intake"', context)
+        self.assertIn('"id": 42', context)
+        self.assertIn('Never infer permissions', context)
+        self.assertIn('ask exactly one visible field at a time', context)

@@ -50,7 +50,7 @@ class AgentChatController extends Controller
     {
         $chat = $this->find($id);
         $data = $request->validate([
-            'text' => ['required', 'string', 'max:'.config('agentchat.max_length')],
+            'text' => ['required', 'string', 'max:'.($chat->bot === 'website' ? config('agentchat.website_max_length', 5000) : config('agentchat.max_length'))],
             'request_id' => ['nullable', 'uuid'],
         ]);
         $text = trim($data['text']);

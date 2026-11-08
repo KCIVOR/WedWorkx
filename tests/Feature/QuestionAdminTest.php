@@ -205,7 +205,7 @@ class QuestionAdminTest extends TestCase
         $this->assertSame('Business Description', WebsiteAnswer::sole()->question_snapshot[0]['label']);
     }
 
-    public function test_confirming_again_before_paying_saves_the_current_questions(): void
+    public function test_confirming_again_before_paying_preserves_the_original_submitted_question_snapshot(): void
     {
         $s = $this->supplier();
         $this->post("/invite/{$s->invite_token}/confirm", $this->answers());
@@ -214,7 +214,7 @@ class QuestionAdminTest extends TestCase
 
         $this->post("/invite/{$s->invite_token}/confirm", $this->answers())->assertSessionHasNoErrors();
 
-        $this->assertSame('About your business', WebsiteAnswer::sole()->question_snapshot[0]['label']);
+        $this->assertSame('Business Description', WebsiteAnswer::sole()->question_snapshot[0]['label']);
     }
 
     public function test_answers_saved_before_this_feature_still_show_with_todays_labels(): void
