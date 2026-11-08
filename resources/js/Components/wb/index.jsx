@@ -38,6 +38,9 @@ export function Shell({ children }) {
     return (
         <div className="flex h-full flex-col overflow-hidden rounded-r-shell border border-wb-line bg-wb-surface font-body text-wb-text shadow-sh-md">
             {children}
+            <footer className="flex-none border-t border-wb-line bg-wb-surface px-s-4 py-[10px] text-center text-[11px] leading-[1.5] text-wb-muted">
+                Powered by <span className="font-semibold text-wb-heading">StartupLab Business Center</span>
+            </footer>
         </div>
     );
 }
