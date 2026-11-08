@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /** One conversation between a supplier (in the website chat) and the Hermes agent, relayed by the system. */
 class AgentChat extends Model
 {
-    protected $fillable = ['public_id', 'bot', 'supplier_id', 'status', 'answers', 'widget', 'waiting_since'];
+    protected $fillable = ['public_id', 'bot', 'supplier_id', 'status', 'answers', 'widget', 'waiting_since', 'last_seen_at'];
 
     protected function casts(): array
     {
-        return ['answers' => 'array', 'waiting_since' => 'datetime'];
+        return ['answers' => 'array', 'waiting_since' => 'datetime', 'last_seen_at' => 'datetime'];
     }
 
     public function supplier(): BelongsTo

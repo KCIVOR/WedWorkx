@@ -51,6 +51,10 @@ class AgentChatController extends Controller
     public function show(string $id, Request $request): JsonResponse
     {
         $chat = $this->find($id, closed: true);
+        if ($chat->status === 'open' && ! $this->chats->expired($chat)
+            && (! $chat->last_seen_at || $chat->last_seen_at->lt(now()->subSeconds(20)))) {
+            $chat->update(['last_seen_at' => now()]);
+        }
         $after = (int) $request->query('after', 0);
 
         return response()->json([

@@ -11,6 +11,7 @@ import { Alert, Icon, Pill } from '../wb';
 const NAV = [
     ['', 'Overview'],
     ['/suppliers', 'Suppliers'],
+    ['/chats', 'Active Chats'],
     ['/payments', 'Payment History'],
     ['/questions', 'Questions'],
     ['/settings', 'Settings'],

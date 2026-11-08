@@ -11,6 +11,7 @@ export default function SupplierShow({ supplier: s, answers, registration_answer
     return (
         <AdminLayout title={s.business_name} current="/suppliers">
             <Head title={s.business_name} />
+            <div><Link href={`${base}/chats?supplier=${s.id}`} className="text-[14px] font-semibold text-wb-accent">View live chats →</Link></div>
 
             <div className="-mt-s-3 flex flex-wrap items-center gap-s-3">
                 <Link href={`${base}/suppliers`} className="text-[13.5px] font-semibold text-wb-accent no-underline hover:underline">&larr; All suppliers</Link>
