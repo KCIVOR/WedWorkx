@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { isChatPoll, replyTimedOut } from './agentChatRecovery';
 
 /**
  * The supplier's side of a chat the Hermes agent runs. It only sends the supplier's words and shows Hermes' replies.
@@ -9,15 +10,24 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const csrf = () => document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
 async function call(method, url, body) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    try {
     const res = await fetch(url, {
         method,
         credentials: 'same-origin',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf() },
         body: body ? JSON.stringify(body) : undefined,
+        signal: controller.signal,
     });
     let json = null;
     try { json = await res.json(); } catch { /* empty body */ }
     return { ok: res.ok, status: res.status, json };
+    } catch {
+        return { ok: false, status: 0, json: null };
+    } finally {
+        clearTimeout(timeout);
+    }
 }
 
 const POLL_MS = 1500;
@@ -41,12 +51,13 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
     const chatId = useRef(null);
     const lastId = useRef(0);
     const failures = useRef(0);
+    const accepted = useRef({});
     const handlers = useRef({ onReady, onFallback });
     handlers.current = { onReady, onFallback };
 
     const finish = useCallback((kind, answers) => {
-        write(null);
-        chatId.current = null;
+        // Keep review's capability until confirmation so reloads resume review and complete() can close it.
+        if (kind !== 'ready') { write(null); chatId.current = null; }
         setActive(false);
         if (kind === 'ready') handlers.current.onReady(answers); else handlers.current.onFallback(answers);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -61,14 +72,15 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
             const r = await call('GET', `/agent-chat/${chatId.current}?after=${lastId.current}`);
             if (stopped) return;
 
-            if (!r.ok) {
+            if (!r.ok || !isChatPoll(r.json)) {
                 // A broken or ended chat, or the network: three misses in a row and the fixed chat takes over.
-                if (r.status === 404 || r.status === 409 || r.status === 403 || ++failures.current >= 3) { finish('fallback', {}); return; }
+                if (r.status === 404 || r.status === 409 || r.status === 403 || ++failures.current >= 6) { finish('fallback', accepted.current); return; }
                 timer = setTimeout(poll, POLL_MS);
                 return;
             }
             failures.current = 0;
             const d = r.json;
+            if (d.answers) accepted.current = d.answers;
 
             if (d.messages.length) {
                 lastId.current = d.messages[d.messages.length - 1].id;
@@ -83,7 +95,8 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
             if (d.status === 'review') { finish('ready', d.answers ?? {}); return; }
             if (d.status === 'fallback' || d.status === 'done') { finish('fallback', d.answers ?? {}); return; }
 
-            if (d.waiting_seconds >= d.timeout) {
+            // Browser handoffs and short reconnects get a small grace window before choosing the fixed form.
+            if (replyTimedOut(d.waiting_seconds, d.timeout)) {
                 const f = await call('POST', `/agent-chat/${chatId.current}/fallback`);
                 if (stopped) return;
                 if (f.ok && f.json?.fallback) { finish('fallback', f.json.answers ?? {}); return; }
@@ -93,16 +106,21 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
 
         async function begin() {
             const saved = read();
-            if (saved) {
-                chatId.current = saved;
-            } else {
-                const r = await call('POST', startUrl);
+            for (let attempt = 0; attempt < 3; attempt++) {
+                // The server chooses the canonical invitation/cookie session; browser storage is only a legacy hint.
+                const r = await call('POST', startUrl, saved ? { resume_id: saved } : undefined);
                 if (stopped) return;
-                if (!r.ok || r.json?.fallback || !r.json?.chat_id) { finish('fallback', {}); return; }
-                chatId.current = r.json.chat_id;
-                write(r.json.chat_id);
+                if (r.ok && !r.json?.fallback && r.json?.chat_id) {
+                    chatId.current = r.json.chat_id;
+                    accepted.current = r.json.answers ?? {};
+                    write(r.json.chat_id);
+                    poll();
+                    return;
+                }
+                if (r.status === 403 || r.status === 404 || attempt === 2) { finish('fallback', accepted.current); return; }
+                await new Promise((resolve) => { timer = setTimeout(resolve, POLL_MS); });
+                if (stopped) return;
             }
-            poll();
         }
 
         begin();
@@ -128,5 +146,13 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
         if (id) call('POST', `/agent-chat/${id}/finish`);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return { active, messages, widget, waiting, send, complete };
+    const retry = () => {
+        lastId.current = 0;
+        failures.current = 0;
+        accepted.current = {}; // Keep corrected fixed-form answers in the page; do not replay an older agent cache.
+        setMessages([]);
+        setWaiting(true);
+        setActive(true);
+    };
+    return { active, messages, widget, waiting, send, complete, retry };
 }

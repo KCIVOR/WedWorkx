@@ -1,3 +1,4 @@
+import { shouldStartAgent } from '../lib/agentChatRecovery';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
 import {
@@ -67,7 +68,7 @@ export default function Register({ businessTypes, questions, ai, agent }) {
     const [answers, setAnswers] = useState(draft?.answers ?? {});
     const [idx, setIdx] = useState(() => resumeQuestionIndex(STEPS, draft));
     const [editIdx, setEditIdx] = useState(null);
-    const [phase, setPhase] = useState(() => resumeQuestionIndex(STEPS, draft) >= STEPS.length ? 'review' : 'chat'); // chat | review | done
+    const [phase, setPhase] = useState(() => agent?.resume ? 'chat' : resumeQuestionIndex(STEPS, draft) >= STEPS.length ? 'review' : 'chat'); // chat | review | done
     const [result, setResult] = useState(null);
     const [value, setValue] = useState('');
     const [error, setError] = useState('');
@@ -90,7 +91,7 @@ export default function Register({ businessTypes, questions, ai, agent }) {
         setPhase(next >= STEPS.length ? 'review' : 'chat');
     };
     const agentChat = useAgentChat({
-        enabled: !!agent?.enabled && !draft,
+        enabled: shouldStartAgent(agent, { draft }),
         startUrl: '/agent-chat/registration/start',
         storageKey: 'wedworks.registration.agent',
         onReady: resumeCollected,
@@ -197,6 +198,9 @@ export default function Register({ businessTypes, questions, ai, agent }) {
                     <Shell>
                         <Header title="WedWorks Assistant" />
                         <Log logRef={logRef}>
+                            {!!agent?.enabled && !agentChat.active && phase === 'chat' && (
+                                <div><Button variant="outline" onClick={() => agentChat.retry()}>Try AI chat</Button></div>
+                            )}
                             {history.map((s) => (
                                 <div key={s.key} className="contents">
                                     <AiBubble at={messageTimes[s.key]?.asked}>{questionText(s)}</AiBubble>

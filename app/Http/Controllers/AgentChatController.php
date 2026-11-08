@@ -8,6 +8,7 @@ use App\Services\AgentChatService;
 use App\Services\WebsiteDetailsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * The supplier's side of a chat the Hermes agent runs. The browser only sends the supplier's own words and reads
@@ -19,9 +20,15 @@ class AgentChatController extends Controller
     {
     }
 
-    public function startRegistration(): JsonResponse
+    public function startRegistration(Request $request): JsonResponse
     {
-        return $this->started($this->chats->start('registration', null));
+        $request->validate(['resume_id' => ['nullable', 'string', 'regex:/^[A-Za-z0-9]{40}$/']]);
+        $existing = $this->chats->resumable('registration', browserId: $request->cookie(AgentChatService::REGISTRATION_COOKIE));
+        $existing ??= $this->chats->resumable('registration', browserId: $request->input('resume_id'));
+        $chat = $existing ? $this->chats->reconnect($existing) : $this->chats->start('registration', null);
+        $response = $this->started($chat);
+        return $chat ? $response->cookie(AgentChatService::REGISTRATION_COOKIE, $chat->public_id,
+            (int) config('agentchat.expire_hours') * 60, '/', null, $request->isSecure(), true, false, 'lax') : $response;
     }
 
     public function startWebsite(string $token): JsonResponse
@@ -29,7 +36,13 @@ class AgentChatController extends Controller
         $supplier = Supplier::where('invite_token', $token)->firstOrFail();
         $this->details->authorizeEdit($supplier); // same rule as the fixed chat
 
-        return $this->started($this->chats->start('website', $supplier));
+        return DB::transaction(function () use ($supplier) {
+            // Serialize browser handoffs for the same invitation so two simultaneous starts cannot create duplicate chats.
+            $supplier = Supplier::whereKey($supplier->id)->lockForUpdate()->firstOrFail();
+            $this->details->authorizeEdit($supplier);
+            $existing = $this->chats->resumable('website', $supplier);
+            return $this->started($existing ? $this->chats->reconnect($existing) : $this->chats->start('website', $supplier));
+        });
     }
 
     public function send(string $id, Request $request): JsonResponse
@@ -64,7 +77,7 @@ class AgentChatController extends Controller
             'waiting_seconds' => $this->chats->waitingSeconds($chat),
             'timeout' => (int) config('agentchat.reply_timeout'),
             'messages' => $chat->messages()->withActualTime()->where('id', '>', $after)->get()->map(fn ($m) => $this->shape($m))->values(),
-            'answers' => in_array($chat->status, ['review', 'done', 'fallback'], true) ? ($chat->answers ?? (object) []) : null,
+            'answers' => $chat->answers ?? (object) [],
         ]);
     }
 
@@ -91,7 +104,7 @@ class AgentChatController extends Controller
     private function started(?AgentChat $chat): JsonResponse
     {
         return $chat
-            ? response()->json(['fallback' => false, 'chat_id' => $chat->public_id, 'timeout' => (int) config('agentchat.reply_timeout')])
+            ? response()->json(['fallback' => false, 'chat_id' => $chat->public_id, 'answers' => $chat->answers ?? (object) [], 'timeout' => (int) config('agentchat.reply_timeout')])
             : response()->json(['fallback' => true]);
     }
 

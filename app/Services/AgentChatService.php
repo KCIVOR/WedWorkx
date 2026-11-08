@@ -11,6 +11,7 @@ use App\Support\RegistrationInput;
 use App\Support\RegistrationQuestions;
 use App\Support\WebsiteQuestions;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -21,6 +22,38 @@ use Illuminate\Support\Str;
  */
 class AgentChatService
 {
+    public const REGISTRATION_COOKIE = 'wedworks_registration_chat';
+
+    public function resumable(string $bot, ?Supplier $supplier = null, ?string $browserId = null): ?AgentChat
+    {
+        if ($this->mode($bot) !== 'hermes') return null;
+        $query = AgentChat::where('bot', $bot)->whereIn('status', ['open', 'review'])
+            ->where('created_at', '>=', now()->subHours((int) config('agentchat.expire_hours')));
+        if ($bot === 'website' && $supplier) {
+            $query->where('supplier_id', $supplier->id);
+        } elseif ($bot === 'registration' && is_string($browserId) && preg_match('/^[A-Za-z0-9]{40}$/', $browserId)) {
+            $query->whereNull('supplier_id')->where('public_id', $browserId);
+        } else {
+            return null;
+        }
+        return $query->latest('id')->first();
+    }
+
+    public function reconnect(AgentChat $chat): AgentChat
+    {
+        return DB::transaction(function () use ($chat) {
+            // Re-read while locked so a reply arriving during the handoff cannot be overwritten by stale state.
+            $chat = AgentChat::whereKey($chat->id)->lockForUpdate()->firstOrFail();
+            // Give a genuinely returning browser a fresh reply window, not an immediate timeout from the old browser.
+            if ($chat->status === 'open' && $chat->waiting_since
+                && (! $chat->last_seen_at || $chat->last_seen_at->lt(now()->subSeconds(30)))) {
+                $chat->waiting_since = now();
+            }
+            $chat->last_seen_at = now();
+            $chat->save();
+            return $chat;
+        });
+    }
     private const SEEN_KEY = 'hermes.chat.last_seen';
 
     private const LEASE_KEY = 'hermes.chat.consumer';
@@ -100,6 +133,7 @@ class AgentChatService
             'bot' => $bot,
             'supplier_id' => $supplier?->id,
             'status' => 'open',
+            'last_seen_at' => now(),
             'waiting_since' => now(), // Hermes is expected to greet first
         ]);
     }

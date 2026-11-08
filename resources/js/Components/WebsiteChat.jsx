@@ -1,3 +1,4 @@
+import { shouldStartAgent } from '../lib/agentChatRecovery';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { router } from '@inertiajs/react';
 import {
@@ -219,7 +220,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
 
     const [answers, setAnswers] = useState(saved ?? draft?.answers ?? {});
     const [idx, setIdx] = useState(() => saved ? questions.length : resumeQuestionIndex(questions, draft));
-    const [phase, setPhase] = useState(() => saved && payment.lastFailed ? 'saved' : saved || resumeQuestionIndex(questions, draft) >= questions.length ? 'review' : 'chat'); // chat | review | saved (payment step)
+    const [phase, setPhase] = useState(() => !saved && agent?.resume ? 'chat' : saved && payment.lastFailed ? 'saved' : saved || resumeQuestionIndex(questions, draft) >= questions.length ? 'review' : 'chat'); // chat | review | saved (payment step)
     const [payBusy, setPayBusy] = useState(false);
     const [payError, setPayError] = useState('');
     const [payLater, setPayLater] = useState(false);
@@ -246,7 +247,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
         setPhase(next >= questions.length ? 'review' : 'chat');
     };
     const agentChat = useAgentChat({
-        enabled: !!agent?.enabled && !saved && !draft,
+        enabled: shouldStartAgent(agent, { saved: !!saved, draft }),
         startUrl: `/invite/${token}/agent-chat/start`,
         storageKey: `wedworks.website.agent.${token.slice(0, 16)}`,
         onReady: resumeCollected,
@@ -414,6 +415,9 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
         <Shell>
             <Header title="WedWorks Assistant" />
             <Log logRef={logRef}>
+                {!!agent?.enabled && !saved && !agentChat.active && phase === 'chat' && (
+                    <div><Button variant="outline" onClick={() => agentChat.retry()}>Try AI chat</Button></div>
+                )}
                 <AiBubble>
                     Welcome back, {firstName}! We&apos;re excited to help create a website for {businessName}. I&apos;ll ask a few
                     questions about your services and the kind of website you&apos;d like — your answers will help us prepare a website that represents your business.

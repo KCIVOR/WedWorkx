@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RegisterSupplierRequest;
 use App\Services\EmailService;
 use App\Services\SlotService;
+use App\Services\AgentChatService;
+use Illuminate\Http\Request;
 use App\Support\BusinessTypes;
 use App\Support\RegistrationQuestions;
 use Illuminate\Http\RedirectResponse;
@@ -13,7 +15,7 @@ use Inertia\Response;
 
 class RegistrationController extends Controller
 {
-    public function show(): Response
+    public function show(Request $request): Response
     {
         return Inertia::render('Register', [
             'businessTypes' => collect(BusinessTypes::ALL)
@@ -21,7 +23,10 @@ class RegistrationController extends Controller
                 ->values(),
             'questions' => RegistrationQuestions::for(),
             'ai' => ['enabled' => (bool) config('ai.enabled')],
-            'agent' => ['enabled' => app(\App\Services\AgentChatService::class)->mode('registration') === 'hermes'],
+            'agent' => [
+                'enabled' => app(AgentChatService::class)->mode('registration') === 'hermes',
+                'resume' => app(AgentChatService::class)->resumable('registration', browserId: $request->cookie(AgentChatService::REGISTRATION_COOKIE)) !== null,
+            ],
         ]);
     }
 
@@ -32,6 +37,8 @@ class RegistrationController extends Controller
         // Only the supplier's own fields go in as they are; the answers to admin-added questions are kept with their labels.
         $result = $slots->register(\Illuminate\Support\Arr::only($data, ['name', 'email', 'mobile', 'business_name', 'business_type', 'location', 'social_link'])
             + ['extra_answers' => $extras ?: null]);
+        $chat = app(AgentChatService::class)->resumable('registration', browserId: $request->cookie(AgentChatService::REGISTRATION_COOKIE));
+        if ($chat) $chat->update(['status' => 'done', 'waiting_since' => null]);
 
         // After the slot transaction has committed. A mail failure is logged and never breaks registration.
         if ($result['supplier']) {
@@ -42,6 +49,6 @@ class RegistrationController extends Controller
         return redirect()->route('home')->with('registration', [
             'outcome' => $result['outcome'] === SlotService::ALREADY_REGISTERED ? 'already_registered' : 'registered',
             'name' => $request->validated('name'),
-        ]);
+        ])->withCookie(cookie()->forget(AgentChatService::REGISTRATION_COOKIE));
     }
 }

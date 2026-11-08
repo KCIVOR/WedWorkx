@@ -55,7 +55,10 @@ class InviteController extends Controller
         return Inertia::render('Invite', array_merge($base, ['chat' => [
             'token' => $token,
             'ai' => ['enabled' => (bool) config('ai.enabled')],
-            'agent' => ['enabled' => app(\App\Services\AgentChatService::class)->mode('website') === 'hermes'],
+            'agent' => [
+                'enabled' => app(\App\Services\AgentChatService::class)->mode('website') === 'hermes',
+                'resume' => app(\App\Services\AgentChatService::class)->resumable('website', $supplier) !== null,
+            ],
             'questions' => WebsiteQuestions::for($supplier->business_type, $supplier->business_name),
             'saved' => $supplier->websiteAnswer?->submitted_at ? $supplier->websiteAnswer->answers : null,
             'defaultArea' => $supplier->city,
@@ -80,6 +83,8 @@ class InviteController extends Controller
         $details->authorizeEdit($supplier);
 
         $details->confirm($supplier, $request->answers());
+        \App\Models\AgentChat::where('bot', 'website')->where('supplier_id', $supplier->id)
+            ->whereIn('status', ['open', 'review'])->update(['status' => 'done', 'waiting_since' => null]);
 
         return redirect()->route('invite.show', $token);
     }
