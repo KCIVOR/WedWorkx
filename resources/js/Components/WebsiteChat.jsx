@@ -10,6 +10,7 @@ import { FailedCard, PaymentCard, SavedLaterCard, startPayment } from './Payment
 import { summarize } from '../lib/summarize';
 import { fetchWording } from '../lib/wording';
 import { useAgentChat } from '../lib/agentChat';
+import { firstUnansweredIndex, resumeQuestionIndex } from '../lib/questionSequence';
 
 /* Chatbot 2. The questions come from the server (App\Support\WebsiteQuestions, rows in website_questions, edited in Admin > Questions). */
 
@@ -217,8 +218,8 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
     }, [draftKey]);
 
     const [answers, setAnswers] = useState(saved ?? draft?.answers ?? {});
-    const [idx, setIdx] = useState(saved ? questions.length : Math.min(draft?.idx ?? 0, questions.length));
-    const [phase, setPhase] = useState(saved && payment.lastFailed ? 'saved' : saved || draft?.phase === 'review' ? 'review' : 'chat'); // chat | review | saved (payment step)
+    const [idx, setIdx] = useState(() => saved ? questions.length : resumeQuestionIndex(questions, draft));
+    const [phase, setPhase] = useState(() => saved && payment.lastFailed ? 'saved' : saved || resumeQuestionIndex(questions, draft) >= questions.length ? 'review' : 'chat'); // chat | review | saved (payment step)
     const [payBusy, setPayBusy] = useState(false);
     const [payError, setPayError] = useState('');
     const [payLater, setPayLater] = useState(false);
@@ -235,28 +236,29 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
     const [agentText, setAgentText] = useState('');
 
     // When the Hermes agent runs this chat. If it cannot be reached the fixed questions carry on, keeping what it collected.
-    const firstOpen = (a) => { const i = questions.findIndex((x) => x.fields.every((f) => a[f] === undefined)); return i === -1 ? questions.length : i; };
+    const firstOpen = (a) => firstUnansweredIndex(questions, a);
+    const resumeCollected = (collected) => {
+        const merged = { ...answers, ...collected };
+        setAnswers(merged);
+        const next = firstOpen(merged);
+        setIdx(next);
+        setPhase(next >= questions.length ? 'review' : 'chat');
+    };
     const agentChat = useAgentChat({
         enabled: !!agent?.enabled && !saved && !draft,
         startUrl: `/invite/${token}/agent-chat/start`,
         storageKey: `wedworks.website.agent.${token.slice(0, 16)}`,
-        onReady: (a) => { setAnswers((x) => ({ ...x, ...a })); setIdx(questions.length); setPhase('review'); },
-        onFallback: (a) => {
-            const merged = { ...answers, ...a };
-            setAnswers(merged);
-            const i = firstOpen(merged);
-            setIdx(i);
-            setPhase(i >= questions.length ? 'review' : 'chat');
-        },
+        onReady: resumeCollected,
+        onFallback: resumeCollected,
     });
 
     const q = editIdx !== null ? questions[editIdx] : phase === 'chat' && !agentChat.active ? questions[idx] : null;
 
     useEffect(() => {
-        if (phase !== 'saved') {
-            try { sessionStorage.setItem(draftKey, JSON.stringify({ answers, idx, phase })); } catch { /* ignore */ }
+        if (phase !== 'saved' && !agentChat.active) {
+            try { sessionStorage.setItem(draftKey, JSON.stringify({ answers, idx, phase, currentKey: phase === 'chat' ? questions[idx]?.key : null })); } catch { /* ignore */ }
         }
-    }, [answers, idx, phase, draftKey]);
+    }, [answers, idx, phase, draftKey, agentChat.active]);
 
     useEffect(() => {
         if (!q) { setTyping(false); return undefined; }
@@ -287,16 +289,16 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
     }, [idx, typing, phase, editIdx, serverErrors, uploads.length]);
 
     function commit(patch) {
-        setAnswers((a) => ({ ...a, ...patch }));
+        const merged = { ...answers, ...patch };
+        setAnswers(merged);
         setServerErrors({});
         if (editIdx !== null) {
             setEditIdx(null);
             setPhase('review');
-        } else if (idx + 1 >= questions.length) {
-            setIdx(questions.length);
-            setPhase('review');
         } else {
-            setIdx(idx + 1);
+            const next = firstOpen(merged);
+            setIdx(next);
+            setPhase(next >= questions.length ? 'review' : 'chat');
         }
     }
 

@@ -50,13 +50,12 @@ class MyWebsiteController extends Controller
             'review' => null,
         ];
 
-        // Hermes-only facts (stage, website address) and the locked answers are shown only for paid orders.
+        // Paid order details and locked answers; internal production stages stay private.
         if ($paid) {
             $props['order'] = [
                 'reference' => $order->reference,
                 'amount' => (float) ($supplier->payments()->where('status', 'completed')->latest('id')->value('amount') ?? $supplier->campaign->price),
                 'paidOn' => $fmt($order->paid_at),
-                'stage' => $order->current_stage,
                 'websiteUrl' => $order->website_url,
                 'deliveredOn' => $fmt($order->delivered_at),
             ];

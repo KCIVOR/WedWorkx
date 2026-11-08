@@ -7,6 +7,7 @@ import {
 } from '../Components/wb';
 import { fetchWording } from '../lib/wording';
 import { useAgentChat } from '../lib/agentChat';
+import { firstUnansweredIndex, resumeQuestionIndex } from '../lib/questionSequence';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const normalizeMobile = (v) => {
@@ -64,9 +65,9 @@ export default function Register({ businessTypes, questions, ai, agent }) {
 
     const draft = useMemo(loadDraft, []);
     const [answers, setAnswers] = useState(draft?.answers ?? {});
-    const [idx, setIdx] = useState(Math.min(draft?.idx ?? 0, STEPS.length));
+    const [idx, setIdx] = useState(() => resumeQuestionIndex(STEPS, draft));
     const [editIdx, setEditIdx] = useState(null);
-    const [phase, setPhase] = useState(draft?.phase === 'review' ? 'review' : 'chat'); // chat | review | done
+    const [phase, setPhase] = useState(() => resumeQuestionIndex(STEPS, draft) >= STEPS.length ? 'review' : 'chat'); // chat | review | done
     const [result, setResult] = useState(null);
     const [value, setValue] = useState('');
     const [error, setError] = useState('');
@@ -79,19 +80,20 @@ export default function Register({ businessTypes, questions, ai, agent }) {
     const [agentText, setAgentText] = useState('');
 
     // When the Hermes agent runs this chat. If it cannot be reached the fixed questions carry on, keeping what it collected.
-    const firstOpen = (a) => { const i = STEPS.findIndex((s) => a[s.key] === undefined); return i === -1 ? STEPS.length : i; };
+    const firstOpen = (a) => firstUnansweredIndex(STEPS, a);
+    const resumeCollected = (collected) => {
+        const merged = { ...answers, ...collected };
+        setAnswers(merged);
+        const next = firstOpen(merged);
+        setIdx(next);
+        setPhase(next >= STEPS.length ? 'review' : 'chat');
+    };
     const agentChat = useAgentChat({
         enabled: !!agent?.enabled && !draft,
         startUrl: '/agent-chat/registration/start',
         storageKey: 'wedworks.registration.agent',
-        onReady: (a) => { setAnswers((x) => ({ ...x, ...a })); setIdx(STEPS.length); setPhase('review'); },
-        onFallback: (a) => {
-            const merged = { ...answers, ...a };
-            setAnswers(merged);
-            const i = firstOpen(merged);
-            setIdx(i);
-            setPhase(i >= STEPS.length ? 'review' : 'chat');
-        },
+        onReady: resumeCollected,
+        onFallback: resumeCollected,
     });
 
     // What the supplier sees: the reworded question if there is one, otherwise the scripted text (same source as the server).
@@ -102,8 +104,8 @@ export default function Register({ businessTypes, questions, ai, agent }) {
 
     // Persist the draft in the browser session until submit.
     useEffect(() => {
-        if (phase !== 'done') saveDraft({ answers, idx, phase });
-    }, [answers, idx, phase]);
+        if (phase !== 'done' && !agentChat.active) saveDraft({ answers, idx, phase, currentKey: phase === 'chat' ? STEPS[idx]?.key : null });
+    }, [answers, idx, phase, agentChat.active]);
 
     // Typing indicator before each question; prefill when editing.
     useEffect(() => {
@@ -145,16 +147,16 @@ export default function Register({ businessTypes, questions, ai, agent }) {
         const err = s.validate ? s.validate(v) : null;
         if (err) { setError(err); return; }
         const stored = s.key === 'mobile' ? normalizeMobile(v) : s.key === 'social_link' ? normalizeLink(v) : v;
-        setAnswers((a) => ({ ...a, [s.key]: stored }));
+        const merged = { ...answers, [s.key]: stored };
+        setAnswers(merged);
         setServerErrors({});
         if (editIdx !== null) {
             setEditIdx(null);
             setPhase('review');
-        } else if (idx + 1 >= STEPS.length) {
-            setIdx(STEPS.length);
-            setPhase('review');
         } else {
-            setIdx(idx + 1);
+            const next = firstOpen(merged);
+            setIdx(next);
+            setPhase(next >= STEPS.length ? 'review' : 'chat');
         }
     }
 

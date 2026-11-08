@@ -60,7 +60,9 @@ class FakeApi:
     def __call__(self, method, path, body=None):
         self.calls.append((method, path, body))
         if method == 'GET':
-            return 200, {'data': chat(self.latest)}
+            data = chat(self.latest)
+            data.update(getattr(self, 'chat_overrides', {}))
+            return 200, {'data': data}
         for suffix, answer in self.replies.items():
             if path.endswith(suffix):
                 return answer
@@ -154,6 +156,24 @@ class WrapSupplierTextTest(unittest.TestCase):
 # ------------------------------------------------------------------ build_context
 
 class BuildContextTest(unittest.TestCase):
+    def test_next_question_stays_at_earliest_missing_even_with_later_answers(self):
+        state = chat(collected={'business_type': 'florist'})
+        text = wp.build_context(state)
+        self.assertIn('NEXT QUESTION (earliest unanswered):', text)
+        block = text.split('NEXT QUESTION (earliest unanswered):\n', 1)[1].split('\n\n', 1)[0]
+        self.assertEqual('name', json.loads(block)['key'])
+
+    def test_optional_question_must_be_offered_or_explicitly_skipped(self):
+        state = chat(collected={'name': 'Ana', 'business_type': 'florist'})
+        state['questions'].append({'key': 'social', 'text': 'Your website?', 'required': False, 'fields': ['social'], 'rules': 'Optional.'})
+        text = wp.build_context(state)
+        block = text.split('NEXT QUESTION (earliest unanswered):\n', 1)[1].split('\n\n', 1)[0]
+        self.assertEqual('social', json.loads(block)['key'])
+        state['collected']['social'] = ''
+        text = wp.build_context(state)
+        block = text.split('NEXT QUESTION (earliest unanswered):\n', 1)[1].split('\n\n', 1)[0]
+        self.assertIsNone(json.loads(block))
+
     def test_it_contains_the_instructions_questions_and_collected_answers(self):
         text = wp.build_context(chat(collected={'name': 'Ana Reyes'}))
         self.assertIn(wp.INSTRUCTIONS[:60], text)
@@ -273,6 +293,34 @@ class ApplyPlanTest(unittest.TestCase):
             self.assertIn('/chats/abc123', path)
         self.assertEqual({'answers'}, set(api.posted('/answers')[0][2]))
         self.assertEqual({'text'}, set(api.posted('/messages')[0][2]))
+
+
+class MobilePreservationTest(unittest.TestCase):
+    def test_raw_mobile_is_preserved_when_model_masks_or_omits_it(self):
+        for supplied in ('09603883166', '+63 960 388 3166'):
+            for answers in ({'mobile': '+639****3166'}, {}):
+                api = FakeApi([{'id': 1, 'role': 'supplier', 'text': supplied}])
+                api.chat_overrides = {'next_question': {'fields': ['mobile']}}
+                wp.apply_plan(api, 'cid', dict(PLAN, answers=answers), 1)
+                self.assertEqual('+639603883166', api.posted('/answers')[0][2]['answers']['mobile'])
+
+    def test_does_not_guess_from_masked_invalid_or_embedded_numbers(self):
+        for supplied in ('+639****3166', '0960388316', 'Call 09603883166 or 09171234567'):
+            api = FakeApi([{'id': 1, 'role': 'supplier', 'text': supplied}])
+            wp.apply_plan(api, 'cid', dict(PLAN, answers={}), 1)
+            self.assertEqual([], api.posted('/answers'))
+
+    def test_does_not_extract_from_an_assistant_message(self):
+        api = FakeApi([{'id': 1, 'role': 'hermes', 'text': '09603883166'}])
+        wp.apply_plan(api, 'cid', dict(PLAN, answers={}), 1)
+        self.assertEqual([], api.posted('/answers'))
+
+    def test_does_not_extract_for_website_or_an_unrelated_question(self):
+        for overrides in ({'bot': 'website'}, {'next_question': {'fields': ['business_name']}}):
+            api = FakeApi([{'id': 1, 'role': 'supplier', 'text': '09603883166'}])
+            api.chat_overrides = overrides
+            wp.apply_plan(api, 'cid', dict(PLAN, answers={}), 1)
+            self.assertEqual([], api.posted('/answers'))
 
 
 if __name__ == '__main__':

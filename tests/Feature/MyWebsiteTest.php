@@ -72,6 +72,13 @@ class MyWebsiteTest extends TestCase
 
     // ---------- access ----------
 
+    public function test_internal_production_stage_is_not_sent_to_the_client(): void
+    {
+        $s = $this->supplier(SupplierStatus::Building, 3);
+        $this->page($s)->assertOk()->assertInertia(fn ($p) => $p->missing('order.stage'));
+        $this->assertSame(3, $s->order->current_stage);
+    }
+
     public function test_an_invalid_token_shows_nothing_about_any_supplier(): void
     {
         $s = $this->supplier(SupplierStatus::Paid);
@@ -153,20 +160,20 @@ class MyWebsiteTest extends TestCase
 
         $this->page($s)->assertInertia(fn ($p) => $p
             ->where('status', 'paid')
-            ->where('order.reference', $s->order->reference)->where('order.amount', 10000)->where('order.stage', 0)->where('order.websiteUrl', null)
+            ->where('order.reference', $s->order->reference)->where('order.amount', 10000)->missing('order.stage')->where('order.websiteUrl', null)
             ->has('order.paidOn')
             ->where('canEditDetails', false)
             ->has('review.questions', 8)->where('review.answers.style', 'romantic')->has('review.uploads', 1)
             ->missing('review.email')->missing('order.supplier_id'));
     }
 
-    public function test_progress_is_correct_for_every_stage_from_0_to_6(): void
+    public function test_internal_progress_stays_private_for_every_stage_from_0_to_6(): void
     {
         foreach (range(0, 6) as $stage) {
             $status = $stage === 0 ? SupplierStatus::Paid : SupplierStatus::Building;
             $s = $this->supplier($status, $stage);
 
-            $this->page($s)->assertInertia(fn ($p) => $p->where('status', $status->value)->where('order.stage', $stage));
+            $this->page($s)->assertInertia(fn ($p) => $p->where('status', $status->value)->missing('order.stage'));
         }
     }
 
@@ -175,7 +182,7 @@ class MyWebsiteTest extends TestCase
         $s = $this->supplier(SupplierStatus::Delivered, 6);
 
         $this->page($s)->assertInertia(fn ($p) => $p
-            ->where('status', 'delivered')->where('order.stage', 6)->where('order.websiteUrl', 'https://rosal.example.ph')->has('order.deliveredOn'));
+            ->where('status', 'delivered')->missing('order.stage')->where('order.websiteUrl', 'https://rosal.example.ph')->has('order.deliveredOn'));
     }
 
     public function test_the_page_follows_changes_made_by_hermes_without_any_other_step(): void
@@ -184,9 +191,9 @@ class MyWebsiteTest extends TestCase
         $ref = $s->order->reference;
         $h = ['Authorization' => 'Bearer tok'];
 
-        $this->page($s)->assertInertia(fn ($p) => $p->where('status', 'paid')->where('order.stage', 0));
+        $this->page($s)->assertInertia(fn ($p) => $p->where('status', 'paid')->missing('order.stage'));
         $this->postJson("/api/hermes/orders/$ref/stage", ['stage' => 1], $h)->assertOk();
-        $this->page($s)->assertInertia(fn ($p) => $p->where('status', 'building')->where('order.stage', 1));
+        $this->page($s)->assertInertia(fn ($p) => $p->where('status', 'building')->missing('order.stage'));
         foreach (range(2, 6) as $i) {
             $this->postJson("/api/hermes/orders/$ref/stage", ['stage' => $i], $h)->assertOk();
         }

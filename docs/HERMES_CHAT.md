@@ -24,10 +24,10 @@ Same address and token as the order API: `http://localhost:8000/api/hermes` on t
 1. `GET /chats?wait=20&consumer=NAME` (`wait` 0 to 20 seconds, `consumer` a short lowercase name such as `wedworks-plugin`). With `wait` the website holds the request open until a chat is waiting (a new chat to greet, or a message to answer) and answers at once, so there is no need to ask every second; with `wait=0` it answers immediately (simple agents can ask every 1 to 2 seconds). This is also how Hermes says "I am listening".
    - Only one consumer answers at a time. If another consumer asked within the last 30 seconds you get `{"data": [], "held_by": "name"}` straight away and do not count as listening.
    - `seen=CHATID:COUNT,CHATID:COUNT` lists chats you are already working on (their message count when you took them). They are not returned again until a new message arrives in them, so a held request does not end at once for a chat in progress.
-2. `GET /chats/{chat_id}` for each: the transcript, the `questions` to ask (key, label, type, required, options, and `rules` in words), what is `collected` so far, and `guidelines`. In the website chat there is also `supplier` (first name, business) and `uploads`.
+2. `GET /chats/{chat_id}` for each: the transcript, the ordered `questions` to ask (key, label, type, required, options, and `rules` in words), the earliest unanswered `next_question` (or null), what is `collected` so far, and `guidelines`. In the website chat there is also `supplier` (first name, business) and `uploads`. Accept volunteered answers, then return to the earliest unanswered question; do not choose topics out of order.
 3. `POST /chats/{chat_id}/messages` `{"text": "..."}` to reply. For photos and the logo add `"widget": "upload"` (website chat only): the supplier then sees the upload buttons.
 4. `POST /chats/{chat_id}/answers` `{"answers": {"email": "maria@example.com"}}` as soon as the supplier gives something. The system answers `{ok, accepted, errors}`. If an answer is refused, the message in `errors` says why: explain it to the supplier in your own words and ask again.
-5. `POST /chats/{chat_id}/ready` when every required question has an accepted answer. If something is missing you get `409 not_ready` with the list. When it succeeds the supplier sees a review card with all their answers and confirms.
+5. `POST /chats/{chat_id}/ready` after every question has been answered or explicitly skipped. Optional questions must be offered in order, but remain skippable. Record empty text/list values for a requested skip, including every field of a multi-field question. Required answers must still pass validation. Untouched optional questions or incomplete multi-field questions also return `409 not_ready` with the ordered missing list. When it succeeds the supplier sees a review card and confirms.
 
 Answer keys are the question keys (the question's `fields`). For example `services` is a list of `{"name": "...", "price": "..."}`, `areas` uses `service_areas` (a list) and `booking`, and a choice question takes the option's `value`.
 
@@ -48,5 +48,5 @@ In dev mode, `php artisan hermes:fake` runs a simple stand-in that asks the fixe
 |---|---|---|
 | 401 | `unauthorized` | Missing or wrong token |
 | 404 | `chat_not_found` | Unknown, finished, or expired chat (24 hours), or the chat was handed to the fixed chat |
-| 409 | `not_ready` | `ready` called while required questions have no accepted answer |
+| 409 | `not_ready` | Required answer invalid/missing, or a question has not been answered or explicitly skipped |
 | 422 | (validation) | Empty reply, text too long, or `widget` used in the registration chat |

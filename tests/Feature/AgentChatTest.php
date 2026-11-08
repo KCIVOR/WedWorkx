@@ -76,6 +76,7 @@ class AgentChatTest extends TestCase
         return $o + [
             'name' => 'Maria Santos', 'email' => 'Maria@Example.com', 'mobile' => '0917 123 4567', 'business_name' => 'Rosal Studio',
             'business_type' => 'photographer', 'location' => 'Tagaytay City, Cavite',
+            'social_link' => '',
         ];
     }
 
@@ -114,6 +115,39 @@ class AgentChatTest extends TestCase
     }
 
     // ---------- registration through Hermes ----------
+
+    public function test_hermes_must_offer_optional_questions_before_review_and_can_skip_them(): void
+    {
+        $id = $this->startRegistration();
+        $answers = $this->coreAnswers();
+        unset($answers['social_link']);
+        $this->postJson("/api/hermes/chats/$id/answers", ['answers' => $answers], $this->auth())->assertOk();
+        $this->getJson("/api/hermes/chats/$id", $this->auth())->assertJsonPath('data.next_question.key', 'social_link');
+        $this->postJson("/api/hermes/chats/$id/ready", [], $this->auth())
+            ->assertStatus(409)->assertJsonPath('missing.0.key', 'social_link');
+        $this->postJson("/api/hermes/chats/$id/answers", ['answers' => ['social_link' => '']], $this->auth())->assertOk();
+        $this->postJson("/api/hermes/chats/$id/ready", [], $this->auth())->assertOk();
+        $this->getJson("/api/hermes/chats/$id", $this->auth())->assertJsonPath('data.next_question', null);
+    }
+
+    public function test_website_review_waits_for_optional_and_partial_questions_in_order(): void
+    {
+        $s = $this->supplier();
+        $id = $this->startWebsite($s);
+        $answers = [
+            'description' => 'A company description.', 'style' => 'modern',
+            'extra1' => 'Full-day coverage', 'extra2' => 'Both photos and videos',
+            'service_areas' => ['Cavite'],
+        ];
+        $this->postJson("/api/hermes/chats/$id/answers", ['answers' => $answers], $this->auth())->assertOk();
+        $result = $this->postJson("/api/hermes/chats/$id/ready", [], $this->auth())->assertStatus(409)->json();
+        $this->assertSame(['services', 'areas', 'media', 'additional'], array_column($result['missing'], 'key'));
+        $this->getJson("/api/hermes/chats/$id", $this->auth())->assertJsonPath('data.next_question.key', 'services');
+        $this->postJson("/api/hermes/chats/$id/answers", ['answers' => [
+            'services' => [], 'booking' => '', 'colors' => '', 'additional' => '',
+        ]], $this->auth())->assertOk();
+        $this->postJson("/api/hermes/chats/$id/ready", [], $this->auth())->assertOk();
+    }
 
     public function test_hermes_runs_the_registration_and_the_supplier_confirms_it(): void
     {

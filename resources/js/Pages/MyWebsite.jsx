@@ -4,7 +4,6 @@ import {
     AiBubble, Alert, Button, ButtonLink, Card, CardIcon, CardText, CardTitle, Header, Log, Note, Pill, ReviewRow, ReviewRows,
     Shell, StatusCard,
 } from '../Components/wb';
-import { SlotMeter } from '../Components/wb/forms';
 import { ConfirmedCard, FailedCard, PaymentCard, startPayment } from '../Components/PaymentCards';
 import { summarize } from '../lib/summarize';
 
@@ -39,28 +38,14 @@ function LiveCard({ businessName, order }) {
     );
 }
 
-/** Production progress: 1/6 to 6/6, amber while in progress and green when done. */
-function ProgressCard({ order, delivered }) {
-    const stage = order.stage;
-    const text = delivered
-        ? 'All six steps are done and your website is live.'
-        : stage === 0
-            ? 'Your payment is confirmed. Our team will start building your website soon.'
-            : stage === 6
-                ? 'Final checks are done. Your website will be delivered very soon.'
-                : `Step ${stage} of 6 is done. We are working on the next one.`;
+function DeliveryCard() {
     return (
         <Card>
-            <CardTitle>Website progress</CardTitle>
-            <div>
-                {delivered
-                    ? <Pill tone="success">Complete (6/6)</Pill>
-                    : stage === 0
-                        ? <Pill tone="muted">Waiting to start (0/6)</Pill>
-                        : <Pill tone="warning">In progress ({stage}/6)</Pill>}
-            </div>
-            <SlotMeter taken={stage} total={6} label={`${stage} of 6 steps done`} />
-            <CardText>{text}</CardText>
+            <CardTitle>Website delivery</CardTitle>
+            <CardText>
+                Your website will be delivered within 5 days after your payment is confirmed and your website details are submitted.
+                We&apos;ll email you when your website is ready.
+            </CardText>
         </Card>
     );
 }
@@ -69,7 +54,6 @@ function StatusGrid({ p }) {
     const paid = PAID.includes(p.status);
     const delivered = p.status === 'delivered';
     const expired = p.status === 'expired';
-    const stage = p.order?.stage ?? 0;
 
     const invitation = expired ? ['danger', 'Expired'] : paid ? ['success', 'Accepted'] : ['info', 'Invited'];
     const payment = paid ? ['success', 'Paid']
@@ -77,10 +61,6 @@ function StatusGrid({ p }) {
             : p.payment.lastFailed ? ['danger', 'Failed, retry needed']
                 : ['muted', 'Not yet paid'];
     const website = p.detailsSubmitted ? ['success', paid ? 'Submitted · locked' : 'Submitted'] : ['muted', 'Not started'];
-    const production = delivered ? ['success', 'Complete (6/6)']
-        : paid && stage > 0 ? ['warning', `In progress (${stage}/6)`]
-            : paid ? ['muted', 'Waiting to start']
-                : ['muted', 'Not started'];
     const delivery = delivered ? ['success', 'Live'] : ['muted', 'Not yet'];
 
     const items = [
@@ -88,7 +68,6 @@ function StatusGrid({ p }) {
         ['Invitation', invitation],
         ['Payment', payment],
         ['Website information', website],
-        ['Production', production],
         ['Delivery', delivery],
     ];
 
@@ -177,8 +156,7 @@ function DevPanel({ token, status, order, expired }) {
         router.post(`/dev/invite/${token}/${what}`, {}, { preserveScroll: true, onFinish: () => setBusy(false) });
     };
     const paid = PAID.includes(status);
-    const stage = order?.stage ?? 0;
-    const advanceLabel = status === 'delivered' ? 'Delivered' : stage >= 6 ? 'Deliver the website' : `Advance production to stage ${stage + 1}`;
+    const advanceLabel = status === 'delivered' ? 'Delivered' : 'Advance production / deliver (dev only)';
 
     return (
         <Card>
@@ -225,7 +203,7 @@ export default function MyWebsite(props) {
                             {status === 'expired' && <ExpiredCard firstName={firstName} businessName={businessName} />}
                             {!paid && status !== 'expired' && <BeforePayment p={props} />}
                             {paid && <ConfirmedCard firstName={firstName} businessName={businessName} order={order} status={status} />}
-                            {paid && <ProgressCard order={order} delivered={status === 'delivered'} />}
+                            {paid && status !== 'delivered' && <DeliveryCard />}
                             {status === 'delivered' && <LiveCard businessName={businessName} order={order} />}
 
                             <StatusGrid p={props} />

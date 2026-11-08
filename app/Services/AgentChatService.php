@@ -267,20 +267,33 @@ class AgentChatService
         return $this->questions($chat);
     }
 
+    /** Questions still needing an answer or an explicit optional skip, in configured order. */
+    public function unansweredQuestions(AgentChat $chat): array
+    {
+        $answers = $chat->answers ?? [];
+        $validator = Validator::make($answers, $this->rules($chat), $this->messages($chat));
+        $invalid = array_unique(array_map(fn ($key) => Str::before($key, '.'), array_keys($validator->errors()->messages())));
+
+        return array_values(array_filter($this->questions($chat), function ($question) use ($answers, $invalid) {
+            foreach ($question['fields'] as $field) {
+                if (! array_key_exists($field, $answers) || in_array($field, $invalid, true)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }));
+    }
+
     /**
-     * Ready for the supplier's review when every required question has an accepted answer.
+     * Review follows the full interview. Optional questions can be explicitly skipped, not silently omitted.
      *
      * @return array{ok:bool,missing:list<array{key:string,label:string}>}
      */
     public function ready(AgentChat $chat): array
     {
-        $validator = Validator::make($chat->answers ?? [], $this->rules($chat));
-        if ($validator->fails()) {
-            $bad = array_unique(array_map(fn ($k) => Str::before($k, '.'), array_keys($validator->errors()->messages())));
-            $missing = collect($this->questions($chat))
-                ->filter(fn ($q) => count(array_intersect($q['fields'], $bad)) > 0)
-                ->map(fn ($q) => ['key' => $q['key'], 'label' => $q['label']])->values()->all();
-
+        $missing = array_map(fn ($question) => ['key' => $question['key'], 'label' => $question['label']], $this->unansweredQuestions($chat));
+        if ($missing) {
             return ['ok' => false, 'missing' => $missing];
         }
 

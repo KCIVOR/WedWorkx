@@ -1,0 +1,787 @@
+{
+    "registration": [
+        {
+            "key": "name",
+            "type": "core",
+            "label": "Name",
+            "text": "Hello! Welcome to our 10‑10‑10 Campaign! We're celebrating Kasalang Tagaytay's 10th anniversary with a special website offer for wedding suppliers. I'd love to know more about your business. Let's get started! 🎉\n\nMay I know your name?",
+            "placeholder": "Your full name",
+            "options": null,
+            "required": true,
+            "sort_order": 10,
+            "locked": true
+        },
+        {
+            "key": "email",
+            "type": "core",
+            "label": "Email",
+            "text": "Nice to meet you, {name}! What's your email address? We'll use this to send you updates about the website offer.",
+            "placeholder": "you@example.com",
+            "options": null,
+            "required": true,
+            "sort_order": 20,
+            "locked": true
+        },
+        {
+            "key": "mobile",
+            "type": "core",
+            "label": "Mobile",
+            "text": "What's the best mobile number to reach you?",
+            "placeholder": "09xx xxx xxxx",
+            "options": null,
+            "required": true,
+            "sort_order": 30,
+            "locked": true
+        },
+        {
+            "key": "business_name",
+            "type": "core",
+            "label": "Business Name",
+            "text": "What's the name of your wedding business?",
+            "placeholder": "Business name",
+            "options": null,
+            "required": true,
+            "sort_order": 40,
+            "locked": true
+        },
+        {
+            "key": "business_type",
+            "type": "core",
+            "label": "Business Type",
+            "text": "What type of wedding service do you offer?",
+            "placeholder": null,
+            "options": null,
+            "required": true,
+            "sort_order": 50,
+            "locked": true
+        },
+        {
+            "key": "location",
+            "type": "core",
+            "label": "Location",
+            "text": "Which city or province is your business based in?",
+            "placeholder": "e.g. Tagaytay City, Cavite",
+            "options": null,
+            "required": true,
+            "sort_order": 60,
+            "locked": true
+        },
+        {
+            "key": "social_link",
+            "type": "core",
+            "label": "Social Media",
+            "text": "Last one for now — do you have a Facebook page, Instagram account, or existing website you'd like to share? This is optional.",
+            "placeholder": "Facebook / Instagram / website link",
+            "options": null,
+            "required": false,
+            "sort_order": 70,
+            "locked": true
+        }
+    ],
+    "website": [
+        {
+            "key": "description",
+            "type": "textarea",
+            "label": "Company Description",
+            "text": "Tell us about your company. What products or services do you offer, and how long have you been in business?",
+            "placeholder": "What your company offers and how long you have been in business",
+            "options": null,
+            "required": true,
+            "applies_to": null,
+            "sort_order": 10,
+            "locked": true
+        },
+        {
+            "key": "q_7be6711e",
+            "type": "textarea",
+            "label": "Target Audience",
+            "text": "Who do you want to reach through your website—for example, couples planning a wedding, wedding suppliers, or corporate clients?",
+            "placeholder": "e.g. Couples planning a wedding in Tagaytay",
+            "options": null,
+            "required": true,
+            "applies_to": null,
+            "sort_order": 20,
+            "locked": false
+        },
+        {
+            "key": "q_c074a772",
+            "type": "textarea",
+            "label": "Main Website Goal",
+            "text": "What is the main action you want visitors to take—for example, send an inquiry, submit a form, request a quote, book an appointment, purchase a service, or subscribe?",
+            "placeholder": "e.g. Request a quote or book a consultation",
+            "options": null,
+            "required": true,
+            "applies_to": null,
+            "sort_order": 30,
+            "locked": false
+        },
+        {
+            "key": "q_77963408",
+            "type": "textarea",
+            "label": "What Makes Your Business Different?",
+            "text": "What sets your company apart from other businesses offering similar products or services?",
+            "placeholder": "e.g. Our experience, specialties, or personal approach",
+            "options": null,
+            "required": false,
+            "applies_to": null,
+            "sort_order": 40,
+            "locked": false
+        },
+        {
+            "key": "services",
+            "type": "services",
+            "label": "Services / Packages",
+            "text": "What services or packages would you like to list on your website? Add each one, and the price if you'd like to show it.",
+            "placeholder": null,
+            "options": null,
+            "required": false,
+            "applies_to": null,
+            "sort_order": 50,
+            "locked": true
+        },
+        {
+            "key": "extra1",
+            "type": "number",
+            "label": "Guest Capacity",
+            "text": "About how many guests can your venue fit comfortably?",
+            "placeholder": "e.g. 150 guests",
+            "options": null,
+            "required": false,
+            "applies_to": [
+                "venue"
+            ],
+            "sort_order": 60,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "choice",
+            "label": "What's Included",
+            "text": "Besides the venue space, what else is included — like catering, tables and chairs, or decorations?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Venue space only",
+                    "label": "Venue space only"
+                },
+                {
+                    "value": "Venue + basic setup (tables & chairs)",
+                    "label": "Venue + basic setup (tables & chairs)"
+                },
+                {
+                    "value": "Venue + full package (catering, decor, etc.)",
+                    "label": "Venue + full package (catering, decor, etc.)"
+                },
+                {
+                    "value": "It depends on the package",
+                    "label": "It depends on the package"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "venue"
+            ],
+            "sort_order": 70,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "choice",
+            "label": "Planning Service",
+            "text": "Which of these do you offer?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Full wedding planning, start to finish",
+                    "label": "Full wedding planning, start to finish"
+                },
+                {
+                    "value": "Day-of coordination only",
+                    "label": "Day-of coordination only"
+                },
+                {
+                    "value": "Both — depending on what the couple needs",
+                    "label": "Both — depending on what the couple needs"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "coordinator"
+            ],
+            "sort_order": 80,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "textarea",
+            "label": "Why Couples Choose You",
+            "text": "What's something couples often say they loved about working with you?",
+            "placeholder": "Optional — e.g. attention to detail, staying calm under pressure...",
+            "options": null,
+            "required": false,
+            "applies_to": [
+                "coordinator"
+            ],
+            "sort_order": 90,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "choice",
+            "label": "Coverage Type",
+            "text": "What kind of coverage do you usually offer?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Full-day coverage",
+                    "label": "Full-day coverage"
+                },
+                {
+                    "value": "Half-day coverage",
+                    "label": "Half-day coverage"
+                },
+                {
+                    "value": "Ceremony only",
+                    "label": "Ceremony only"
+                },
+                {
+                    "value": "Pre-wedding + wedding day",
+                    "label": "Pre-wedding + wedding day"
+                },
+                {
+                    "value": "Depends on the package",
+                    "label": "Depends on the package"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "photographer"
+            ],
+            "sort_order": 100,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "choice",
+            "label": "Photo or Video",
+            "text": "Do you do photos, videos, or both?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Photos only",
+                    "label": "Photos only"
+                },
+                {
+                    "value": "Videos only",
+                    "label": "Videos only"
+                },
+                {
+                    "value": "Both photos and videos",
+                    "label": "Both photos and videos"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "photographer"
+            ],
+            "sort_order": 110,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "textarea",
+            "label": "Menu Options",
+            "text": "What food packages or menu styles do you offer?",
+            "placeholder": "e.g. Buffet, plated meals, food stations...",
+            "options": null,
+            "required": false,
+            "applies_to": [
+                "caterer"
+            ],
+            "sort_order": 120,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "choice",
+            "label": "Special Requests",
+            "text": "Can you prepare special meals, like vegetarian or halal, if couples ask?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Yes, we can accommodate special requests",
+                    "label": "Yes, we can accommodate special requests"
+                },
+                {
+                    "value": "We can try — just ask us first",
+                    "label": "We can try — just ask us first"
+                },
+                {
+                    "value": "We only offer our standard menu",
+                    "label": "We only offer our standard menu"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "caterer"
+            ],
+            "sort_order": 130,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "textarea",
+            "label": "Style",
+            "text": "What flower or decoration styles do you usually do?",
+            "placeholder": "e.g. Garden-style, minimalist, tropical...",
+            "options": null,
+            "required": false,
+            "applies_to": [
+                "florist"
+            ],
+            "sort_order": 140,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "choice",
+            "label": "Other Décor",
+            "text": "Do you only do flowers, or do you also handle other décor like backdrops or lights?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Flowers only",
+                    "label": "Flowers only"
+                },
+                {
+                    "value": "Flowers plus some décor",
+                    "label": "Flowers plus some décor"
+                },
+                {
+                    "value": "Full styling and décor",
+                    "label": "Full styling and décor"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "florist"
+            ],
+            "sort_order": 150,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "choice",
+            "label": "Service Location",
+            "text": "Where do you usually do the makeup — at your own studio, or do you travel to the venue?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "At my own studio",
+                    "label": "At my own studio"
+                },
+                {
+                    "value": "I travel to the venue",
+                    "label": "I travel to the venue"
+                },
+                {
+                    "value": "Both, depending on the booking",
+                    "label": "Both, depending on the booking"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "makeup"
+            ],
+            "sort_order": 160,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "choice",
+            "label": "Trial Session",
+            "text": "Do you offer a trial session before the wedding day?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Yes, trials are included",
+                    "label": "Yes, trials are included"
+                },
+                {
+                    "value": "Trials available for an extra fee",
+                    "label": "Trials available for an extra fee"
+                },
+                {
+                    "value": "No trials — just the wedding day",
+                    "label": "No trials — just the wedding day"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "makeup"
+            ],
+            "sort_order": 170,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "choice",
+            "label": "Offering",
+            "text": "What do you offer?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Gown or suit rentals",
+                    "label": "Gown or suit rentals"
+                },
+                {
+                    "value": "Custom-made outfits",
+                    "label": "Custom-made outfits"
+                },
+                {
+                    "value": "Ready-made (off-the-rack)",
+                    "label": "Ready-made (off-the-rack)"
+                },
+                {
+                    "value": "A mix of these",
+                    "label": "A mix of these"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "attire"
+            ],
+            "sort_order": 180,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "choice",
+            "label": "Fittings & Alterations",
+            "text": "Do you also offer fitting or alteration services?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Yes, included",
+                    "label": "Yes, included"
+                },
+                {
+                    "value": "Available for a fee",
+                    "label": "Available for a fee"
+                },
+                {
+                    "value": "No alteration services",
+                    "label": "No alteration services"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "attire"
+            ],
+            "sort_order": 190,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "textarea",
+            "label": "What's Included",
+            "text": "What do you provide? For example a live band, DJ, host, or sound system.",
+            "placeholder": "e.g. Live band, DJ, host/emcee, sound & lights...",
+            "options": null,
+            "required": false,
+            "applies_to": [
+                "entertainment"
+            ],
+            "sort_order": 200,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "choice",
+            "label": "Duration",
+            "text": "How long do your services usually run on the wedding day?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "A few hours",
+                    "label": "A few hours"
+                },
+                {
+                    "value": "The whole event, ceremony to reception",
+                    "label": "The whole event, ceremony to reception"
+                },
+                {
+                    "value": "Depends on the package",
+                    "label": "Depends on the package"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "entertainment"
+            ],
+            "sort_order": 210,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "textarea",
+            "label": "Flavors & Designs",
+            "text": "What flavors or cake designs do you specialize in?",
+            "placeholder": "Optional — e.g. classic vanilla, custom themed designs...",
+            "options": null,
+            "required": false,
+            "applies_to": [
+                "cake"
+            ],
+            "sort_order": 220,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "choice",
+            "label": "Tasting",
+            "text": "Do you offer a free tasting before the wedding?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Yes, free tasting",
+                    "label": "Yes, free tasting"
+                },
+                {
+                    "value": "Tasting available for a fee",
+                    "label": "Tasting available for a fee"
+                },
+                {
+                    "value": "No tasting offered",
+                    "label": "No tasting offered"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "cake"
+            ],
+            "sort_order": 230,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "choice",
+            "label": "What You Make",
+            "text": "What do you make — invitations, souvenirs, or both?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Invitations only",
+                    "label": "Invitations only"
+                },
+                {
+                    "value": "Souvenirs or giveaways only",
+                    "label": "Souvenirs or giveaways only"
+                },
+                {
+                    "value": "Both invitations and souvenirs",
+                    "label": "Both invitations and souvenirs"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "invitations"
+            ],
+            "sort_order": 240,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "choice",
+            "label": "Custom Designs",
+            "text": "Can couples ask for a custom design, or do you only offer ready-made designs?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Yes, custom designs available",
+                    "label": "Yes, custom designs available"
+                },
+                {
+                    "value": "Mostly ready-made designs",
+                    "label": "Mostly ready-made designs"
+                },
+                {
+                    "value": "Both options available",
+                    "label": "Both options available"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "invitations"
+            ],
+            "sort_order": 250,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "choice",
+            "label": "Offering",
+            "text": "What do you offer?",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "Wedding car or transportation only",
+                    "label": "Wedding car or transportation only"
+                },
+                {
+                    "value": "Accommodation only",
+                    "label": "Accommodation only"
+                },
+                {
+                    "value": "Both transportation and accommodation",
+                    "label": "Both transportation and accommodation"
+                }
+            ],
+            "required": true,
+            "applies_to": [
+                "transportation"
+            ],
+            "sort_order": 260,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "textarea",
+            "label": "Vehicles & Packages",
+            "text": "What vehicles or rooms/packages do you have available?",
+            "placeholder": "Optional — e.g. bridal car, van for guests, honeymoon suite...",
+            "options": null,
+            "required": false,
+            "applies_to": [
+                "transportation"
+            ],
+            "sort_order": 270,
+            "locked": false
+        },
+        {
+            "key": "extra1",
+            "type": "textarea",
+            "label": "Business Details",
+            "text": "Tell us a bit more about what your business offers.",
+            "placeholder": "Optional",
+            "options": null,
+            "required": false,
+            "applies_to": [
+                "other"
+            ],
+            "sort_order": 280,
+            "locked": false
+        },
+        {
+            "key": "extra2",
+            "type": "textarea",
+            "label": "Additional Notes",
+            "text": "Is there anything else couples should know before booking you?",
+            "placeholder": "Optional",
+            "options": null,
+            "required": false,
+            "applies_to": [
+                "other"
+            ],
+            "sort_order": 290,
+            "locked": false
+        },
+        {
+            "key": "areas",
+            "type": "areas",
+            "label": "Service Areas & Booking",
+            "text": "Which towns or cities do you serve? And how do couples usually get in touch to book you — Messenger, phone call, or something else?",
+            "placeholder": null,
+            "options": null,
+            "required": false,
+            "applies_to": null,
+            "sort_order": 300,
+            "locked": true
+        },
+        {
+            "key": "style",
+            "type": "choice",
+            "label": "Website Style",
+            "text": "What kind of look would you like for your website? This is just a preference — our design team creates the final look for you.",
+            "placeholder": null,
+            "options": [
+                {
+                    "value": "elegant",
+                    "label": "Elegant & Luxurious"
+                },
+                {
+                    "value": "modern",
+                    "label": "Modern & Simple"
+                },
+                {
+                    "value": "romantic",
+                    "label": "Romantic & Soft"
+                },
+                {
+                    "value": "classic",
+                    "label": "Classic & Timeless"
+                },
+                {
+                    "value": "colorful",
+                    "label": "Colorful & Creative"
+                },
+                {
+                    "value": "surprise",
+                    "label": "Surprise Me!"
+                }
+            ],
+            "required": true,
+            "applies_to": null,
+            "sort_order": 310,
+            "locked": true
+        },
+        {
+            "key": "q_19a5f097",
+            "type": "textarea",
+            "label": "Style References (Links)",
+            "text": "Share links to websites or designs you like. What do you like about them—for example, their colors, layout, or overall style?",
+            "placeholder": "Website links and what you like about each one",
+            "options": null,
+            "required": false,
+            "applies_to": null,
+            "sort_order": 320,
+            "locked": false
+        },
+        {
+            "key": "media",
+            "type": "media",
+            "label": "Photos, Logo & Colors",
+            "text": "Do you have a logo, photos of your work, or favorite colors you'd like us to use? This is optional — skip it if you don't have anything ready yet.",
+            "placeholder": "Favorite colors, e.g. Blush pink and gold",
+            "options": null,
+            "required": false,
+            "applies_to": null,
+            "sort_order": 330,
+            "locked": true
+        },
+        {
+            "key": "q_702f0901",
+            "type": "textarea",
+            "label": "Search Phrases",
+            "text": "What words or phrases might someone type into Google to find your business—for example, “best wedding caterer in Tagaytay”?",
+            "placeholder": "e.g. Best wedding caterer in Tagaytay",
+            "options": null,
+            "required": false,
+            "applies_to": null,
+            "sort_order": 340,
+            "locked": false
+        },
+        {
+            "key": "additional",
+            "type": "textarea",
+            "label": "Additional Information",
+            "text": "Is there anything else you would like included on your website—for example, customer reviews, awards, promotions, or important policies?",
+            "placeholder": "Optional — leave blank to skip",
+            "options": null,
+            "required": false,
+            "applies_to": null,
+            "sort_order": 350,
+            "locked": false
+        }
+    ]
+}
