@@ -72,7 +72,7 @@ function StatusGrid({ p }) {
     ];
 
     return (
-        <div className="grid max-w-[94%] grid-cols-2 gap-s-3">
+        <div className="grid max-w-full md:max-w-[94%] grid-cols-2 gap-s-3">
             {items.map(([title, [tone, label]]) => (
                 <StatusCard key={title} title={title}><Pill tone={tone} wrap>{label}</Pill></StatusCard>
             ))}
@@ -126,7 +126,7 @@ function BeforePayment({ p }) {
                 onPay={pay}
             />
             {p.canEditDetails && (
-                <div className="max-w-[94%]"><ButtonLink block variant="outline" href={`/invite/${p.token}`}>Review or change my answers</ButtonLink></div>
+                <div className="max-w-full md:max-w-[94%]"><ButtonLink block variant="outline" href={`/invite/${p.token}`}>Review or change my answers</ButtonLink></div>
             )}
         </>
     );
@@ -189,8 +189,8 @@ export default function MyWebsite(props) {
     return (
         <>
             <Head title="My Website" />
-            <main className="flex min-h-dvh justify-center p-s-4 md:items-center md:p-s-8">
-                <div className="h-[calc(100dvh-32px)] w-full max-w-[600px] md:h-[calc(100dvh-64px)] md:max-h-[760px]">
+            <main className="flex min-h-dvh justify-center p-0 md:items-center md:p-s-8">
+                <div className="h-dvh w-full md:max-w-[600px] md:h-[calc(100dvh-64px)] md:max-h-[760px]">
                     <Shell>
                         <Header title="My Website" status={businessName} />
                         <Log>

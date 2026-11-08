@@ -36,9 +36,9 @@ export function Icon({ name, className = '' }) {
 /* ---- Shell, header, log ---- */
 export function Shell({ children }) {
     return (
-        <div className="flex h-full flex-col overflow-hidden rounded-r-shell border border-wb-line bg-wb-surface font-body text-wb-text shadow-sh-md">
+        <div className="flex h-full flex-col overflow-hidden bg-wb-surface font-body text-wb-text md:rounded-r-shell md:border md:border-wb-line md:shadow-sh-md">
             {children}
-            <footer className="flex-none border-t border-wb-line bg-wb-surface px-s-4 py-[10px] text-center text-[11px] leading-[1.5] text-wb-muted">
+            <footer className="flex-none border-t border-wb-line bg-wb-surface px-s-4 pt-[8px] pb-[max(8px,env(safe-area-inset-bottom))] text-center text-[11px] leading-[1.5] text-wb-muted">
                 Powered by <span className="font-semibold text-wb-heading">StartupLab Business Center</span>
             </footer>
         </div>
@@ -48,7 +48,7 @@ export function Shell({ children }) {
 export function Header({ title, status = 'Online' }) {
     const dev = usePage().props.dev;
     return (
-        <div className="relative z-[1] flex flex-none items-center gap-s-3 rounded-b-r-shell bg-wb-accent px-s-4 pb-s-5 pt-s-4 text-white">
+        <div className="relative z-[1] flex flex-none items-center gap-s-3 md:rounded-b-r-shell bg-wb-accent px-s-4 pb-s-5 pt-[max(16px,env(safe-area-inset-top))] text-white">
             <div className="grid h-[40px] w-[40px] flex-none place-items-center rounded-full bg-white text-[22px] text-wb-accent">
                 <Icon name="rings" />
             </div>
@@ -72,7 +72,7 @@ export function Log({ children, logRef }) {
     return (
         <div
             ref={logRef}
-            className="wb-log flex min-h-0 flex-1 flex-col gap-[18px] overflow-y-auto bg-wb-canvas px-[18px] py-s-5"
+            className="wb-log flex min-h-0 flex-1 flex-col gap-[18px] overflow-y-auto bg-wb-canvas px-s-3 py-s-4 md:px-[18px] md:py-s-5"
             aria-live="polite"
         >
             {children}
@@ -227,7 +227,7 @@ export function FieldError({ children }) {
 /* ---- Cards ---- */
 export function Card({ children, center }) {
     return (
-        <div className={`grid min-w-0 max-w-[94%] animate-wb-in gap-s-3 rounded-r-card rounded-tl-r-tail border border-wb-line bg-white p-[18px] shadow-sh-sm ${center ? 'justify-items-center text-center' : ''}`}>
+        <div className={`grid min-w-0 max-w-full md:max-w-[94%] animate-wb-in gap-s-3 rounded-r-card rounded-tl-r-tail border border-wb-line bg-white p-[18px] shadow-sh-sm ${center ? 'justify-items-center text-center' : ''}`}>
             {children}
         </div>
     );

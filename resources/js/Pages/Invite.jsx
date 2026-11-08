@@ -107,8 +107,8 @@ export default function Invite(props) {
     return (
         <>
             <Head title={expired ? 'Invitation expired' : 'Your invitation'} />
-            <main className="flex min-h-dvh justify-center p-s-4 md:items-center md:p-s-8">
-                <div className="h-[calc(100dvh-32px)] w-full max-w-[600px] md:h-[calc(100dvh-64px)] md:max-h-[760px]">{body}</div>
+            <main className="flex min-h-dvh justify-center p-0 md:items-center md:p-s-8">
+                <div className="h-dvh w-full md:max-w-[600px] md:h-[calc(100dvh-64px)] md:max-h-[760px]">{body}</div>
             </main>
         </>
     );
