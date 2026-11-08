@@ -310,6 +310,7 @@ export default function Register({ businessTypes, questions, ai, agent }) {
                             <InputZone>
                                 <InputBar
                                     value={agentText}
+                            disabled={agentChat.sending}
                                     onChange={setAgentText}
                                     onSubmit={async () => { const t = agentText; if (t.trim() && await agentChat.send(t)) setAgentText(''); }}
                                     placeholder="Type your message"

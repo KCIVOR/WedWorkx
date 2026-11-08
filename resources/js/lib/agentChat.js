@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isChatPoll, replyTimedOut } from './agentChatRecovery';
+import { createSendGate, mergeMessages, newSendId } from './chatSend';
 
 /**
  * The supplier's side of a chat the Hermes agent runs. It only sends the supplier's words and shows Hermes' replies.
@@ -48,6 +49,9 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
     const [messages, setMessages] = useState([]);
     const [widget, setWidget] = useState(null);
     const [waiting, setWaiting] = useState(true);
+    const [sending, setSending] = useState(false);
+    const sendGate = useRef(createSendGate());
+    const pendingSend = useRef(null);
     const chatId = useRef(null);
     const lastId = useRef(0);
     const failures = useRef(0);
@@ -84,10 +88,7 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
 
             if (d.messages.length) {
                 lastId.current = d.messages[d.messages.length - 1].id;
-                setMessages((m) => {
-                    const seen = new Set(m.map((x) => x.id));
-                    return [...m, ...d.messages.filter((x) => !seen.has(x.id))];
-                });
+                setMessages((m) => mergeMessages(m, d.messages));
             }
             setWidget(d.widget ?? null);
             setWaiting(!!d.awaiting);
@@ -129,14 +130,26 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
     }, [active]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const send = useCallback(async (text) => {
-        if (!chatId.current || !text.trim()) return false;
-        const r = await call('POST', `/agent-chat/${chatId.current}/messages`, { text });
-        if (!r.ok) return false;
-        lastId.current = Math.max(lastId.current, r.json.message.id);
-        setMessages((m) => [...m, r.json.message]);
-        setWaiting(true);
-        setWidget(null);
-        return true;
+        const id = chatId.current;
+        const trimmed = text.trim();
+        if (!id || !trimmed || !sendGate.current.acquire()) return false;
+        setSending(true);
+        try {
+            if (pendingSend.current?.chat !== id || pendingSend.current?.text !== trimmed) {
+                pendingSend.current = { chat: id, text: trimmed, requestId: newSendId() };
+            }
+            const r = await call('POST', `/agent-chat/${id}/messages`, { text: trimmed, request_id: pendingSend.current.requestId });
+            if (!r.ok || !r.json?.message || chatId.current !== id) return false;
+            // Only polling advances the cursor, so a late POST cannot hide an earlier bot reply.
+            setMessages((m) => mergeMessages(m, [r.json.message]));
+            pendingSend.current = null;
+            setWaiting(true);
+            setWidget(null);
+            return true;
+        } finally {
+            sendGate.current.release();
+            setSending(false);
+        }
     }, []);
 
     /** The supplier confirmed on the review card. */
@@ -154,5 +167,5 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
         setWaiting(true);
         setActive(true);
     };
-    return { active, messages, widget, waiting, send, complete, retry };
+    return { active, messages, widget, waiting, sending, send, complete, retry };
 }

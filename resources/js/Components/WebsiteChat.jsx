@@ -518,6 +518,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName }) 
                     ) : (
                         <InputBar
                             value={agentText}
+                            disabled={agentChat.sending}
                             onChange={setAgentText}
                             onSubmit={async () => { const t = agentText; if (t.trim() && await agentChat.send(t)) setAgentText(''); }}
                             placeholder="Type your message"

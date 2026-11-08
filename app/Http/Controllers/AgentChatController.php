@@ -9,6 +9,7 @@ use App\Services\WebsiteDetailsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * The supplier's side of a chat the Hermes agent runs. The browser only sends the supplier's own words and reads
@@ -48,17 +49,31 @@ class AgentChatController extends Controller
     public function send(string $id, Request $request): JsonResponse
     {
         $chat = $this->find($id);
-        $data = $request->validate(['text' => ['required', 'string', 'max:'.config('agentchat.max_length')]]);
+        $data = $request->validate([
+            'text' => ['required', 'string', 'max:'.config('agentchat.max_length')],
+            'request_id' => ['nullable', 'uuid'],
+        ]);
         $text = trim($data['text']);
         abort_if($text === '', 422, 'Please type a message.');
 
-        if ($chat->messages()->count() >= (int) config('agentchat.max_messages')) {
-            return response()->json(['error' => 'chat_full', 'message' => 'This chat is full.'], 422);
-        }
-
-        $message = $this->chats->supplierMessage($chat, $text);
-
-        return response()->json(['message' => $this->shape($message)]);
+        return DB::transaction(function () use ($chat, $text, $data) {
+            $chat = AgentChat::whereKey($chat->id)->lockForUpdate()->firstOrFail();
+            abort_if(in_array($chat->status, ['done', 'fallback'], true) || $this->chats->expired($chat), 409, 'This chat has ended.');
+            $key = empty($data['request_id']) ? null : 'chat.send.'.hash('sha256', $chat->public_id.':'.$data['request_id']);
+            if ($key && ($previousId = Cache::get($key))) {
+                $previous = $chat->messages()->withActualTime()->whereKey($previousId)->first();
+                if ($previous) {
+                    abort_if($previous->body !== $text, 409, 'This send identifier was already used for another message.');
+                    return response()->json(['message' => $this->shape($previous)]);
+                }
+            }
+            if ($chat->messages()->count() >= (int) config('agentchat.max_messages')) {
+                return response()->json(['error' => 'chat_full', 'message' => 'This chat is full.'], 422);
+            }
+            $message = $this->chats->supplierMessage($chat, $text);
+            if ($key) Cache::put($key, $message->id, 86400);
+            return response()->json(['message' => $this->shape($message)]);
+        });
     }
 
     public function show(string $id, Request $request): JsonResponse

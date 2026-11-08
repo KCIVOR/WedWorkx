@@ -183,6 +183,7 @@ export function InputBar({ value, onChange, onSubmit, placeholder, type = 'text'
             noValidate
             onSubmit={(e) => {
                 e.preventDefault();
+                if (disabled) return;
                 onSubmit();
             }}
             className="flex items-center gap-s-1 rounded-r-pill border border-wb-line bg-slate-50 py-[5px] pl-[18px] pr-[5px] transition duration-fast focus-within:border-wb-accent focus-within:bg-white focus-within:shadow-[0_0_0_4px_var(--wb-accent-soft)]"
