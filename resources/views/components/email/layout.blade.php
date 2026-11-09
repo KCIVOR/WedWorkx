@@ -36,11 +36,8 @@
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%">
   <tr><td class="hd" bgcolor="#2f5bea" style="background:#2f5bea;border-radius:20px 20px 0 0;padding:22px 32px">
     <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-      <td width="40" height="40" align="center" valign="middle" style="width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:'DM Sans',Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px">W</td>
-      <td style="padding-left:12px">
-        <div style="font-family:'DM Sans',Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px">WedWorx</div>
-        <div style="font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc">Celebrating Kasalang Tagaytay&rsquo;s 10th Anniversary</div>
-      </td>
+      <td valign="middle" style="font-size:0;line-height:0"><img src="{{ asset('images/wedworx-logo-email.png') }}" width="110" height="56" alt="WedWorx" style="display:block;border:0;outline:none;text-decoration:none;width:110px;height:56px;font-family:'DM Sans',Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff"></td>
+      <td valign="middle" style="padding-left:16px;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc">Celebrating Kasalang Tagaytay&rsquo;s<br>10th Anniversary</td>
     </tr></table>
   </td></tr>
   <tr><td class="px" bgcolor="#ffffff" style="background:#ffffff;border:1px solid #e2e8f0;border-top:0;border-radius:0 0 20px 20px;padding:32px 36px 36px">
