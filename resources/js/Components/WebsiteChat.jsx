@@ -292,7 +292,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName, re
     useEffect(() => {
         const el = logRef.current;
         if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
-    }, [idx, typing, phase, editIdx, serverErrors, uploads.length]);
+    }, [idx, typing, phase, editIdx, serverErrors, uploads.length, agentChat.active, agentChat.messages, agentChat.waiting, agentChat.widget]);
 
     function commit(patch) {
         setIntakeCursors((cursors) => ({ ...cursors, [q.key]: null }));

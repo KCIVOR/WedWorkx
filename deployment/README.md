@@ -7,7 +7,7 @@ Download `wedworks-cpanel.zip` using GitHub's **Download raw file** button. This
 1. Back up the current application files and database. Record the current release so it can be restored. Preserve the server `.env` and all existing `storage` contents, including uploads and sessions; never upload a local database or credentials.
 2. In cPanel File Manager, enable **Show Hidden Files**. Upload and extract the ZIP into a temporary directory outside `public_html`. Confirm `public/.htaccess`, `vendor/autoload.php`, and `public/build/manifest.json` exist. Do not expose the archive or application root publicly.
 3. During a maintenance window, release the application files and production `vendor` together. Preserve the server `.env` and existing `storage`; the archive's storage files are empty-directory placeholders only. Retain a backup and old hashed public assets while existing browser sessions reload.
-4. Release the new controller, routes, React source, navigation, manifest, and new asset files together. The manifest must reference `assets/app-BoGcMo7m.js` and `assets/app-B--0aZlw.css`, both present under `public/build`. Remove `public/hot` if present; it points browsers at a development server. Preserve the existing public storage link.
+4. Release the new controller, routes, React source, navigation, manifest, and new asset files together. The manifest must reference `assets/app-D5TCS-GU.js` and `assets/app-B--0aZlw.css`, both present under `public/build`. Remove `public/hot` if present; it points browsers at a development server. Preserve the existing public storage link.
 5. Keep the domain document root at `/home/YOURUSER/wedworks/public` (substitute the actual app path). Confirm writable Laravel storage/cache directories. Never upload Windows-generated config, route, or compiled-view caches. Package discovery files `bootstrap/cache/packages.php` and `services.php` are included.
 6. If the server has stale route/config/view caches, have hosting support clear them or use a controlled **one-time** cPanel Cron Job running the host's verified PHP binary and `artisan optimize:clear` in the actual application directory. Send output to a private log outside the document root, inspect success, then remove the cron job and temporary log. Use the PHP binary selected for this domain. Do not add a public cache-clearing URL. Preserve the existing scheduler cron.
 7. Sign out and confirm Payment History redirects to login; sign in and verify the page, filters, pagination, and supplier link against existing hosted rows. Compare read-only payment counts/statuses before and after. No migration, seed, backfill, test database, or live payment is required for this feature.
@@ -31,7 +31,7 @@ See repository `docs/DEPLOYMENT.md` for server requirements and layout. Roll bac
 
 ## Question sequence and client delivery release — 2026-11-08
 
-The current ZIP replaces the earlier payment-history package. SHA-256: `4b3d551fefa2d6a3991b255bcd217a4c96af1804148fe742fdb7e2ac1dbc9d83`; 8,071,686 bytes. Manifest: `assets/app-BoGcMo7m.js` and `assets/app-B--0aZlw.css`. Archive CRC, exclusions, changed controller, new sequence helper and referenced assets verified.
+The current ZIP replaces the earlier payment-history package. SHA-256: `4b3d551fefa2d6a3991b255bcd217a4c96af1804148fe742fdb7e2ac1dbc9d83`; 8,071,686 bytes. Manifest: `assets/app-D5TCS-GU.js` and `assets/app-B--0aZlw.css`. Archive CRC, exclusions, changed controller, new sequence helper and referenced assets verified.
 
 Validation: 297 PHP tests / 2,870 assertions; 10 frontend sequence tests; 35 shared protocol tests; 35 plugin tests; Vite build passed. Earlier question/delivery changes had no migrations or Composer dependencies. The subsequent live-chat update below adds one migration. Existing production tables must already be migrated. Preserve server .env, APP_KEY, uploads, public/storage and cPanel-generated PHP settings. Never run migrate:fresh or broad seeders on production.
 
@@ -100,3 +100,9 @@ Current package SHA-256: `f9c86c15615ce7ef604770cffffe31bb9b30ee0ce4ec1353dc67df
 The chat header uses the full WedWorx logo on desktop and its symbol on mobile. Assistant messages use the symbol. The new favicon is linked from the app layout. Pull the matching frontend build and clear compiled views. If the preceding question wording migration is pending, apply it using the command above.
 
 Current package SHA-256: `a08bc96c7650e33e9ca8c2e6467a8c6cc68fd79e750aa7b34cedebbf7c8173f5`; 10846514 bytes. Favicon, source logos, compiled assets, layout and ZIP integrity verified.
+
+## Chat auto-scroll — November 9, 2026
+
+Both bots scroll the chat log when supplier messages or Hermes replies arrive. Pull the matching frontend build and refresh the chat.
+
+Current package SHA-256: `0ad7f4fc8fa33c093db977f7b7146db4d2c8ab914d9763992abdb945982b18bc`; 10846566 bytes. ZIP integrity and matching frontend assets verified.

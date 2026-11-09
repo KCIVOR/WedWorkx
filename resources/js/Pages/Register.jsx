@@ -142,7 +142,7 @@ export default function Register({ businessTypes, questions, ai, agent }) {
     useEffect(() => {
         const el = logRef.current;
         if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
-    }, [idx, typing, phase, editIdx, result, serverErrors]);
+    }, [idx, typing, phase, editIdx, result, serverErrors, agentChat.active, agentChat.messages, agentChat.waiting]);
 
     function commit(raw) {
         const s = step;
