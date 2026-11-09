@@ -23,6 +23,35 @@ class WebsiteIntakeV2Test extends TestCase
     use RefreshDatabase;
     private int $sequence = 0;
 
+    public function test_shorter_intake_keeps_the_approved_order_and_existing_briefs(): void
+    {
+        $this->upgrade();
+        $s = $this->supplier('caterer');
+        $snapshot = WebsiteQuestions::snapshot($s);
+        $answers = $this->answers($s);
+        $saved = WebsiteAnswer::create(['supplier_id' => $s->id, 'answers' => $answers, 'question_snapshot' => $snapshot, 'submitted_at' => now()]);
+        $migration = require database_path('data-migrations/2026_11_16_000001_shorten_shared_website_questions.php');
+
+        $migration->up();
+
+        $this->assertSame(36, WebsiteQuestion::count());
+        $this->assertSame(6, WebsiteQuestion::onlyTrashed()->count());
+        foreach (BusinessTypes::keys() as $type) {
+            $this->assertSame([
+                'description', 'q_7be6711e', 'q_c074a772', 'services', 'pricing_display', 'extra1', 'extra2',
+                'areas', 'public_contacts', 'style', 'media', 'website_scope', 'q_702f0901', 'additional',
+            ], array_column(WebsiteQuestions::for($type, 'Sample Business'), 'key'));
+        }
+        $this->assertSame($snapshot, WebsiteQuestions::forAnswer($saved->fresh(), $s));
+        $this->assertSame($answers, $saved->fresh()->answers);
+        $currentAnswers = $this->answers($s);
+        $this->assertFalse(Validator::make($currentAnswers, WebsiteQuestions::rules($s->business_type, $currentAnswers, $s))->fails());
+
+        $migration->down();
+
+        $this->assertSame($snapshot, WebsiteQuestions::snapshot($s));
+    }
+
     public function test_wording_refresh_preserves_intake_behavior_and_submitted_questions(): void
     {
         $this->upgrade();
