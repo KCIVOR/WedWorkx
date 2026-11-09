@@ -30,7 +30,7 @@ export function AdminLayout({ title, current = '', children }) {
                         <span className="grid h-[36px] w-[36px] place-items-center rounded-full bg-white text-[20px] text-wb-accent">
                             <Icon name="rings" />
                         </span>
-                        <strong className="font-display text-[16px] font-bold tracking-[-.01em]">WedWorks Admin</strong>
+                        <strong className="font-display text-[16px] font-bold tracking-[-.01em]">WedWorx Admin</strong>
                     </Link>
 
                     <nav className="order-last flex w-full flex-wrap gap-s-1 md:order-none md:w-auto md:flex-1" aria-label="Admin">

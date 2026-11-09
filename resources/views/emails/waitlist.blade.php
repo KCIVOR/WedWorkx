@@ -6,7 +6,7 @@
 <x-email.spacer />
 <x-email.text>Hi {{ $firstName }}, thank you for registering {{ $supplier->business_name }}. All {{ $total }} website slots have been taken, and you’re number {{ $supplier->waitlist_number }} on the waiting list.</x-email.text>
 <x-email.spacer />
-<x-email.text>We’re sorry to say that slots do not reopen, so we can’t offer you a spot in this campaign. We truly appreciate your interest, and we’ll be glad to reach out about future WedWorks offers.</x-email.text>
+<x-email.text>We’re sorry to say that slots do not reopen, so we can’t offer you a spot in this campaign. We truly appreciate your interest, and we’ll be glad to reach out about future WedWorx offers.</x-email.text>
 <x-email.spacer />
 <x-email.slot-meter :taken="$total" :total="$total" />
 </x-email.layout>

@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=wedworx">
-    <title inertia>{{ config('app.name') }}</title>
+    <title inertia>WedWorx</title>
     @viteReactRefresh
     @vite(['resources/js/app.jsx'])
     @inertiaHead

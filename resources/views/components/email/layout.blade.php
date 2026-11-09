@@ -38,7 +38,7 @@
     <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
       <td width="40" height="40" align="center" valign="middle" style="width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:'DM Sans',Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px">W</td>
       <td style="padding-left:12px">
-        <div style="font-family:'DM Sans',Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px">WedWorks</div>
+        <div style="font-family:'DM Sans',Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px">WedWorx</div>
         <div style="font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc">Kasalang Tagaytay &middot; 10-10-10 Campaign</div>
       </td>
     </tr></table>

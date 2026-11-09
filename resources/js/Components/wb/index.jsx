@@ -102,7 +102,7 @@ export function AiBubble({ children, at }) {
         <div className="grid max-w-[86%] animate-wb-in gap-[6px]">
             <div className="flex items-center gap-s-2 font-display text-[12.5px] font-semibold text-wb-heading">
                 <Avatar kind="ai"><img src={wedworxSymbol} alt="" className="h-[17px] w-[20px] object-contain" /></Avatar>
-                WedWorks Assistant
+                WedWorx Assistant
             </div>
             <div className="min-w-0 whitespace-pre-line break-words rounded-r-bubble rounded-tl-r-tail border border-wb-ai-line bg-wb-ai-bg px-s-4 py-s-3 text-[14.5px] leading-[1.5] text-wb-ai-text">
                 {children}

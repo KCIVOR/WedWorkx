@@ -11,11 +11,11 @@ class AdminTestMail extends Mailable
 {
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'WedWorks test email');
+        return new Envelope(subject: 'WedWorx test email');
     }
 
     public function content(): Content
     {
-        return new Content(htmlString: '<p>This is a test from the WedWorks admin.</p><p>If you can read it, your email settings work.</p>');
+        return new Content(htmlString: '<p>This is a test from the WedWorx admin.</p><p>If you can read it, your email settings work.</p>');
     }
 }

@@ -94,7 +94,7 @@ export default function Invite(props) {
     } else {
         body = (
             <Shell>
-                <Header title="WedWorks Assistant" />
+                <Header title="WedWorx Assistant" />
                 <Log>
                     {expired && <ExpiredCard firstName={firstName} businessName={businessName} />}
                     {!expired && status === 'payment_pending' && <PendingPayment props={props} />}

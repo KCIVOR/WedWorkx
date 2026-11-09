@@ -17,7 +17,7 @@ export default function Login({ notice }) {
             <form onSubmit={submit} className="grid w-full max-w-[400px] gap-s-4 rounded-r-card border border-wb-line bg-white p-s-6 shadow-sh-md">
                 <div className="grid justify-items-center gap-s-2 text-center">
                     <CardIcon name="rings" />
-                    <CardTitle>WedWorks Admin</CardTitle>
+                    <CardTitle>WedWorx Admin</CardTitle>
                     <CardText>Sign in to see suppliers, payments and settings.</CardText>
                     {dev && <span className="rounded-r-pill bg-amber-50 px-s-3 py-s-1 text-[11px] font-semibold uppercase tracking-[.08em] text-amber-700">Dev mode</span>}
                 </div>

@@ -419,7 +419,7 @@ export default function WebsiteChat({ chat, payment, firstName, businessName, re
 
     return (
         <Shell>
-            <Header title="WedWorks Assistant" />
+            <Header title="WedWorx Assistant" />
             <Log logRef={logRef}>
                 {agentChat.notice && <p role="status" className="text-sm text-wb-muted">{agentChat.notice}</p>}
                 <AiBubble>

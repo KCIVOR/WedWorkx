@@ -196,7 +196,7 @@ export default function Register({ businessTypes, questions, ai, agent }) {
             <main className="flex min-h-dvh justify-center p-0 md:items-center md:p-s-8">
                 <div className="h-dvh w-full md:max-w-[600px] md:h-[calc(100dvh-64px)] md:max-h-[760px]">
                     <Shell>
-                        <Header title="WedWorks Assistant" />
+                        <Header title="WedWorx Assistant" />
                         <Log logRef={logRef}>
                             {agentChat.notice && <p role="status" className="text-sm text-wb-muted">{agentChat.notice}</p>}
                             {history.map((s) => (

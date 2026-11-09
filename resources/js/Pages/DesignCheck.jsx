@@ -9,7 +9,7 @@ function Header() {
     return (
         <div className="relative z-[1] flex flex-none items-center gap-s-3 rounded-b-r-shell bg-wb-accent px-s-4 pb-s-5 pt-s-4 text-white">
             <div className="grid min-w-0 flex-1 gap-[1px]">
-                <strong className="font-display text-[16px] font-bold tracking-[-.01em] text-white">WedWorks Assistant</strong>
+                <strong className="font-display text-[16px] font-bold tracking-[-.01em] text-white">WedWorx Assistant</strong>
                 <small className="flex items-center gap-[6px] text-[12px] text-white/80">
                     <span className="h-[7px] w-[7px] rounded-full bg-wb-online shadow-[0_0_0_3px_var(--wb-online-ring)]" />
                     Online
@@ -95,7 +95,7 @@ export default function DesignCheck() {
                 <div className="flex w-full flex-col overflow-hidden rounded-r-shell border border-wb-line bg-wb-surface font-body text-wb-text shadow-sh-md">
                     <Header />
                     <div className="flex flex-1 flex-col gap-[18px] bg-wb-canvas px-[18px] py-s-5">
-                        <AiBubble>Hi! I&apos;m the WedWorks Assistant. What&apos;s your name?</AiBubble>
+                        <AiBubble>Hi! I&apos;m the WedWorx Assistant. What&apos;s your name?</AiBubble>
                         <UserBubble>Maria Santos</UserBubble>
                         <Card />
                     </div>

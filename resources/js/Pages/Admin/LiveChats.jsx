@@ -86,7 +86,7 @@ export default function LiveChats({ supplierFilter }) {
                             {conversation.messages.map((m) => {
                                 const client = m.role === 'supplier', time = chatTime(m.at);
                                 return <div key={m.id} className={`grid max-w-[90%] gap-s-1 ${client ? 'self-end' : 'self-start'}`}>
-                                    <span className="text-[11px] font-semibold text-wb-muted">{client ? 'Client' : 'WedWorks Assistant'}</span>
+                                    <span className="text-[11px] font-semibold text-wb-muted">{client ? 'Client' : 'WedWorx Assistant'}</span>
                                     <p className={`whitespace-pre-wrap break-words rounded-r-field px-s-3 py-s-2 text-[14px] ${client ? 'bg-wb-accent text-white' : 'border border-wb-line bg-white text-wb-text'}`}>{m.text}</p>
                                     {time && <time dateTime={time.iso} title={time.title} className="text-[11px] text-wb-muted">{time.label}</time>}
                                 </div>;
