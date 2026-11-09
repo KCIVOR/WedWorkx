@@ -41,10 +41,10 @@ class DatabaseFoundationTest extends TestCase
         $this->assertSame([10, 0, 24, 30, '10000.00'], [$c->slot_limit, $c->slots_taken, $c->invite_expiry_hours, $c->grace_minutes, $c->price]);
     }
 
-    public function test_status_enum_has_exactly_the_eight_statuses(): void
+    public function test_status_enum_has_exactly_the_nine_statuses(): void
     {
         $this->assertSame(
-            ['waitlisted', 'invited', 'expired', 'details_submitted', 'payment_pending', 'paid', 'building', 'delivered'],
+            ['pending_review', 'waitlisted', 'invited', 'expired', 'details_submitted', 'payment_pending', 'paid', 'building', 'delivered'],
             array_map(fn ($c) => $c->value, SupplierStatus::cases()),
         );
     }

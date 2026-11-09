@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Envelope;
 
 class WaitlistMail extends Mailable
 {
-    public const SUBJECT = 'You’re on the waiting list';
+    public const SUBJECT = 'We’ve received your request';
 
     public function __construct(public Supplier $supplier)
     {
@@ -22,13 +22,10 @@ class WaitlistMail extends Mailable
 
     public function content(): Content
     {
-        $campaign = $this->supplier->campaign;
-
         return new Content(view: 'emails.waitlist', with: [
             'subject' => self::SUBJECT,
-            'preheader' => "All {$campaign->slot_limit} slots are taken. You’re #{$this->supplier->waitlist_number} in line.",
+            'preheader' => 'Thank you for registering. Please stay tuned for our update.',
             'firstName' => explode(' ', trim($this->supplier->name))[0],
-            'total' => $campaign->slot_limit,
         ]);
     }
 }

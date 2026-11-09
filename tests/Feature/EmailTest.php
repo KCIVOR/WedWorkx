@@ -8,6 +8,7 @@ use App\Models\Campaign;
 use App\Models\EmailLog;
 use App\Models\Supplier;
 use App\Services\EmailService;
+use App\Services\SlotService;
 use Database\Seeders\CampaignSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
@@ -23,16 +24,24 @@ class EmailTest extends TestCase
         $this->seed(CampaignSeeder::class);
     }
 
+    /**
+     * Registers the way the first-come-first-served flow does (slot assigned at once) and sends its email.
+     * The live /register route no longer does this: it waits for an admin approval (see ApprovalGuardrailTest).
+     */
     private function register(int $n): void
     {
-        $this->post('/register', [
+        $result = app(SlotService::class)->register([
             'name' => "Maria Santos $n",
             'email' => "supplier$n@example.com",
-            'mobile' => '0917'.str_pad((string) $n, 7, '0', STR_PAD_LEFT),
+            'mobile' => '+6391'.str_pad((string) $n, 9, '0', STR_PAD_LEFT),
             'business_name' => "Rosal Catering $n",
             'business_type' => 'caterer',
             'location' => 'Tagaytay City, Cavite',
-        ])->assertRedirect('/');
+        ]);
+
+        if ($result['supplier']) {
+            app(EmailService::class)->sendRegistrationOutcome($result['supplier']);
+        }
     }
 
     private function breakMail(): void
@@ -140,7 +149,7 @@ class EmailTest extends TestCase
         $this->assertStringContainsString('bgcolor="#2f5bea"', $html); // royal blue header from the template
     }
 
-    public function test_waitlist_email_has_number_and_says_slots_do_not_reopen(): void
+    public function test_waitlist_email_acknowledges_request_without_mentioning_waiting_list(): void
     {
         Campaign::first()->update(['slots_taken' => 10]);
         $this->register(11);
@@ -148,9 +157,10 @@ class EmailTest extends TestCase
 
         $html = (new WaitlistMail($supplier))->render();
 
-        $this->assertStringContainsString('Waiting list &middot; #1', $html);
-        $this->assertStringContainsString('number 1 on the waiting list', $html);
-        $this->assertStringContainsString('slots do not reopen', $html);
+        $this->assertStringContainsString('received your request', $html);
+        $this->assertStringContainsString('keep an eye on your inbox', $html);
+        $this->assertStringNotContainsStringIgnoringCase('waiting list', $html);
+        $this->assertStringNotContainsString('do not reopen', $html);
         $this->assertStringNotContainsString('/invite/', $html);
     }
 

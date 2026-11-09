@@ -43,24 +43,38 @@ class RegistrationTest extends TestCase
             ->where('businessTypes.0.value', 'venue'));
     }
 
-    public function test_twelve_registrations_give_ten_invited_and_two_waitlisted(): void
+    public function test_twelve_registrations_all_wait_for_review_with_no_slot_or_token(): void
     {
         for ($n = 1; $n <= 12; $n++) {
             $this->post('/register', $this->payload($n))->assertRedirect('/');
+        }
+
+        $this->assertSame(12, Supplier::where('status', SupplierStatus::PendingReview)->count());
+        $this->assertSame(0, Supplier::whereNotNull('slot_number')->count());
+        $this->assertSame(0, Supplier::whereNotNull('invite_token')->count());
+        $this->assertSame(12, Campaign::first()->slots_taken);
+        $this->assertSame(12, StatusHistory::where('actor', 'system')->whereNull('from_status')->count());
+    }
+
+    public function test_service_first_come_first_served_still_gives_ten_invited_and_two_waitlisted(): void
+    {
+        $service = app(SlotService::class);
+        for ($n = 1; $n <= 12; $n++) {
+            $service->register(['name' => "S$n", 'email' => "s$n@example.com", 'mobile' => '+6391'.str_pad((string) $n, 9, '0', STR_PAD_LEFT),
+                'business_name' => "B$n", 'business_type' => 'venue', 'location' => 'Tagaytay']);
         }
 
         $this->assertSame(10, Supplier::where('status', SupplierStatus::Invited)->count());
         $this->assertSame(2, Supplier::where('status', SupplierStatus::Waitlisted)->count());
         $this->assertSame(range(1, 10), Supplier::whereNotNull('slot_number')->orderBy('slot_number')->pluck('slot_number')->all());
         $this->assertSame([1, 2], Supplier::whereNotNull('waitlist_number')->orderBy('waitlist_number')->pluck('waitlist_number')->all());
-        $this->assertSame(12, Campaign::first()->slots_taken);
-        $this->assertSame(12, StatusHistory::where('actor', 'system')->whereNull('from_status')->count());
     }
 
     public function test_invited_supplier_gets_token_and_deadline_from_campaign_hours(): void
     {
         $this->travelTo(now()->startOfSecond());
         $this->post('/register', $this->payload(1));
+        app(SlotService::class)->approve(Supplier::first());
 
         $s = Supplier::first();
         $this->assertSame(SupplierStatus::Invited, $s->status);
@@ -70,14 +84,13 @@ class RegistrationTest extends TestCase
         $this->assertTrue($s->invite_expires_at->equalTo($s->invited_at->copy()->addHours(24)));
     }
 
-    public function test_waitlisted_supplier_has_no_token_or_deadline(): void
+    public function test_pending_supplier_has_no_token_or_deadline(): void
     {
-        Campaign::first()->update(['slots_taken' => 10]);
         $this->post('/register', $this->payload(11));
 
         $s = Supplier::first();
-        $this->assertSame(SupplierStatus::Waitlisted, $s->status);
-        $this->assertSame(1, $s->waitlist_number);
+        $this->assertSame(SupplierStatus::PendingReview, $s->status);
+        $this->assertNull($s->waitlist_number);
         $this->assertNull($s->slot_number);
         $this->assertNull($s->invite_token);
         $this->assertNull($s->invite_expires_at);

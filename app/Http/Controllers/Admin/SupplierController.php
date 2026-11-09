@@ -11,9 +11,11 @@ use App\Mail\PaymentReminderMail;
 use App\Mail\WaitlistMail;
 use App\Mail\WebsiteLiveMail;
 use App\Models\AuditLog;
+use App\Models\Campaign;
 use App\Models\EmailLog;
 use App\Models\Supplier;
 use App\Services\EmailService;
+use App\Services\SlotService;
 use App\Support\AdminPresenter;
 use App\Support\BusinessTypes;
 use App\Support\WebsiteQuestions;
@@ -43,6 +45,10 @@ class SupplierController extends Controller
                 'to' => $page->lastItem(),
             ],
             'filters' => $filters,
+            'slots' => [
+                'limit' => (int) Campaign::value('slot_limit'),
+                'used' => Supplier::whereNotNull('slot_number')->count(),
+            ],
             'options' => [
                 'statuses' => collect(AdminPresenter::STATUS)->map(fn ($v, $k) => ['value' => $k, 'label' => $v[0]])->values(),
                 'types' => collect(BusinessTypes::ALL)->map(fn ($l, $k) => ['value' => $k, 'label' => $l])->values(),
@@ -113,6 +119,49 @@ class SupplierController extends Controller
             });
             fclose($out);
         }, 'wedworks-suppliers-'.now()->format('Ymd-His').'.csv', ['Content-Type' => 'text/csv; charset=UTF-8', 'Cache-Control' => 'no-store']);
+    }
+
+    /**
+     * Approval guardrail: the admin picks the winners. Each one gets a slot, a fresh deadline and the
+     * invitation email with the Bot 2 link. Never more winners than the campaign's slot limit.
+     */
+    public function approve(Request $request, SlotService $slots, EmailService $emails)
+    {
+        $ids = $request->validate([
+            'ids' => ['required', 'array', 'min:1', 'max:50'],
+            'ids.*' => ['integer', 'distinct'],
+        ])['ids'];
+
+        $approved = 0;
+        $full = false;
+        $skipped = 0;
+
+        foreach (Supplier::whereIn('id', $ids)->orderBy('id')->get() as $supplier) {
+            $result = $slots->approve($supplier);
+
+            if ($result['outcome'] === SlotService::FULL) {
+                $full = true;
+                break;
+            }
+            if ($result['outcome'] !== SlotService::APPROVED) {
+                $skipped++;
+                continue;
+            }
+
+            $approved++;
+            $emails->send($result['supplier'], 'invite', new InvitationMail($result['supplier']));
+            AuditLog::record('approve_winner', ['supplier_id' => $supplier->id, 'slot' => $result['supplier']->slot_number]);
+        }
+
+        $message = $approved === 1 ? '1 winner approved and the Bot 2 link was emailed.' : "$approved winners approved and the Bot 2 link was emailed.";
+        if ($full) {
+            $message .= ' All '.Campaign::first()->slot_limit.' slots are taken, so the rest were not approved.';
+        }
+        if ($skipped > 0) {
+            $message .= " $skipped could not be approved (already invited or not waiting for review).";
+        }
+
+        return back()->with('admin_flash', ['tone' => $approved > 0 && ! $full ? 'success' : 'warning', 'message' => $message]);
     }
 
     public function resendEmail(Supplier $supplier, EmailLog $emailLog, EmailService $emails)

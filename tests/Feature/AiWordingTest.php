@@ -342,6 +342,7 @@ class AiWordingTest extends TestCase
         $this->assertSame(['Maria Santos', 'maria@example.com', '+639171234567', 'Rosal Catering', 'caterer', 'Tagaytay City', 'Cavite'],
             [$s->name, $s->email, $s->mobile, $s->business_name, $s->business_type, $s->city, $s->province]);
 
+        $s = app(\App\Services\SlotService::class)->approve($s)['supplier']; // an admin picks them as a winner
         $this->post("/invite/{$s->invite_token}/confirm", [
             'description' => 'Warm Filipino menus.', 'style' => 'romantic', 'extra1' => 'Buffet', 'extra2' => 'Yes, we can accommodate special requests',
         ])->assertRedirect();

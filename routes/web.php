@@ -72,7 +72,8 @@ Route::prefix(config('admin.path'))->name('admin.')->group(function () {
 
         Route::get('/suppliers', [AdminSupplierController::class, 'index'])->name('suppliers');
         Route::get('/suppliers/export', [AdminSupplierController::class, 'export'])->middleware('throttle:20,1')->name('suppliers.export');
-        Route::get('/suppliers/{supplier}', [AdminSupplierController::class, 'show'])->whereNumber('supplier')->name('suppliers.show');
+        Route::post('/suppliers/approve', [AdminSupplierController::class, 'approve'])->middleware('throttle:30,1')->name('suppliers.approve');
+        Route::get('/suppliers/{supplier}',[AdminSupplierController::class, 'show'])->whereNumber('supplier')->name('suppliers.show');
         Route::post('/suppliers/{supplier}/emails/{emailLog}/resend', [AdminSupplierController::class, 'resendEmail'])
             ->whereNumber(['supplier', 'emailLog'])->middleware('throttle:20,1')->name('suppliers.emails.resend');
 

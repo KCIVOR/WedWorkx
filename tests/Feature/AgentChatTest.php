@@ -222,7 +222,8 @@ class AgentChatTest extends TestCase
         // The supplier presses Confirm: the normal sign-up creates the supplier.
         $this->post('/register', $poll['answers'])->assertSessionHasNoErrors();
         $s = Supplier::sole();
-        $this->assertSame(SupplierStatus::Invited, $s->status);
+        $this->assertSame(SupplierStatus::PendingReview, $s->status); // waits for an admin to pick the winners
+        $this->assertNull($s->invite_token);
         $this->assertSame('+639171234567', $s->mobile);
 
         $this->postJson("/agent-chat/$id/finish")->assertOk();

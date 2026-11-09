@@ -38,8 +38,8 @@ class DashboardController extends Controller
             'campaign' => $campaign ? [
                 'name' => $campaign->name,
                 'slot_limit' => $campaign->slot_limit,
-                // slots_taken counts every registration (waiting list too); winners are capped at the limit.
-                'slots_taken' => min($campaign->slots_taken, $campaign->slot_limit),
+                // Slots used are the approved winners; registrations waiting for review do not take one.
+                'slots_taken' => Supplier::whereNotNull('slot_number')->count(),
                 'price' => (float) $campaign->price,
             ] : null,
             'waitlist_count' => (int) ($counts['waitlisted'] ?? 0),

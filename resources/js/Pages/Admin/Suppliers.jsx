@@ -5,10 +5,26 @@ import { TextInput } from '../../Components/wb/forms';
 import { AdminLayout, Pager, Select, Table, Td, Th } from '../../Components/admin/ui';
 import { PAYMENT_PILL, fmtDate, peso } from '../../lib/admin';
 
-export default function Suppliers({ suppliers, filters, options }) {
+const canApprove = (s) => s.status === 'pending_review' || s.status === 'waitlisted';
+
+export default function Suppliers({ suppliers, filters, options, slots }) {
     const base = `/${usePage().props.admin.path}`;
     const [f, setF] = useState(filters);
     const set = (k, v) => setF((s) => ({ ...s, [k]: v }));
+    const [picked, setPicked] = useState([]);
+    const [busy, setBusy] = useState(false);
+    const remaining = Math.max(slots.limit - slots.used, 0);
+    const toggle = (id) => setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
+    const approve = () => {
+        const msg = `Approve ${picked.length} supplier${picked.length === 1 ? '' : 's'} as winner${picked.length === 1 ? '' : 's'}? `
+            + 'They will be emailed the Bot 2 link now and their deadline starts today.';
+        if (!picked.length || !window.confirm(msg)) return;
+        router.post(`${base}/suppliers/approve`, { ids: picked }, {
+            preserveScroll: true,
+            onStart: () => setBusy(true),
+            onFinish: () => { setBusy(false); setPicked([]); },
+        });
+    };
 
     const clean = (obj) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== '' && v != null));
     const apply = (e) => {
@@ -48,23 +64,41 @@ export default function Suppliers({ suppliers, filters, options }) {
                 </div>
             </form>
 
+            <div className="flex flex-wrap items-center gap-s-3 rounded-r-card border border-wb-line bg-white p-[14px] shadow-sh-sm">
+                <div className="text-wb-heading">
+                    <strong>{slots.used} of {slots.limit}</strong> winner slots used · <strong>{remaining}</strong> left
+                </div>
+                <span className="flex-1" />
+                {picked.length > remaining && <span className="text-[12.5px] text-wb-muted">Only the first {remaining} will be approved.</span>}
+                <Button onClick={approve} disabled={busy || picked.length === 0 || remaining === 0}>
+                    Approve {picked.length || ''} as winner{picked.length === 1 ? '' : 's'} and send Bot 2 link
+                </Button>
+            </div>
+
             <Table>
                 <thead>
                     <tr>
-                        <Th>Spot</Th><Th>Supplier</Th><Th>Contact</Th><Th>Registered</Th><Th>Status</Th>
+                        <Th><span className="sr-only">Select</span></Th><Th>Spot</Th><Th>Supplier</Th><Th>Contact</Th><Th>Registered</Th><Th>Status</Th>
                         <Th>Answers</Th><Th>Payment</Th><Th>Website</Th><Th>Emails</Th>
                     </tr>
                 </thead>
                 <tbody>
                     {suppliers.data.length === 0 && (
-                        <tr><Td className="py-s-8 text-center text-wb-muted" colSpan={9}>Nobody matches these filters.</Td></tr>
+                        <tr><Td className="py-s-8 text-center text-wb-muted" colSpan={10}>Nobody matches these filters.</Td></tr>
                     )}
                     {suppliers.data.map((s) => {
                         const [ptone, plabel] = PAYMENT_PILL[s.payment.state] ?? PAYMENT_PILL.none;
                         return (
                             <tr key={s.id} className="transition duration-fast hover:bg-blue-50">
+                                <Td>
+                                    {canApprove(s) && (
+                                        <input type="checkbox" aria-label={`Select ${s.business_name}`} checked={picked.includes(s.id)} onChange={() => toggle(s.id)} />
+                                    )}
+                                </Td>
                                 <Td className="whitespace-nowrap">
-                                    {s.slot ? <Pill tone="success">Slot {s.slot}</Pill> : <Pill tone="muted">Waitlist {s.waitlist}</Pill>}
+                                    {s.slot ? <Pill tone="success">Slot {s.slot}</Pill>
+                                        : s.waitlist ? <Pill tone="muted">Waitlist {s.waitlist}</Pill>
+                                        : <Pill tone="warning">Awaiting approval</Pill>}
                                 </Td>
                                 <Td className="min-w-[190px]">
                                     <Link href={`${base}/suppliers/${s.id}`} className="font-display font-semibold text-wb-accent no-underline hover:underline">{s.business_name}</Link>

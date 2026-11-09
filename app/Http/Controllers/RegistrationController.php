@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterSupplierRequest;
-use App\Services\EmailService;
 use App\Services\SlotService;
 use App\Services\AgentChatService;
 use Illuminate\Http\Request;
@@ -30,20 +29,18 @@ class RegistrationController extends Controller
         ]);
     }
 
-    public function store(RegisterSupplierRequest $request, SlotService $slots, EmailService $emails): RedirectResponse
+    public function store(RegisterSupplierRequest $request, SlotService $slots): RedirectResponse
     {
         $data = $request->validated();
         $extras = RegistrationQuestions::extras($data);
         // Only the supplier's own fields go in as they are; the answers to admin-added questions are kept with their labels.
         $result = $slots->register(\Illuminate\Support\Arr::only($data, ['name', 'email', 'mobile', 'business_name', 'business_type', 'location', 'social_link'])
-            + ['extra_answers' => $extras ?: null]);
+            + ['extra_answers' => $extras ?: null], autoInvite: false);
         $chat = app(AgentChatService::class)->resumable('registration', browserId: $request->cookie(AgentChatService::REGISTRATION_COOKIE));
         if ($chat) $chat->update(['status' => 'done', 'waiting_since' => null]);
 
-        // After the slot transaction has committed. A mail failure is logged and never breaks registration.
-        if ($result['supplier']) {
-            $emails->sendRegistrationOutcome($result['supplier']);
-        }
+        // Approval guardrail: finishing Bot 1 sends nothing. The Bot 2 link goes out only when an admin
+        // picks the supplier as a winner (Admin\SupplierController::approve).
 
         // The chat deliberately does not reveal invited vs waitlisted (T2 scope item 6).
         return redirect()->route('home')->with('registration', [

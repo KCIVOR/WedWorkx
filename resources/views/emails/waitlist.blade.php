@@ -1,12 +1,10 @@
-{{-- Waiting list. Structure from docs/WedWorks_Email_Templates.html (#em-waitlist), wording changed for decision D9. --}}
+{{-- Registration received (sent to suppliers without an invitation). Structure from docs/WedWorks_Email_Templates.html (#em-waitlist). Deliberately never mentions a waiting list or slot numbers (decision D9). --}}
 <x-email.layout :subject="$subject" :preheader="$preheader">
-<x-email.pill tone="warning">Waiting list &middot; #{{ $supplier->waitlist_number }}</x-email.pill>
+<x-email.pill>Request received</x-email.pill>
 <x-email.spacer />
-<x-email.heading>You’re on the waiting list</x-email.heading>
+<x-email.heading>We’ve received your request</x-email.heading>
 <x-email.spacer />
-<x-email.text>Hi {{ $firstName }}, thank you for registering {{ $supplier->business_name }}. All {{ $total }} website slots have been taken, and you’re number {{ $supplier->waitlist_number }} on the waiting list.</x-email.text>
+<x-email.text>Hi {{ $firstName }}, thank you for registering {{ $supplier->business_name }} for the WedWorx 10-10-10 Campaign. We’ve received your details and our team is reviewing them.</x-email.text>
 <x-email.spacer />
-<x-email.text>We’re sorry to say that slots do not reopen, so we can’t offer you a spot in this campaign. We truly appreciate your interest, and we’ll be glad to reach out about future WedWorx offers.</x-email.text>
-<x-email.spacer />
-<x-email.slot-meter :taken="$total" :total="$total" />
+<x-email.text>There’s nothing else you need to do for now. Please keep an eye on your inbox, as we’ll email you here as soon as we have an update.</x-email.text>
 </x-email.layout>

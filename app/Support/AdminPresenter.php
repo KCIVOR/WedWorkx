@@ -9,6 +9,7 @@ use App\Models\Supplier;
 final class AdminPresenter
 {
     public const STATUS = [
+        'pending_review' => ['Pending review', 'warning'],
         'waitlisted' => ['Waitlisted', 'muted'],
         'invited' => ['Invited', 'info'],
         'expired' => ['Expired', 'danger'],
