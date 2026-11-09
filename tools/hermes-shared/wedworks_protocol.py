@@ -123,6 +123,8 @@ def build_context(chat, problem=None):
     parts.append('UPLOADS (actual owned IDs and kinds):\n' + json.dumps(chat.get('uploads', []), ensure_ascii=False))
     parts.append('QUESTIONS (in order):\n' + json.dumps(questions, ensure_ascii=False, indent=1))
     parts.append('ALREADY ACCEPTED ANSWERS (collected):\n' + json.dumps(chat['collected'], ensure_ascii=False))
+    if chat['bot'] == 'registration' and chat['collected'].get('mobile'):
+        parts.append('The mobile number is already collected. Leave it out of your reply and answers on later turns unless the supplier asks to correct it. Continue with the current question.')
     def active_fields(q):
         fields = q.get('intake', {}).get('fields', [])
         by_key = {f['key']: f for f in fields}
@@ -252,11 +254,6 @@ def apply_plan(api, chat_id, plan, snapshot_id, final=False):
     current = body['data']
     answers = dict(plan['answers'])
     blocked_contacts = _guard_contacts(current, answers)
-    claims_phone_update = re.search(r'(?:\b(?:corrected|updated|recorded|set|saved)\b[^.!?\n]{0,70}\b(?:phone|mobile|number)\b|\b(?:phone|mobile)(?: number)?\b[^.!?\n]{0,70}\b(?:corrected|updated|recorded|set|saved)\b)', plan['reply'], re.I)
-    if claims_phone_update and not any(key in answers for key in ('mobile', 'public_phone')):
-        blocked_contacts.append('repeated phone acknowledgment')
-    if blocked_contacts and not final:
-        return Outcome('problem', 'Contact update has no support in the latest supplier message: ' + ', '.join(blocked_contacts) + '. Keep accepted contacts unchanged. Do not mention an old correction. If reusing a contact, show the complete actual registered value and ask approval first. Return only answers from the latest supplier message and continue the earliest unanswered field.')
     next_question = current.get('next_question') or {}
     if current.get('bot') == 'registration' and (
         'mobile' in answers or 'mobile' in next_question.get('fields', [])
@@ -268,6 +265,25 @@ def apply_plan(api, chat_id, plan, snapshot_id, final=False):
             if match:
                 answers['mobile'] = '+639' + match.group(1)
 
+    claims_phone_update = re.search(r'(?:\b(?:corrected|updated|recorded|set|saved)\b[^.!?\n]{0,70}\b(?:phone|mobile|number)\b|\b(?:phone|mobile)(?: number)?\b[^.!?\n]{0,70}\b(?:corrected|updated|recorded|set|saved)\b)', plan['reply'], re.I)
+    collected_mobile = str(current.get('collected', {}).get('mobile') or '')
+    old_mobile_reply = (
+        current.get('bot') == 'registration'
+        and re.fullmatch(r'\+639[0-9]{9}', collected_mobile)
+        and 'mobile' not in answers
+        and ('mobile' in blocked_contacts or claims_phone_update or re.search(
+            r'\b(?:phone|mobile|cellphone|contact number)\b|(?:\+63|09)[0-9* ()-]*\*', plan['reply'], re.I,
+        ))
+    )
+    if old_mobile_reply:
+        # Keep the new business answer and move on without starting another phone retry.
+        if 'mobile' in blocked_contacts:
+            blocked_contacts.remove('mobile')
+    elif claims_phone_update and not any(key in answers for key in ('mobile', 'public_phone')):
+        blocked_contacts.append('repeated phone acknowledgment')
+    if blocked_contacts and not final:
+        return Outcome('problem', 'Contact update has no support in the latest supplier message: ' + ', '.join(blocked_contacts) + '. Keep accepted contacts unchanged. Do not mention an old correction. If reusing a contact, show the complete actual registered value and ask approval first. Return only answers from the latest supplier message and continue the earliest unanswered field.')
+
     problem = None
     if answers:
         s, r = api('POST', base + '/answers', {'answers': answers})
@@ -276,8 +292,10 @@ def apply_plan(api, chat_id, plan, snapshot_id, final=False):
         elif s != 200:
             problem = 'The answer update was not accepted. Keep existing answers and do not claim the update was saved.'
 
+    review_ready = False
     if plan['ready'] and not problem and not blocked_contacts:
         s, r = api('POST', base + '/ready')
+        review_ready = s == 200
         if s == 409:
             problem = 'Not ready yet. Questions needing an answer or explicit optional skip: ' + json.dumps(r.get('missing', []), ensure_ascii=False)
 
@@ -285,11 +303,15 @@ def apply_plan(api, chat_id, plan, snapshot_id, final=False):
         return Outcome('problem', problem)
 
     out = {'text': plan['reply']}
-    if blocked_contacts or problem:
+    if blocked_contacts or problem or old_mobile_reply:
         # Do not publish a fabricated correction even if the model repeats it on the last retry.
         _, refreshed = api('GET', base)
         field = _next_field(refreshed.get('data', {}))
-        out['text'] = field.get('prompt') or 'Please provide or confirm the complete contact detail you want to use. Your previously collected contact details have not been changed.'
+        if old_mobile_reply:
+            fallback = 'Thank you. Please review your details and confirm.' if review_ready else 'Thank you. I’ve noted your answer.'
+        else:
+            fallback = 'Please provide or confirm the complete contact detail you want to use. Your previously collected contact details have not been changed.'
+        out['text'] = field.get('prompt') or fallback
     if plan['widget'] and not blocked_contacts:
         out['widget'] = plan['widget']
     s, _ = api('POST', base + '/messages', out)

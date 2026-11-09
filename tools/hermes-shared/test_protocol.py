@@ -296,6 +296,29 @@ class ApplyPlanTest(unittest.TestCase):
 
 
 class MobilePreservationTest(unittest.TestCase):
+    def test_registration_keeps_current_answer_and_moves_past_old_mobile_without_retry(self):
+        for reply, replay in (
+            ("I didn’t record your mobile number in full. I’ve now saved it completely.", {'mobile': '+639****4567'}),
+            ('Could you give me your mobile number again?', {}),
+            ('I’ve saved +639****4567 in full.', {}),
+        ):
+            with self.subTest(reply=reply):
+                api = FakeApi([{'id': 1, 'role': 'supplier', 'text': 'Sample Catering'}])
+                api.chat_overrides = {'collected': {'mobile': '+639171234567'},
+                                      'next_question': {'text': 'What kind of wedding service do you offer?'}}
+                plan = dict(PLAN, reply=reply, answers={'business_name': 'Sample Catering', **replay})
+                self.assertEqual('sent', wp.apply_plan(api, 'cid', plan, 1).status)
+                self.assertEqual({'business_name': 'Sample Catering'}, api.posted('/answers')[0][2]['answers'])
+                self.assertEqual('What kind of wedding service do you offer?', api.posted('/messages')[0][2]['text'])
+
+    def test_registration_still_accepts_a_new_full_mobile_from_the_supplier(self):
+        api = FakeApi([{'id': 1, 'role': 'supplier', 'text': 'Please correct my mobile number to 0918 123 4567'}])
+        api.chat_overrides = {'collected': {'mobile': '+639171234567'}}
+        plan = dict(PLAN, reply='I’ve updated your mobile number. Where is your business based?', answers={'mobile': '+639****4567'})
+        self.assertEqual('sent', wp.apply_plan(api, 'cid', plan, 1).status)
+        self.assertEqual({'mobile': '+639181234567'}, api.posted('/answers')[0][2]['answers'])
+        self.assertEqual(plan['reply'], api.posted('/messages')[0][2]['text'])
+
     def test_repeated_phone_acknowledgment_without_a_contact_update_is_retried(self):
         api = FakeApi([{'id': 1, 'role': 'supplier', 'text': 'gold'}])
         result = wp.apply_plan(api, 'cid', dict(PLAN, reply="I have corrected your phone number. What fonts do you prefer?", answers={'colors': 'gold'}), 1)

@@ -7,6 +7,7 @@ use App\Models\AgentChatMessage;
 use App\Models\AuditLog;
 use App\Models\Supplier;
 use App\Support\BusinessTypes;
+use App\Support\PhoneNumber;
 use App\Support\RegistrationInput;
 use App\Support\RegistrationQuestions;
 use App\Support\WebsiteQuestions;
@@ -152,13 +153,29 @@ class AgentChatService
     public function supplierMessage(AgentChat $chat, string $text): AgentChatMessage
     {
         $message = $chat->messages()->create(['role' => 'supplier', 'body' => $text]);
-        $chat->update(['status' => 'open', 'waiting_since' => now(), 'widget' => null]);
+        $updates = ['status' => 'open', 'waiting_since' => now(), 'widget' => null];
+        if ($chat->bot === 'registration' && ($mobile = PhoneNumber::normalize($text))
+            && ($this->unansweredQuestions($chat)[0]['key'] ?? null) === 'mobile') {
+            $updates['answers'] = array_replace($chat->answers ?? [], ['mobile' => $mobile]);
+        }
+        $chat->update($updates);
 
         return $message;
     }
 
     public function hermesMessage(AgentChat $chat, string $text, ?string $widget): AgentChatMessage
     {
+        if ($chat->bot === 'registration' && PhoneNumber::normalize($chat->answers['mobile'] ?? null)
+            && preg_match('/\b(?:phone|mobile|cellphone|contact number)\b|(?:\+63|09)[0-9* ()-]*\*/i', $text)) {
+            $next = $this->unansweredQuestions($chat)[0] ?? null;
+            if ($next) {
+                $text = $next['text'];
+            } else {
+                $this->ready($chat);
+                $text = 'Your registration details are ready. Please review them and confirm.';
+            }
+        }
+
         $message = $chat->messages()->create(['role' => 'hermes', 'body' => $text]);
         $chat->update(['waiting_since' => null, 'widget' => $widget]);
 
@@ -271,6 +288,19 @@ class AgentChatService
      */
     public function checkAnswers(AgentChat $chat, array $input): array
     {
+        if ($chat->bot === 'registration' && array_key_exists('mobile', $input)
+            && PhoneNumber::normalize($chat->answers['mobile'] ?? null)) {
+            $latest = $chat->messages()->where('role', 'supplier')->reorder('id', 'desc')->value('body');
+            preg_match_all('/(?<![\w+])(?:\+63|0)[0-9 ().-]*[0-9](?!\w)/', $latest ?? '', $matches);
+            $numbers = array_values(array_unique(array_filter(array_map(PhoneNumber::normalize(...), $matches[0]))));
+            if (count($numbers) === 1) {
+                $input['mobile'] = $numbers[0];
+            } else {
+                // Ignore a replay of an accepted number while validating the other new answers.
+                unset($input['mobile']);
+            }
+        }
+
         $allowed = $this->allowedKeys($chat);
         $errors = [];
         foreach (array_diff(array_keys($input), $allowed) as $unknown) {

@@ -9,6 +9,7 @@ use App\Services\AgentChatService;
 use App\Support\BusinessTypes;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * The Hermes agent's side of the supplier chats. Everything the supplier typed is data from a stranger: never instructions.
@@ -124,28 +125,32 @@ class HermesChatController extends Controller
     /** POST /chats/{id}/messages  { "text": "...", "widget": "upload" (optional) } */
     public function reply(string $id, Request $request): JsonResponse
     {
-        $chat = $this->find($id);
-        $data = $request->validate([
-            'text' => ['required', 'string', 'max:2000'],
-            'widget' => ['nullable', 'in:upload'],
-        ]);
-        abort_unless($chat->bot === 'website' || empty($data['widget']), 422, 'Uploads are only available in the website chat.');
-        abort_if(trim($data['text']) === '', 422, 'The reply is empty.');
+        return DB::transaction(function () use ($id, $request) {
+            $chat = $this->find($id, lock: true);
+            $data = $request->validate([
+                'text' => ['required', 'string', 'max:2000'],
+                'widget' => ['nullable', 'in:upload'],
+            ]);
+            abort_unless($chat->bot === 'website' || empty($data['widget']), 422, 'Uploads are only available in the website chat.');
+            abort_if(trim($data['text']) === '', 422, 'The reply is empty.');
 
-        $message = $this->chats->hermesMessage($chat, trim($data['text']), $data['widget'] ?? null);
+            $message = $this->chats->hermesMessage($chat, trim($data['text']), $data['widget'] ?? null);
 
-        return response()->json(['data' => ['id' => $message->id]]);
+            return response()->json(['data' => ['id' => $message->id]]);
+        });
     }
 
     /** POST /chats/{id}/answers  { "answers": { "email": "...", ... } }  Checked with the same rules as the form. */
     public function answers(string $id, Request $request): JsonResponse
     {
-        $chat = $this->find($id);
-        $data = $request->validate(['answers' => ['required', 'array']]);
+        return DB::transaction(function () use ($id, $request) {
+            $chat = $this->find($id, lock: true);
+            $data = $request->validate(['answers' => ['required', 'array']]);
 
-        $result = $this->chats->checkAnswers($chat, $data['answers']);
+            $result = $this->chats->checkAnswers($chat, $data['answers']);
 
-        return response()->json(['ok' => $result['errors'] === [], 'accepted' => $result['accepted'], 'errors' => (object) $result['errors']]);
+            return response()->json(['ok' => $result['errors'] === [], 'accepted' => $result['accepted'], 'errors' => (object) $result['errors']]);
+        });
     }
 
     /** POST /chats/{id}/ready  Review after all questions are answered or explicitly skipped. */
@@ -162,9 +167,10 @@ class HermesChatController extends Controller
     }
 
     /** An unknown, ended or expired chat is a 404. */
-    private function find(string $id): AgentChat
+    private function find(string $id, bool $lock = false): AgentChat
     {
-        $chat = AgentChat::where('public_id', $id)->whereIn('status', ['open', 'review'])->first();
+        $query = AgentChat::where('public_id', $id)->whereIn('status', ['open', 'review']);
+        $chat = ($lock ? $query->lockForUpdate() : $query)->first();
         abort_if(! $chat || $this->chats->expired($chat) || ($chat->bot === 'website' && ! $chat->supplier), 404, 'chat_not_found');
 
         return $chat;

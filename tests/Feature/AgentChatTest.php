@@ -116,6 +116,41 @@ class AgentChatTest extends TestCase
 
     // ---------- registration through Hermes ----------
 
+    public function test_registration_moves_past_mobile_even_when_hermes_replays_it(): void
+    {
+        $id = $this->startRegistration();
+        $relay = "/api/hermes/chats/$id";
+        $browser = "/agent-chat/$id";
+        $this->postJson("$relay/answers", ['answers' => ['name' => 'Sample Supplier', 'email' => 'supplier@example.test']], $this->auth())->assertOk();
+
+        $this->postJson("$browser/messages", ['text' => '0917 123 4567'])->assertOk();
+        $this->getJson($relay, $this->auth())->assertOk()
+            ->assertJsonPath('data.collected.mobile', '+639171234567')->assertJsonPath('data.next_question.key', 'business_name');
+        $this->postJson("$relay/messages", ['text' => 'What is your business name?'], $this->auth())->assertOk();
+
+        $this->postJson("$browser/messages", ['text' => 'Sample Weddings'])->assertOk();
+        $this->postJson("$relay/answers", ['answers' => ['business_name' => 'Sample Weddings', 'mobile' => '+639****4567']], $this->auth())
+            ->assertOk()->assertJsonPath('ok', true)->assertJsonPath('accepted', ['business_name']);
+        $question = $this->getJson($relay, $this->auth())->assertOk()->assertJsonPath('data.next_question.key', 'business_type')->json('data.next_question.text');
+        $this->postJson("$relay/messages", ['text' => 'Sorry, I masked your mobile number. The full number is +639****4567. Is that correct?'], $this->auth())->assertOk();
+        $poll = $this->getJson($browser)->assertOk()->assertJsonPath('answers.mobile', '+639171234567')->assertJsonPath('answers.business_name', 'Sample Weddings')->json();
+        $this->assertSame($question, collect($poll['messages'])->last()['text']);
+
+        $this->postJson("$browser/messages", ['text' => 'Photographer'])->assertOk();
+        $this->postJson("$relay/answers", ['answers' => ['business_type' => 'photographer', 'mobile' => '+639181234567']], $this->auth())
+            ->assertOk()->assertJsonPath('ok', true)->assertJsonPath('accepted', ['business_type']);
+        $this->getJson($browser)->assertOk()->assertJsonPath('answers.mobile', '+639171234567');
+
+        $this->postJson("$browser/messages", ['text' => 'Please update my mobile to 0918 123 4567'])->assertOk();
+        $this->postJson("$relay/answers", ['answers' => ['mobile' => '+639****4567']], $this->auth())->assertOk()->assertJsonPath('ok', true);
+        $this->getJson($browser)->assertOk()->assertJsonPath('answers.mobile', '+639181234567');
+
+        $this->postJson("$relay/answers", ['answers' => ['location' => 'Lucena', 'social_link' => '']], $this->auth())->assertOk();
+        $this->postJson("$relay/messages", ['text' => 'Could you confirm your phone number again?'], $this->auth())->assertOk();
+        $poll = $this->getJson($browser)->assertOk()->assertJsonPath('status', 'review')->json();
+        $this->assertSame('Your registration details are ready. Please review them and confirm.', collect($poll['messages'])->last()['text']);
+    }
+
     public function test_hermes_must_offer_optional_questions_before_review_and_can_skip_them(): void
     {
         $id = $this->startRegistration();

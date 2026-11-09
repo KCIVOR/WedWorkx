@@ -112,3 +112,9 @@ Current package SHA-256: `0ad7f4fc8fa33c093db977f7b7146db4d2c8ab914d9763992abdb9
 The public chat, admin screens, browser title, email copy and checkout description now display WedWorx. Pull this release with its matching frontend build and clear compiled views.
 
 Current package SHA-256: `61d33b58c5a996641a917e94050b8b989ca9b7679e44b21a9adf5278e94e60aa`; 10846551 bytes. ZIP integrity and matching sources and frontend assets verified.
+
+## Registration mobile reply recovery — November 9, 2026
+
+WedWorx saves a valid mobile answer directly when registration reaches that question. Unrelated Hermes replies cannot overwrite it or reopen the phone step. The server sends the next unanswered question, or the review message when the registration is complete. Pull the app files and clear Laravel caches. The shared protocol also skips retries for old mobile acknowledgments.
+
+Current package SHA-256: `094ed4441e53ade198acfcd51456d9217af357c5a0841136b6011561e5e3db57`; 10847129 bytes. ZIP integrity and matching application files verified.
