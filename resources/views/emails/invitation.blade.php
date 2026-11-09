@@ -4,7 +4,7 @@
 <x-email.spacer />
 <x-email.heading>Congratulations, {{ $firstName }}! You’re one of the first {{ $total }}.</x-email.heading>
 <x-email.spacer />
-<x-email.text>You’ve been selected to continue with the 10-10-10 Campaign. Tell us more about {{ $supplier->business_name }} and complete your website order.</x-email.text>
+<x-email.text>You’ve been selected to continue with WedWorx’s celebration of Kasalang Tagaytay’s 10th Anniversary. Tell us more about {{ $supplier->business_name }} and complete your website order.</x-email.text>
 <x-email.spacer />
 <x-email.slot-meter :taken="$supplier->slot_number" :total="$total" />
 <x-email.spacer />

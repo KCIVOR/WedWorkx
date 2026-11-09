@@ -17,7 +17,7 @@ function ExpiredCard({ firstName, businessName }) {
             <CardTitle>Your invitation has expired</CardTitle>
             <CardText>
                 Hi {firstName}, your invitation for <strong>{businessName}</strong> ended before payment was completed, so this
-                slot is now closed. Slots in this campaign do not reopen. Thank you for your interest!
+                slot is now closed. Slots for this offer do not reopen. Thank you for your interest!
             </CardText>
             <div><Pill tone="danger">Invitation expired</Pill></div>
         </Card>

@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Envelope;
 
 class InvitationMail extends Mailable
 {
-    public const SUBJECT = 'You’re in! Your 10-10-10 website invitation';
+    public const SUBJECT = 'You’re in! Your Kasalang Tagaytay 10th Anniversary website invitation';
 
     public function __construct(public Supplier $supplier)
     {

@@ -3,7 +3,7 @@ label: WedWorks
 kind: platform
 version: 1.0.0
 description: >
-  Supplier chats from the WedWorks website (the 10-10-10 campaign), answered by this Hermes profile.
+  Supplier chats from the WedWorks website (WedWorx's celebration of Kasalang Tagaytay's 10th Anniversary), answered by this Hermes profile.
   Keeps one request open to the WedWorks system and replies through its Hermes API. Standard library only.
 author: WedWorks
 requires_env:

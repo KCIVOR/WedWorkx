@@ -37,7 +37,7 @@ class DatabaseFoundationTest extends TestCase
 
         $this->assertSame(1, Campaign::count());
         $c = Campaign::first();
-        $this->assertSame('Kasalang Tagaytay 10-10-10', $c->name);
+        $this->assertSame('Kasalang Tagaytay 10th Anniversary', $c->name);
         $this->assertSame([10, 0, 24, 30, '10000.00'], [$c->slot_limit, $c->slots_taken, $c->invite_expiry_hours, $c->grace_minutes, $c->price]);
     }
 

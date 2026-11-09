@@ -169,7 +169,7 @@ class EmailTest extends TestCase
         Mail::fake();
         $this->register(1);
 
-        Mail::assertSent(InvitationMail::class, fn ($m) => $m->hasTo('supplier1@example.com') && $m->envelope()->subject === 'You’re in! Your 10-10-10 website invitation');
+        Mail::assertSent(InvitationMail::class, fn ($m) => $m->hasTo('supplier1@example.com') && $m->envelope()->subject === 'You’re in! Your Kasalang Tagaytay 10th Anniversary website invitation');
     }
 
     public function test_invite_link_shows_status_and_unknown_token_is_404(): void

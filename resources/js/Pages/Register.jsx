@@ -257,7 +257,7 @@ export default function Register({ businessTypes, questions, ai, agent }) {
                                     <CardIcon tone="warning" name="alert" />
                                     <CardTitle>You&apos;re already registered</CardTitle>
                                     <CardText>
-                                        That email or mobile number is already registered for this campaign, so no new spot was used.
+                                        That email or mobile number is already registered for this offer, so no new spot was used.
                                         Please check your inbox for our earlier message.
                                     </CardText>
                                     <Actions>

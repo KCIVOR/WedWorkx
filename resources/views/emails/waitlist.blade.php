@@ -4,7 +4,7 @@
 <x-email.spacer />
 <x-email.heading>We’ve received your request</x-email.heading>
 <x-email.spacer />
-<x-email.text>Hi {{ $firstName }}, thank you for registering {{ $supplier->business_name }} for the WedWorx 10-10-10 Campaign. We’ve received your details and our team is reviewing them.</x-email.text>
+<x-email.text>Hi {{ $firstName }}, thank you for registering {{ $supplier->business_name }} for WedWorx’s celebration of Kasalang Tagaytay’s 10th Anniversary. We’ve received your details and our team is reviewing them.</x-email.text>
 <x-email.spacer />
 <x-email.text>There’s nothing else you need to do for now. Please keep an eye on your inbox, as we’ll email you here as soon as we have an update.</x-email.text>
 </x-email.layout>

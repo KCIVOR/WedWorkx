@@ -39,7 +39,7 @@
       <td width="40" height="40" align="center" valign="middle" style="width:40px;height:40px;border-radius:12px;background:#ffffff;color:#2f5bea;font-family:'DM Sans',Arial,Helvetica,sans-serif;font-size:20px;font-weight:700;line-height:40px">W</td>
       <td style="padding-left:12px">
         <div style="font-family:'DM Sans',Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;line-height:22px;color:#ffffff;letter-spacing:-0.3px">WedWorx</div>
-        <div style="font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc">Kasalang Tagaytay &middot; 10-10-10 Campaign</div>
+        <div style="font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6e0fc">Celebrating Kasalang Tagaytay&rsquo;s 10th Anniversary</div>
       </td>
     </tr></table>
   </td></tr>
@@ -49,12 +49,13 @@
 <x-email.spacer :h="28" />
 <tr><td style="border-top:1px solid #e2e8f0;font-size:0;line-height:0">&nbsp;</td></tr>
 <x-email.spacer :h="20" />
-<tr><td style="font-family:'Inter',Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b">Questions? Just reply to this email and our team will help.<br>&mdash; The Kasalang Tagaytay Team</td></tr>
+<tr><td style="font-family:'Inter',Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#64748b">Questions? Just reply to this email and our team will help.<br>&mdash; WedWorx</td></tr>
     </table>
   </td></tr>
   <tr><td align="center" style="padding:22px 24px 8px;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#64748b;text-align:center">
-    You&rsquo;re receiving this because you registered for the 10-10-10 Campaign at Kasalang Tagaytay.<br>We only contact you by email.<br><br>
-    Kasalang Tagaytay &middot; Tagaytay City, Philippines
+    You&rsquo;re receiving this because you registered for WedWorx&rsquo;s celebration of Kasalang Tagaytay&rsquo;s 10th Anniversary.<br>We only contact you by email.<br><br>
+    Powered by StartupLab Business Center<br>
+    2nd Floor, Pearl Plaza Building, 7001 Felix F. Manalo Rd, Navarro, General Trias, 4107 Cavite
   </td></tr>
 </table>
 <!--[if mso]></td></tr></table><![endif]-->

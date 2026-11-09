@@ -35,7 +35,7 @@ class HitPayService
                 'currency' => config('hitpay.currency'),
                 'email' => $supplier->email,
                 'name' => $supplier->name,
-                'purpose' => 'WedWorx 10-10-10 website package: '.$supplier->business_name,
+                'purpose' => 'WedWorx Kasalang Tagaytay 10th Anniversary website package: '.$supplier->business_name,
                 'reference_number' => 'S'.$supplier->id.'-'.$supplier->slot_number,
                 'redirect_url' => $redirectUrl,
                 'webhook' => $webhookUrl,

@@ -11,7 +11,7 @@ class CampaignSeeder extends Seeder
     {
         // Safe to re-run: never resets slots_taken on an existing campaign.
         Campaign::firstOrCreate(
-            ['name' => 'Kasalang Tagaytay 10-10-10'],
+            ['name' => 'Kasalang Tagaytay 10th Anniversary'],
             [
                 'slot_limit' => 10,
                 'slots_taken' => 0,

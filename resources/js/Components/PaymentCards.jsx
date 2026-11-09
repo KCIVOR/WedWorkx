@@ -40,7 +40,7 @@ export function PaymentCard({ businessName, price, pending, expiresAt, serverNow
     return (
         <Card center>
             <CardTitle>Confirm your order</CardTitle>
-            <CardText>10-10-10 Campaign</CardText>
+            <CardText>Kasalang Tagaytay 10th Anniversary</CardText>
             <Amount value={price} />
             <CardText>One-time website package</CardText>
             <Divider />
