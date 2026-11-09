@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
     <meta name="robots" content="noindex, nofollow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=wedworx">
     <title inertia>{{ config('app.name') }}</title>
     @viteReactRefresh
     @vite(['resources/js/app.jsx'])

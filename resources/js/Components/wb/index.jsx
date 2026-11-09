@@ -1,5 +1,7 @@
 import { usePage } from '@inertiajs/react';
 import { chatTime } from '../../lib/chatTime';
+import wedworxLogo from '../../../images/wedworx-logo.png';
+import wedworxSymbol from '../../../images/wedworx-symbol.png';
 /**
  * React versions of the design system's wb-* components
  * (docs/WedWorks_Chatbot_Design_System.html). Values match its CSS one to one,
@@ -50,8 +52,9 @@ export function Header({ title, status = 'Online' }) {
     const dev = usePage().props.dev;
     return (
         <div className="relative z-[1] flex flex-none items-center gap-s-3 md:rounded-b-r-shell bg-wb-accent px-s-4 pb-s-5 pt-[max(16px,env(safe-area-inset-top))] text-white">
-            <div className="grid h-[40px] w-[40px] flex-none place-items-center rounded-full bg-white text-[22px] text-wb-accent">
-                <Icon name="rings" />
+            <img src={wedworxLogo} alt="WedWorx" className="hidden h-[42px] w-[104px] flex-none object-contain md:block" />
+            <div className="grid h-[40px] w-[40px] flex-none place-items-center rounded-full bg-white md:hidden">
+                <img src={wedworxSymbol} alt="WedWorx" className="h-[27px] w-[30px] object-contain" />
             </div>
             <div className="grid min-w-0 flex-1 gap-[1px]">
                 <strong className="font-display text-[16px] font-bold tracking-[-.01em] text-white">{title}</strong>
@@ -98,7 +101,7 @@ export function AiBubble({ children, at }) {
     return (
         <div className="grid max-w-[86%] animate-wb-in gap-[6px]">
             <div className="flex items-center gap-s-2 font-display text-[12.5px] font-semibold text-wb-heading">
-                <Avatar kind="ai"><Icon name="rings" /></Avatar>
+                <Avatar kind="ai"><img src={wedworxSymbol} alt="" className="h-[17px] w-[20px] object-contain" /></Avatar>
                 WedWorks Assistant
             </div>
             <div className="min-w-0 whitespace-pre-line break-words rounded-r-bubble rounded-tl-r-tail border border-wb-ai-line bg-wb-ai-bg px-s-4 py-s-3 text-[14.5px] leading-[1.5] text-wb-ai-text">

@@ -1,11 +1,23 @@
 {
+  "resources/images/wedworx-logo.png": {
+    "file": "assets/wedworx-logo-D_yzdjNa.png",
+    "src": "resources/images/wedworx-logo.png"
+  },
+  "resources/images/wedworx-symbol.png": {
+    "file": "assets/wedworx-symbol-DpOJkCNE.png",
+    "src": "resources/images/wedworx-symbol.png"
+  },
   "resources/js/app.jsx": {
-    "file": "assets/app-YNMLU-ta.js",
+    "file": "assets/app-BoGcMo7m.js",
     "name": "app",
     "src": "resources/js/app.jsx",
     "isEntry": true,
     "css": [
-      "assets/app-C6s8cAmj.css"
+      "assets/app-B--0aZlw.css"
+    ],
+    "assets": [
+      "assets/wedworx-logo-D_yzdjNa.png",
+      "assets/wedworx-symbol-DpOJkCNE.png"
     ]
   }
 }
