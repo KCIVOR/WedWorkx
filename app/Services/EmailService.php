@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\SupplierStatus;
 use App\Mail\InvitationMail;
+use App\Mail\RegistrationReceivedMail;
 use App\Mail\WaitlistMail;
 use App\Models\EmailLog;
 use App\Models\Supplier;
@@ -25,6 +26,12 @@ class EmailService
     public const SENT = 'sent';
     public const FAILED = 'failed';
     private const SENDING = 'sending';
+
+    /** The acknowledgement when Bot 1 is finished. Never says whether the supplier is a winner. */
+    public function sendRegistrationReceived(Supplier $supplier): bool
+    {
+        return $this->send($supplier, 'registered', new RegistrationReceivedMail($supplier));
+    }
 
     /** Sends the right email right after SlotService assigned a status. */
     public function sendRegistrationOutcome(Supplier $supplier): void

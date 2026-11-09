@@ -8,6 +8,7 @@ use App\Mail\InvitationExpiredMail;
 use App\Mail\InvitationMail;
 use App\Mail\PaymentReceiptMail;
 use App\Mail\PaymentReminderMail;
+use App\Mail\RegistrationReceivedMail;
 use App\Mail\WaitlistMail;
 use App\Mail\WebsiteLiveMail;
 use App\Models\AuditLog;
@@ -28,7 +29,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class SupplierController extends Controller
 {
     /** Email types the admin may resend when the first attempt failed. */
-    private const RESENDABLE = ['invite', 'waitlist', 'reminder', 'expired', 'receipt', 'live'];
+    private const RESENDABLE = ['registered', 'invite', 'waitlist', 'reminder', 'expired', 'receipt', 'live'];
 
     public function index(Request $request)
     {
@@ -174,6 +175,7 @@ class SupplierController extends Controller
 
         $supplier->load('order.supplier');
         $mailable = match ($emailLog->type) {
+            'registered' => new RegistrationReceivedMail($supplier),
             'invite' => new InvitationMail($supplier),
             'waitlist' => new WaitlistMail($supplier),
             'reminder' => new PaymentReminderMail($supplier),
@@ -193,6 +195,7 @@ class SupplierController extends Controller
     private function canResend(Supplier $supplier, string $type): bool
     {
         return match ($type) {
+            'registered' => true,
             'invite', 'reminder' => in_array($supplier->status, [SupplierStatus::Invited, SupplierStatus::DetailsSubmitted, SupplierStatus::PaymentPending], true),
             'waitlist' => $supplier->status === SupplierStatus::Waitlisted,
             'expired' => $supplier->status === SupplierStatus::Expired,

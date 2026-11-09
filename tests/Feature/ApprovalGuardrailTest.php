@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\SupplierStatus;
 use App\Mail\InvitationMail;
+use App\Mail\RegistrationReceivedMail;
 use App\Mail\WaitlistMail;
 use App\Models\AuditLog;
 use App\Models\Campaign;
@@ -49,12 +50,22 @@ class ApprovalGuardrailTest extends TestCase
         return $this->admin()->post('/'.config('admin.path').'/suppliers/approve', ['ids' => $ids]);
     }
 
-    public function test_finishing_bot_1_sends_no_email_and_no_link(): void
+    public function test_finishing_bot_1_sends_only_a_received_note_and_no_link(): void
     {
         $this->register(1);
 
-        Mail::assertNothingSent();
-        $this->assertSame(0, EmailLog::count());
+        Mail::assertSent(RegistrationReceivedMail::class, fn ($m) => $m->hasTo('m1@example.com'));
+        Mail::assertNotSent(InvitationMail::class);
+        Mail::assertNotSent(WaitlistMail::class);
+        $this->assertSame(['registered', 'sent'], [EmailLog::sole()->type, EmailLog::sole()->status]);
+
+        $html = (new RegistrationReceivedMail(Supplier::sole()))->render();
+        $this->assertStringContainsString('received your registration', $html);
+        $this->assertStringContainsString('keep in touch', $html);
+        $this->assertStringNotContainsString('/invite/', $html);
+        $this->assertStringNotContainsStringIgnoringCase('winner', $html);
+        $this->assertStringNotContainsStringIgnoringCase('waiting list', $html);
+        $this->assertStringNotContainsStringIgnoringCase('slot', $html);
         $s = Supplier::sole();
         $this->assertSame(SupplierStatus::PendingReview, $s->status);
         $this->assertNull($s->invite_token);
@@ -73,7 +84,8 @@ class ApprovalGuardrailTest extends TestCase
         $this->assertSame(1, $s->slot_number);
         $this->assertSame(48, strlen($s->invite_token));
         Mail::assertSent(InvitationMail::class, fn ($m) => $m->hasTo('m1@example.com'));
-        $this->assertSame(['invite', 'sent'], [EmailLog::sole()->type, EmailLog::sole()->status]);
+        $this->assertSame('sent', EmailLog::where('type', 'invite')->sole()->status);
+        $this->assertSame(1, EmailLog::where('type', 'registered')->count());
         $this->assertSame(1, StatusHistory::where('actor', 'admin')->where('supplier_id', $s->id)->count());
         $this->assertSame(1, AuditLog::where('action', 'approve_winner')->count());
         $this->get('/invite/'.$s->invite_token)->assertOk();
@@ -148,7 +160,7 @@ class ApprovalGuardrailTest extends TestCase
         $this->post('/'.config('admin.path').'/suppliers/approve', ['ids' => [Supplier::sole()->id]])->assertRedirect();
 
         $this->assertSame(SupplierStatus::PendingReview, Supplier::sole()->status);
-        Mail::assertNothingSent();
+        Mail::assertNotSent(InvitationMail::class);
     }
 
     public function test_dashboard_counts_only_approved_winners_as_slots_used(): void
