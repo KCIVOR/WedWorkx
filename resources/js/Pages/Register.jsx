@@ -199,9 +199,6 @@ export default function Register({ businessTypes, questions, ai, agent }) {
                         <Header title="WedWorks Assistant" />
                         <Log logRef={logRef}>
                             {agentChat.notice && <p role="status" className="text-sm text-wb-muted">{agentChat.notice}</p>}
-                            {!!agent?.enabled && !agentChat.active && phase === 'chat' && (
-                                <div><Button variant="outline" onClick={() => agentChat.retry()}>Try AI chat</Button></div>
-                            )}
                             {history.map((s) => (
                                 <div key={s.key} className="contents">
                                     <AiBubble at={messageTimes[s.key]?.asked}>{questionText(s)}</AiBubble>

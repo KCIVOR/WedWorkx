@@ -23,6 +23,38 @@ class WebsiteIntakeV2Test extends TestCase
     use RefreshDatabase;
     private int $sequence = 0;
 
+    public function test_wording_refresh_preserves_intake_behavior_and_submitted_questions(): void
+    {
+        $this->upgrade();
+        $s = $this->supplier('caterer');
+        WebsiteQuestion::where('key', 'style')->update(['text' => 'Our custom style question']);
+        $snapshot = WebsiteQuestions::snapshot($s);
+        $saved = WebsiteAnswer::create(['supplier_id' => $s->id, 'answers' => $this->answers($s), 'question_snapshot' => $snapshot, 'submitted_at' => now()]);
+        $structure = function () use ($s) {
+            return array_map(function ($question) {
+                unset($question['text']);
+                if (isset($question['intake']['fields'])) {
+                    foreach ($question['intake']['fields'] as &$field) {
+                        unset($field['prompt']);
+                        if (isset($field['options'])) $field['options'] = array_column($field['options'], 'value');
+                    }
+                    unset($field);
+                }
+                return $question;
+            }, WebsiteQuestions::snapshot($s));
+        };
+        $before = $structure();
+        $migration = require database_path('data-migrations/2026_11_15_000001_polish_website_intake_wording.php');
+        $migration->up();
+        $this->assertSame($before, $structure());
+        $this->assertSame($snapshot, $saved->fresh()->question_snapshot);
+        $this->assertSame('Our custom style question', WebsiteQuestion::where('key', 'style')->value('text'));
+        $this->assertStringContainsString('what would you like them to do next?', WebsiteQuestion::where('key', 'q_c074a772')->value('text'));
+        $this->assertSame('What would you like visitors to do next?', WebsiteQuestion::where('key', 'q_c074a772')->firstOrFail()->intake_schema['fields'][0]['prompt']);
+        $migration->down();
+        $this->assertSame($snapshot, WebsiteQuestions::snapshot($s));
+    }
+
     public function test_invalid_agent_phone_never_replaces_a_valid_collected_contact(): void
     {
         $this->upgrade();

@@ -422,9 +422,6 @@ export default function WebsiteChat({ chat, payment, firstName, businessName, re
             <Header title="WedWorks Assistant" />
             <Log logRef={logRef}>
                 {agentChat.notice && <p role="status" className="text-sm text-wb-muted">{agentChat.notice}</p>}
-                {!!agent?.enabled && !saved && !agentChat.active && phase === 'chat' && (
-                    <div><Button variant="outline" onClick={() => agentChat.retry()}>Try AI chat</Button></div>
-                )}
                 <AiBubble>
                     Welcome back, {firstName}! We&apos;re excited to help create a website for {businessName}. I&apos;ll ask a few
                     questions about your services and the kind of website you&apos;d like — your answers will help us prepare a website that represents your business.

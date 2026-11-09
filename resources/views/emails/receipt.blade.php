@@ -16,7 +16,7 @@
 @endphp
 <x-email.rows title="Receipt" :rows="$rows" />
 <x-email.spacer />
-<x-email.steps :steps="['Our team reviews your website information.', 'We build your website after the event.', 'We target delivery within five days after the event, subject to complete requirements.']" />
+<x-email.text>We target delivery within five days after the event, subject to complete requirements.</x-email.text>
 <x-email.spacer />
 <x-email.button :href="$link">View my website status</x-email.button>
 </x-email.layout>

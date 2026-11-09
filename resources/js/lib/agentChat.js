@@ -167,14 +167,5 @@ export function useAgentChat({ enabled, startUrl, storageKey, onReady, onFallbac
         if (id) call('POST', `/agent-chat/${id}/finish`);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const retry = () => {
-        setNotice('');
-        lastId.current = 0;
-        failures.current = 0;
-        accepted.current = {}; // Keep corrected fixed-form answers in the page; do not replay an older agent cache.
-        setMessages([]);
-        setWaiting(true);
-        setActive(true);
-    };
-    return { active, messages, widget, waiting, sending, notice, send, complete, retry };
+    return { active, messages, widget, waiting, sending, notice, send, complete };
 }

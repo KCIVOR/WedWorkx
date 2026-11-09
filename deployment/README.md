@@ -7,7 +7,7 @@ Download `wedworks-cpanel.zip` using GitHub's **Download raw file** button. This
 1. Back up the current application files and database. Record the current release so it can be restored. Preserve the server `.env` and all existing `storage` contents, including uploads and sessions; never upload a local database or credentials.
 2. In cPanel File Manager, enable **Show Hidden Files**. Upload and extract the ZIP into a temporary directory outside `public_html`. Confirm `public/.htaccess`, `vendor/autoload.php`, and `public/build/manifest.json` exist. Do not expose the archive or application root publicly.
 3. During a maintenance window, release the application files and production `vendor` together. Preserve the server `.env` and existing `storage`; the archive's storage files are empty-directory placeholders only. Retain a backup and old hashed public assets while existing browser sessions reload.
-4. Release the new controller, routes, React source, navigation, manifest, and new asset files together. The manifest must reference `assets/app-MInFK2ty.js` and `assets/app-C6s8cAmj.css`, both present under `public/build`. Remove `public/hot` if present; it points browsers at a development server. Preserve the existing public storage link.
+4. Release the new controller, routes, React source, navigation, manifest, and new asset files together. The manifest must reference `assets/app-YNMLU-ta.js` and `assets/app-C6s8cAmj.css`, both present under `public/build`. Remove `public/hot` if present; it points browsers at a development server. Preserve the existing public storage link.
 5. Keep the domain document root at `/home/YOURUSER/wedworks/public` (substitute the actual app path). Confirm writable Laravel storage/cache directories. Never upload Windows-generated config, route, or compiled-view caches. Package discovery files `bootstrap/cache/packages.php` and `services.php` are included.
 6. If the server has stale route/config/view caches, have hosting support clear them or use a controlled **one-time** cPanel Cron Job running the host's verified PHP binary and `artisan optimize:clear` in the actual application directory. Send output to a private log outside the document root, inspect success, then remove the cron job and temporary log. Use the PHP binary selected for this domain. Do not add a public cache-clearing URL. Preserve the existing scheduler cron.
 7. Sign out and confirm Payment History redirects to login; sign in and verify the page, filters, pagination, and supplier link against existing hosted rows. Compare read-only payment counts/statuses before and after. No migration, seed, backfill, test database, or live payment is required for this feature.
@@ -31,7 +31,7 @@ See repository `docs/DEPLOYMENT.md` for server requirements and layout. Roll bac
 
 ## Question sequence and client delivery release — 2026-11-08
 
-The current ZIP replaces the earlier payment-history package. SHA-256: `4b3d551fefa2d6a3991b255bcd217a4c96af1804148fe742fdb7e2ac1dbc9d83`; 8,071,686 bytes. Manifest: `assets/app-MInFK2ty.js` and `assets/app-C6s8cAmj.css`. Archive CRC, exclusions, changed controller, new sequence helper and referenced assets verified.
+The current ZIP replaces the earlier payment-history package. SHA-256: `4b3d551fefa2d6a3991b255bcd217a4c96af1804148fe742fdb7e2ac1dbc9d83`; 8,071,686 bytes. Manifest: `assets/app-YNMLU-ta.js` and `assets/app-C6s8cAmj.css`. Archive CRC, exclusions, changed controller, new sequence helper and referenced assets verified.
 
 Validation: 297 PHP tests / 2,870 assertions; 10 frontend sequence tests; 35 shared protocol tests; 35 plugin tests; Vite build passed. Earlier question/delivery changes had no migrations or Composer dependencies. The subsequent live-chat update below adds one migration. Existing production tables must already be migrated. Preserve server .env, APP_KEY, uploads, public/storage and cPanel-generated PHP settings. Never run migrate:fresh or broad seeders on production.
 
@@ -88,3 +88,9 @@ Current package SHA-256: `9ab7b3ac8e85b048fa473dee512e1322e47e24e5291a75437b0225
 Removed the redundant inner rectangular focus outline from the message composer. Its rounded outer focus highlight remains, and other controls retain their focus indicators. Frontend build and matching ZIP assets verified. Pull the matching frontend manifest/assets and reload. No migrations or Hermes restart required for this appearance change.
 
 Current package SHA-256: `4c52a17d80b1280de8afbe3873bec021ac420bf0f8543a5840c9064995cb89bf`; 8091615 bytes.
+
+## Bot 2 wording, silent fallback, and client emails — November 9, 2026
+
+After pulling this release, apply the wording migration with `php artisan migrate --path=database/data-migrations/2026_11_15_000001_polish_website_intake_wording.php --force`, then run `php artisan optimize:clear`. This expects the approved Bot 2 intake upgrade to have already been applied. The migration revises question text, follow-up prompts, and choice labels. Both bots automatically switch to fixed questions when Hermes is unavailable. The invitation and payment receipt use client-facing wording.
+
+Current package SHA-256: `f9c86c15615ce7ef604770cffffe31bb9b30ee0ce4ec1353dc67df888e4a8224`; 8095343 bytes. Matching migration, email views, frontend assets and ZIP integrity verified.
